@@ -1,0 +1,63 @@
+{% load i18n %}
+{% load static %}
+{% load django_vite %}
+{% load django_htmx %}
+
+<!DOCTYPE html>
+{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE }}">
+  <head>
+    <title>
+      {% block title %}
+        {{ page_title|default:_("Welcome") }}
+      {% endblock title %}
+      | Sono
+    </title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Sono Project" />
+    <meta name="author" content="Dennis Paz" />
+    <link href="{% static 'images/favicons/favicon.ico' %}" rel="icon" />
+    {% block css %}
+      {% include "partials/styles.html" %}
+    {% endblock css %}
+    {% block extra_css %}
+    {% endblock extra_css %}
+    {% vite_hmr_client %}
+    {% htmx_script %}
+  </head>
+  <body hx-headers='{"x-csrftoken": "{{ csrf_token }}"}'>
+    {% block body %}
+      <main>
+        {% block main %}
+          <div>
+            {% block sidebar %}
+              {% include "partials/sidebar.html" %}
+            {% endblock sidebar %}
+            <div>
+              {% block header %}
+                {% include "partials/header.html" %}
+              {% endblock header %}
+              <div>
+                {% block content %}
+                {% endblock content %}
+              </div>
+              {% block footer %}
+                {% include "partials/footer.html" %}
+              {% endblock footer %}
+            </div>
+          </div>
+          {% block modals %}
+          {% endblock modals %}
+          {% block drawers %}
+          {% endblock drawers %}
+        {% endblock main %}
+      </main>
+      {% block js %}
+        {% include "partials/scripts.html" %}
+      {% endblock js %}
+      {% block extra_js %}
+      {% endblock extra_js %}
+    {% endblock body %}
+  </body>
+</html>
