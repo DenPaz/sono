@@ -1,0 +1,48 @@
+{% load i18n %}
+{% load static %}
+
+<input id="layout-sidebar-toggle-trigger" type="checkbox" class="hidden" />
+<input id="layout-sidebar-hover-trigger" type="checkbox" class="hidden" />
+<div id="layout-sidebar-hover" class="bg-base-300 h-screen w-1"></div>
+<div id="layout-sidebar" class="sidebar-menu py-3">
+  <label for="layout-sidebar-hover-trigger"
+         title="{% trans 'Toggle sidebar' %}"
+         class="btn btn-circle btn-ghost btn-sm text-base-content/50 absolute inset-e-2 top-3.5 max-lg:hidden">
+    <span class="iconify lucide--panel-left-close absolute size-4.5 opacity-100 transition-all duration-300 group-has-[[id=layout-sidebar-hover-trigger]:checked]/html:opacity-0"></span>
+    <span class="iconify lucide--panel-left-dashed absolute size-4.5 opacity-0 transition-all duration-300 group-has-[[id=layout-sidebar-hover-trigger]:checked]/html:opacity-100"></span>
+  </label>
+  <div class="flex min-h-10 items-center gap-3 px-5">
+    <a href="{% url 'dashboard:index' %}"
+       class="text-primary text-xl font-bold">Sono</a>
+  </div>
+  <div class="custom-scrollbar grow overflow-auto">
+    <div class="mt-3 space-y-0.5 px-2.5">
+      <a href="{% url 'dashboard:index' %}" class="menu-item">
+        <span class="iconify lucide--monitor-dot size-4"></span>
+        <p>{% trans "Dashboard" %}</p>
+      </a>
+    </div>
+  </div>
+  <div class="border-base-200 sidebar-menu mt-3 space-y-0.5 border-t px-2.5 pt-2">
+    <button type="button"
+            class="menu-item w-full hover:bg-base-200 cursor-pointer"
+            onclick="document.getElementById('logout-modal').showModal()">
+      <span class="iconify lucide--log-out size-4"></span>
+      <p>{% trans "Log out" %}</p>
+    </button>
+  </div>
+</div>
+<label id="layout-sidebar-backdrop" for="layout-sidebar-toggle-trigger"></label>
+<dialog id="logout-modal" class="modal">
+  <form method="post" action="{% url 'account_logout' %}" class="modal-box">
+    {% csrf_token %}
+    <h3 class="text-lg font-bold">{% trans "Confirm Logout" %}</h3>
+    <p class="py-4">{% trans "Are you sure you want to log out?" %}</p>
+    <div class="modal-action">
+      <button type="submit" class="btn btn-error">{% trans "Confirm" %}</button>
+      <button type="button"
+              class="btn"
+              onclick="document.getElementById('logout-modal').close()">{% trans "Cancel" %}</button>
+    </div>
+  </form>
+</dialog>
