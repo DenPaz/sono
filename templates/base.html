@@ -26,10 +26,11 @@
     {% vite_hmr_client %}
     {% htmx_script %}
   </head>
-  <body hx-headers='{"x-csrftoken": "{{ csrf_token }}"}'>
+  <body class="{% block body_class %}{% endblock body_class %}"
+        hx-headers='{"x-csrftoken": "{{ csrf_token }}"}'>
     {% block body %}
-      {% block main %}
-        <div class="size-full">
+      <main class="{% block main_class %}size-full{% endblock main_class %}">
+        {% block main %}
           <div class="flex">
             {% block sidebar %}
               {% include "partials/sidebar.html" %}
@@ -51,8 +52,8 @@
           {% endblock modals %}
           {% block drawers %}
           {% endblock drawers %}
-        </div>
-      {% endblock main %}
+        {% endblock main %}
+      </main>
       {% block js %}
         {% include "partials/scripts.html" %}
       {% endblock js %}
