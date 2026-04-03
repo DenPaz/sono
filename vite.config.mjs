@@ -7,6 +7,7 @@ export default defineConfig({
   resolve: { alias: { "@": path.resolve(__dirname, "./static/js") } },
   base: "/static/",
   build: {
+    minify: true,
     manifest: true,
     outDir: path.resolve(__dirname, "./static/dist"),
     emptyOutDir: true,
