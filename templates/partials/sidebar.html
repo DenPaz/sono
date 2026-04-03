@@ -1,5 +1,6 @@
 {% load i18n %}
 {% load static %}
+{% load core_tags %}
 
 <input id="layout-sidebar-toggle-trigger" type="checkbox" class="hidden" />
 <input id="layout-sidebar-hover-trigger" type="checkbox" class="hidden" />
@@ -17,7 +18,8 @@
   </div>
   <div class="custom-scrollbar grow overflow-auto">
     <div class="mt-3 space-y-0.5 px-2.5">
-      <a href="{% url 'dashboard:index' %}" class="menu-item">
+      <a href="{% url 'dashboard:index' %}"
+         class="menu-item {% active_class 'dashboard:index' %}">
         <span class="iconify lucide--monitor-dot size-4"></span>
         <p>{% trans "Dashboard" %}</p>
       </a>
