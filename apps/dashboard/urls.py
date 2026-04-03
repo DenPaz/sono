@@ -8,6 +8,6 @@ urlpatterns = [
     path(
         route="",
         view=IndexView.as_view(),
-        name="home",
+        name="index",
     ),
 ]
