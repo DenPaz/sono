@@ -5,7 +5,7 @@
 
 <!DOCTYPE html>
 {% get_current_language as LANGUAGE_CODE %}
-<html lang="{{ LANGUAGE_CODE }}">
+<html lang="{{ LANGUAGE_CODE }}" data-theme="material">
   <head>
     <title>
       {% block title %}
@@ -28,17 +28,17 @@
   </head>
   <body hx-headers='{"x-csrftoken": "{{ csrf_token }}"}'>
     {% block body %}
-      <main>
-        {% block main %}
-          <div>
+      {% block main %}
+        <div class="size-full">
+          <div class="flex">
             {% block sidebar %}
               {% include "partials/sidebar.html" %}
             {% endblock sidebar %}
-            <div>
+            <div class="flex h-screen min-w-0 grow flex-col overflow-auto">
               {% block header %}
                 {% include "partials/header.html" %}
               {% endblock header %}
-              <div>
+              <div class="grow p-6 transition-all">
                 {% block content %}
                 {% endblock content %}
               </div>
@@ -51,8 +51,8 @@
           {% endblock modals %}
           {% block drawers %}
           {% endblock drawers %}
-        {% endblock main %}
-      </main>
+        </div>
+      {% endblock main %}
       {% block js %}
         {% include "partials/scripts.html" %}
       {% endblock js %}
