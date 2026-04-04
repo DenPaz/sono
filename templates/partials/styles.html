@@ -1,3 +1,14 @@
 {% load django_vite %}
 
+<script>
+  try {
+    const config = localStorage.getItem("__SONO_CONFIG__");
+    if (config) {
+      const theme = JSON.parse(config).theme;
+      document.documentElement.setAttribute("data-theme", theme);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+</script>
 <link href="{% vite_asset_url 'static/css/styles.css' %}" rel="stylesheet" />
