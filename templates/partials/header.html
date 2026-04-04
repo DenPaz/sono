@@ -16,10 +16,10 @@
     };
   }
 </script>
-<div id="layout-topbar"
-     role="navigation"
-     aria-label="{% trans 'Navigation bar' %}"
-     class="flex items-center justify-between px-4">
+<header id="layout-topbar"
+        role="navigation"
+        aria-label="{% trans 'Navigation bar' %}"
+        class="flex items-center justify-between px-4">
   <div class="inline-flex items-center gap-3" x-data="topbarData()">
     <label for="layout-sidebar-toggle-trigger"
            class="btn btn-square btn-ghost btn-sm group-has-[[id=layout-sidebar-hover-trigger]:checked]/html:hidden"
@@ -105,4 +105,4 @@
       </div>
     </div>
   </div>
-</div>
+</header>
