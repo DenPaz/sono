@@ -1,0 +1,92 @@
+{% load i18n %}
+{% load static %}
+
+{% get_current_language as current_language %}
+{% get_available_languages as languages %}
+{% get_language_info_list for languages as language_info_list %}
+<div id="layout-topbar"
+     role="navigation"
+     aria-label="{% trans 'Navbar' %}"
+     class="flex items-center justify-between px-4">
+  <div class="inline-flex items-center gap-3"
+       x-data="{ greeting: '', init() { const hour = new Date().getHours(); const messages = { morning: '{% trans 'Good morning' %}', afternoon: '{% trans 'Good afternoon' %}', evening: '{% trans 'Good evening' %}' }; this.greeting = hour < 12 ? messages.morning : hour < 18 ? messages.afternoon : messages.evening; } }">
+    <label for="layout-sidebar-toggle-trigger"
+           class="btn btn-square btn-ghost btn-sm group-has-[[id=layout-sidebar-hover-trigger]:checked]/html:hidden"
+           aria-label="{% trans 'Sidebar toggle' %}">
+      <span class="iconify lucide--menu size-5"></span>
+    </label>
+    <label for="layout-sidebar-hover-trigger"
+           class="btn btn-square btn-ghost btn-sm hidden group-has-[[id=layout-sidebar-hover-trigger]:checked]/html:flex"
+           aria-label="{% trans 'Sidebar hover toggle' %}">
+      <span class="iconify lucide--menu size-5"></span>
+    </label>
+    <div class="hidden sm:flex flex-col">
+      <p class="leading-none font-medium md:text-lg">
+        <span x-text="greeting"></span>, {{ user.first_name }}.
+      </p>
+    </div>
+  </div>
+  <div class="inline-flex items-center gap-2.5">
+    <div class="dropdown dropdown-bottom dropdown-end">
+      <div class="btn btn-ghost btn-circle btn-sm" tabindex="0">
+        <img src="https://flagcdn.com/{% if current_language == 'pt-br' %}br{% else %}us{% endif %}.svg"
+             class="rounded-box size-5.5 object-cover"
+             alt="{% trans 'Current language' %}" />
+      </div>
+      <div class="dropdown-content bg-base-100 rounded-box mt-2 shadow-sm"
+           tabindex="0">
+        <ul class="menu w-full p-2">
+          {% for language in language_info_list %}
+            <li>
+              <form method="post" action="{% url 'set_language' %}">
+                {% csrf_token %}
+                <input type="hidden" name="language" value="{{ language.code }}" />
+                <input type="hidden" name="next" value="{{ request.get_full_path }}" />
+                <button type="submit" class="flex items-center gap-2 cursor-pointer w-25">
+                  <img src="https://flagcdn.com/{% if language.code == 'pt-br' %}br{% else %}us{% endif %}.svg"
+                       class="rounded-box size-4.5 object-cover"
+                       alt="{{ language.name_local }}" />
+                  <span>{{ language.code|upper }}</span>
+                  {% if language.code == current_language %}
+                    <span class="iconify lucide--check ms-auto size-4 text-success"></span>
+                  {% endif %}
+                </button>
+              </form>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    <div class="border-base-300 h-7 border-e"></div>
+    <div class="dropdown dropdown-bottom dropdown-end">
+      <div class="btn btn-ghost btn-circle btn-sm" tabindex="0">
+        <div class="avatar bg-base-200 rounded-box size-7 overflow-hidden">
+          <img src="{{ user.profile.get_avatar_url }}"
+               alt="{% trans 'User avatar' %}" />
+        </div>
+      </div>
+      <div class="dropdown-content bg-base-100 rounded-box mt-2 w-44 shadow-sm"
+           tabindex="0">
+        <ul class="menu w-full p-2">
+          <li>
+            <a href="#">
+              <span class="iconify lucide--settings size-4"></span>
+              <span>{% trans "Settings" %}</span>
+            </a>
+          </li>
+        </ul>
+        <hr class="border-base-300" />
+        <ul class="menu w-full p-2">
+          <li>
+            <button type="button"
+                    class="text-error hover:bg-error/10"
+                    onclick="document.getElementById('logout-modal').showModal()">
+              <span class="iconify lucide--log-out size-4"></span>
+              <span>{% trans "Logout" %}</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
