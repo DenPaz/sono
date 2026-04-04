@@ -18,6 +18,14 @@
     <meta name="description" content="Sono Project" />
     <meta name="author" content="Dennis Paz" />
     <link href="{% static 'images/favicons/favicon.ico' %}" rel="icon" />
+    <script>
+      try {
+        const config = localStorage.getItem("__SONO_CONFIG__");
+        if (config) {
+          document.documentElement.setAttribute("data-theme", JSON.parse(config).theme);
+        }
+      } catch (e) {}
+    </script>
     {% block css %}
       {% include "partials/styles.html" %}
     {% endblock css %}
