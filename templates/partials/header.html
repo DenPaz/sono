@@ -4,12 +4,24 @@
 {% get_current_language as current_language %}
 {% get_available_languages as languages %}
 {% get_language_info_list for languages as language_info_list %}
+<script>
+  function topbarData() {
+    return {
+      get greeting() {
+        const hour = new Date().getHours();
+        if (hour < 12) return "{% trans 'Good morning' %}";
+        if (hour < 18) return "{% trans 'Good afternoon' %}";
+        return "{% trans 'Good evening' %}";
+      },
+    };
+  }
+</script>
 <div id="layout-topbar"
      role="navigation"
-     aria-label="{% trans 'Navbar' %}"
-     class="flex items-center justify-between px-4">
-  <div class="inline-flex items-center gap-3"
-       x-data="{ greeting: '', init() { const hour = new Date().getHours(); const messages = { morning: '{% trans 'Good morning' %}', afternoon: '{% trans 'Good afternoon' %}', evening: '{% trans 'Good evening' %}' }; this.greeting = hour < 12 ? messages.morning : hour < 18 ? messages.afternoon : messages.evening; } }">
+     aria-label="{% trans 'Navigation bar' %}"
+     class="flex items-center justify-between px-4"
+     x-data="topbarData()">
+  <div class="inline-flex items-center gap-3">
     <label for="layout-sidebar-toggle-trigger"
            class="btn btn-square btn-ghost btn-sm group-has-[[id=layout-sidebar-hover-trigger]:checked]/html:hidden"
            aria-label="{% trans 'Sidebar toggle' %}">
@@ -26,7 +38,7 @@
       </p>
     </div>
   </div>
-  <div class="inline-flex items-center gap-2.5">
+  <div class="inline-flex items-center gap-3">
     <div class="dropdown dropdown-bottom dropdown-end">
       <div class="btn btn-ghost btn-circle btn-sm" tabindex="0">
         <img src="https://flagcdn.com/{% if current_language == 'pt-br' %}br{% else %}us{% endif %}.svg"
@@ -42,7 +54,7 @@
                 {% csrf_token %}
                 <input type="hidden" name="language" value="{{ language.code }}" />
                 <input type="hidden" name="next" value="{{ request.get_full_path }}" />
-                <button type="submit" class="flex items-center gap-2 cursor-pointer w-25">
+                <button type="submit" class="flex items-center w-25 cursor-pointer gap-2">
                   <img src="https://flagcdn.com/{% if language.code == 'pt-br' %}br{% else %}us{% endif %}.svg"
                        class="rounded-box size-4.5 object-cover"
                        alt="{{ language.name_local }}" />
@@ -61,8 +73,7 @@
     <div class="dropdown dropdown-bottom dropdown-end">
       <div class="btn btn-ghost btn-circle btn-sm" tabindex="0">
         <div class="avatar bg-base-200 rounded-box size-7 overflow-hidden">
-          <img src="{{ user.profile.get_avatar_url }}"
-               alt="{% trans 'User avatar' %}" />
+          <img src="{{ user.profile.get_avatar_url }}" alt="{% trans 'Avatar' %}" />
         </div>
       </div>
       <div class="dropdown-content bg-base-100 rounded-box mt-2 w-44 shadow-sm"
