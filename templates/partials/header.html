@@ -19,8 +19,9 @@
 <header id="layout-topbar"
         role="navigation"
         aria-label="{% trans 'Navigation bar' %}"
-        class="flex items-center justify-between px-4">
-  <div class="inline-flex items-center gap-3" x-data="topbarData()">
+        class="flex items-center justify-between px-4"
+        x-data="topbarData()">
+  <div class="inline-flex items-center gap-3">
     <label for="layout-sidebar-toggle-trigger"
            class="btn btn-square btn-ghost btn-sm group-has-[[id=layout-sidebar-hover-trigger]:checked]/html:hidden"
            aria-label="{% trans 'Sidebar toggle' %}">
