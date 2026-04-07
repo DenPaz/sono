@@ -24,7 +24,7 @@
 /* Container utility */
 @utility container {
   margin-inline: auto;
-  @apply px-[1rem] md:px-[2rem] lg:px-[3rem] xl:px-[4rem] 2xl:px-[6rem];
+  @apply px-4 md:px-8 lg:px-12 xl:px-16 2xl:px-24;
 }
 
 html {

@@ -23,10 +23,10 @@
     }
   }
   .flatpickr-prev-month {
-    @apply start-2!;
+    @apply inset-s-2!;
   }
   .flatpickr-next-month {
-    @apply end-2!;
+    @apply inset-e-2!;
   }
 
   .flatpickr-months {
@@ -78,7 +78,7 @@
       @apply relative border-transparent;
 
       &::after {
-        @apply bg-primary absolute end-1 top-1 rounded-full;
+        @apply bg-primary absolute inset-e-1 top-1 rounded-full;
         content: "";
         width: 5px;
         height: 5px;

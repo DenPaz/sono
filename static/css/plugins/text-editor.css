@@ -8,7 +8,7 @@
 }
 
 .ql-toolbar {
-  @apply rounded-t;
+  @apply rounded-t-sm;
 
   .ql-formats {
     .ql-header,
@@ -51,5 +51,5 @@
 }
 
 .ql-container {
-  @apply bg-base-100! rounded-b;
+  @apply bg-base-100! rounded-b-sm;
 }

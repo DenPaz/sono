@@ -47,7 +47,7 @@
 
     .collapse-content {
       &:before {
-        @apply bg-base-content/10 absolute start-4 top-10 bottom-2 w-px;
+        @apply bg-base-content/10 absolute inset-s-4 top-10 bottom-2 w-px;
         content: "";
       }
     }
@@ -55,14 +55,13 @@
 }
 
 /* == Layout: Sidebar == */
-
 #layout-sidebar {
   width: var(--layout-sidebar-width);
   min-width: var(--layout-sidebar-width);
   background: var(--layout-sidebar-background);
   max-height: 100vh;
 
-  @apply relative top-0 bottom-0 z-10 flex flex-col transition-[margin,_top,_max-height,_border-radius] duration-300;
+  @apply relative top-0 bottom-0 z-10 flex flex-col transition-[margin,top,max-height,border-radius] duration-300;
 
   &.hide {
     margin-inline-start: calc(var(--layout-sidebar-width) * -1);
@@ -70,20 +69,17 @@
 }
 
 /* == Layout: Topbar == */
-
 #layout-topbar {
   background: var(--layout-topbar-background);
-  @apply sticky top-0 z-10 max-h-16 min-h-16 transition-[top,_margin,_border-radius] duration-300;
+  @apply sticky top-0 z-10 max-h-16 min-h-16 transition-[top,margin,border-radius] duration-300;
 }
 
 /* == Layout: Content == */
-
 #layout-content {
   @apply grow p-6 transition-all;
 }
 
 /* == Sidebar: Toggle == */
-
 #layout-sidebar-toggle-trigger:checked ~ #layout-sidebar {
   margin-inline-start: calc(var(--layout-sidebar-width) * -1);
 }
@@ -107,9 +103,8 @@
 }
 
 /* == Layout: Monochrome Layer == */
-
 #layout-monochrome-layer {
-  @apply pointer-events-none fixed inset-0 z-[999999] opacity-0 grayscale-100 backdrop-opacity-100 transition-all duration-1000;
+  @apply pointer-events-none fixed inset-0 z-999999 opacity-0 grayscale-100 backdrop-opacity-100 transition-all duration-1000;
 }
 
 html[data-monochrome-enabled] #layout-monochrome-layer {
@@ -117,10 +112,9 @@ html[data-monochrome-enabled] #layout-monochrome-layer {
 }
 
 /* == Sidebar: @media for small devices (phone, tablet), <= lg size == */
-
 @media (max-width: theme(--breakpoint-lg)) {
   #layout-sidebar {
-    @apply fixed z-[500];
+    @apply fixed z-500;
   }
 
   /* = Tweaks for hide on mobile device by default = */
@@ -131,15 +125,14 @@ html[data-monochrome-enabled] #layout-monochrome-layer {
     margin-inline-start: 0;
   }
   #layout-sidebar-toggle-trigger:checked ~ #layout-sidebar-backdrop {
-    @apply bg-base-content/5 fixed inset-0 z-[499] transition-all;
+    @apply bg-base-content/5 fixed inset-0 z-499 transition-all;
   }
 }
 
 /* == Overrides: specific to material theme and non-material theme == */
-
 html:not([data-theme="material"], [data-theme="material-dark"]) {
   #layout-sidebar {
-    @apply border-base-200 border-e-[1px];
+    @apply border-base-200 border-e;
   }
 
   #layout-topbar {
