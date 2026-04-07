@@ -200,6 +200,9 @@ After running `make seed`, the following accounts are available:
 - Use **DaisyUI** markup for available components. Fall back to Tailwind CSS utility classes otherwise.
 - Stick to the DaisyUI color palette (e.g. `btn-primary`, `text-error`, `bg-base-200`) whenever possible.
 - Theme-aware styles should use CSS variables defined in `static/css/base/daisyui.css`.
+- Do not use `tailwind.config.js` — it is deprecated in Tailwind v4.
+- To override DaisyUI styles, append `!` to the Tailwind utility class (e.g. `bg-red-500!`), not `!important`.
+- There is no need to add `dark:` variants when using daisyUI color names — they update automatically with the theme.
 
 ---
 
