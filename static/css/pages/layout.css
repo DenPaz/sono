@@ -148,6 +148,6 @@ html[data-theme="material-dark"] {
   }
 
   #layout-topbar {
-    @apply rounded-box static mx-5 mt-4;
+    @apply rounded-box sticky top-4 mx-5 mt-4;
   }
 }
