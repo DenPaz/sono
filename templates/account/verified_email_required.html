@@ -1,0 +1,27 @@
+{% extends "account/_base.html" %}
+{% load i18n %}
+{% load static %}
+{% load django_vite %}
+
+{% block title %}{% trans "Verificacao de e-mail obrigatoria" %}{% endblock title %}
+
+{% block content %}
+  <article class="card bg-base-100 border-base-300 border shadow-sm">
+    <div class="card-body gap-5 p-6 sm:p-8">
+      <header class="space-y-2">
+        <h1 class="text-2xl font-bold">{% trans "Verifique seu e-mail" %}</h1>
+        <p class="text-base-content/70 text-sm">
+          {% blocktrans %}Esta area exige a verificacao de identidade. Para continuar, confirme a propriedade do seu endereco de e-mail pelo link enviado.{% endblocktrans %}
+        </p>
+        <p class="text-base-content/70 text-sm">
+          {% blocktrans %}Se o e-mail nao estiver na caixa principal, verifique spam ou promocoes.{% endblocktrans %}
+        </p>
+      </header>
+
+      <div class="flex flex-wrap gap-2">
+        <a href="{% url 'account_email' %}" class="btn btn-primary btn-sm">{% trans "Gerenciar e-mail" %}</a>
+        <a href="{% url 'account_login' %}" class="btn btn-ghost btn-sm">{% trans "Voltar para login" %}</a>
+      </div>
+    </div>
+  </article>
+{% endblock content %}

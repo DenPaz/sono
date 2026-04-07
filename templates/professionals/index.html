@@ -1,0 +1,104 @@
+{% extends "dashboard/_base.html" %}
+{% load i18n %}
+{% load static %}
+{% load django_vite %}
+
+{% block title %}{% trans "Profissionais" %}{% endblock title %}
+
+{% block content %}
+  <section class="space-y-6 p-4 md:p-6">
+    <article class="card bg-base-100 border-base-300 border shadow-sm">
+      <div class="card-body gap-4 p-5">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 class="text-lg font-semibold">{% trans "Gestao de profissionais" %}</h2>
+            <p class="text-base-content/70 text-sm">
+              {% trans "Acompanhe cargos, status e volume de casos ativos por profissional." %}
+            </p>
+          </div>
+          <a href="{% url 'dashboard:invite_professional' %}" class="btn btn-primary btn-sm">
+            <span class="iconify lucide--user-plus size-4"></span>
+            <span>{% trans "Convidar profissional" %}</span>
+          </a>
+        </div>
+
+        <form method="get" class="grid gap-3 md:grid-cols-3">
+          <label class="form-control">
+            <span class="label-text text-xs uppercase tracking-wide text-base-content/60">{% trans "Busca" %}</span>
+            <input type="text"
+                   name="query"
+                   value="{{ applied_filters.query }}"
+                   class="input input-bordered w-full"
+                   placeholder="{% trans 'Nome ou e-mail' %}" />
+          </label>
+          <label class="form-control">
+            <span class="label-text text-xs uppercase tracking-wide text-base-content/60">{% trans "Cargo" %}</span>
+            <select name="role" class="select select-bordered w-full">
+              <option value="">{% trans "Todos" %}</option>
+              {% for role_option in role_options %}
+                <option value="{{ role_option }}" {% if applied_filters.role == role_option %}selected{% endif %}>{{ role_option }}</option>
+              {% endfor %}
+            </select>
+          </label>
+          <label class="form-control">
+            <span class="label-text text-xs uppercase tracking-wide text-base-content/60">{% trans "Status" %}</span>
+            <select name="status" class="select select-bordered w-full">
+              <option value="">{% trans "Todos" %}</option>
+              {% for status_option in status_options %}
+                <option value="{{ status_option }}" {% if applied_filters.status == status_option %}selected{% endif %}>{{ status_option }}</option>
+              {% endfor %}
+            </select>
+          </label>
+          <div class="md:col-span-3 flex flex-wrap gap-2">
+            <button type="submit" class="btn btn-primary btn-sm">{% trans "Aplicar filtros" %}</button>
+            <a href="{% url 'dashboard:professionals' %}" class="btn btn-ghost btn-sm">{% trans "Limpar" %}</a>
+          </div>
+        </form>
+      </div>
+    </article>
+
+    <article class="card bg-base-100 border-base-300 border shadow-sm">
+      <div class="card-body p-0">
+        <div class="overflow-x-auto">
+          <table class="table table-zebra">
+            <thead>
+              <tr>
+                <th>{% trans "Nome" %}</th>
+                <th>{% trans "E-mail" %}</th>
+                <th>{% trans "Cargo" %}</th>
+                <th>{% trans "Municipio" %}</th>
+                <th>{% trans "Casos ativos" %}</th>
+                <th>{% trans "Status" %}</th>
+                <th class="text-end">{% trans "Acoes" %}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for professional in professionals %}
+                <tr>
+                  <td class="font-semibold">{{ professional.name }}</td>
+                  <td>{{ professional.email }}</td>
+                  <td>{{ professional.role }}</td>
+                  <td>{{ professional.municipality }}</td>
+                  <td>{{ professional.active_cases }}</td>
+                  <td>
+                    <span class="badge {% if professional.status == 'Ativo' %}badge-success{% else %}badge-ghost{% endif %}">
+                      {{ professional.status }}
+                    </span>
+                  </td>
+                  <td class="text-end">
+                    <a href="{% url 'dashboard:manage_professional' %}?email={{ professional.email|urlencode }}"
+                       class="btn btn-ghost btn-xs">{% trans "Gerenciar" %}</a>
+                  </td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="7" class="text-center text-base-content/60 py-8">{% trans "Nenhum profissional encontrado." %}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </article>
+  </section>
+{% endblock content %}

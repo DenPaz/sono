@@ -1,0 +1,23 @@
+{% extends "account/_base.html" %}
+{% load i18n %}
+{% load static %}
+{% load django_vite %}
+
+{% block title %}{% trans "Conta inativa" %}{% endblock title %}
+
+{% block content %}
+  <article class="card bg-base-100 border-base-300 border shadow-sm">
+    <div class="card-body gap-5 p-6 sm:p-8">
+      <div class="inline-flex size-12 items-center justify-center rounded-full bg-warning/15 text-warning">
+        <span class="iconify lucide--shield-alert size-6"></span>
+      </div>
+
+      <header class="space-y-1">
+        <h1 class="text-2xl font-bold">{% trans "Conta inativa" %}</h1>
+        <p class="text-base-content/70 text-sm">{% trans "Esta conta esta inativa no momento." %}</p>
+      </header>
+
+      <a href="{% url 'account_login' %}" class="btn btn-primary w-full">{% trans "Voltar para login" %}</a>
+    </div>
+  </article>
+{% endblock content %}

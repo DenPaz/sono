@@ -1,0 +1,107 @@
+{% extends "account/_base.html" %}
+{% load i18n %}
+{% load static %}
+{% load django_vite %}
+{% load widget_tweaks %}
+
+{% block title %}
+  {% block head_title %}{% trans "Confirmacao por codigo" %}{% endblock head_title %}
+{% endblock title %}
+
+{% block content %}
+  <article class="card bg-base-100 border-base-300 border shadow-sm">
+    <div class="card-body gap-5 p-6 sm:p-8">
+      <header class="space-y-1">
+        <h1 class="text-2xl font-bold">{% block code_title %}{% trans "Informe o codigo" %}{% endblock code_title %}</h1>
+        <p class="text-base-content/70 text-sm">
+          {% trans "Enviamos um codigo para" %}
+          <strong>{% block recipient %}{% trans "seu contato" %}{% endblock recipient %}</strong>.
+          {% trans "O codigo expira em poucos minutos." %}
+        </p>
+      </header>
+
+      {% if verify_form.non_field_errors %}
+        <div class="alert alert-error">
+          <span>{{ verify_form.non_field_errors|join:", " }}</span>
+        </div>
+      {% endif %}
+
+      <form method="post" action="" class="space-y-4" novalidate>
+        {% csrf_token %}
+        {% for hidden_field in verify_form.hidden_fields %}
+          {{ hidden_field }}
+        {% endfor %}
+
+        {% for field in verify_form.visible_fields %}
+          <div class="space-y-1">
+            <label class="label" for="{{ field.id_for_label }}">
+              <span class="label-text">{{ field.label }}</span>
+            </label>
+            {{ field|add_class:"input input-bordered w-full"|add_error_class:"input-error" }}
+            {% if field.errors %}
+              <p class="text-error text-xs">{{ field.errors|join:", " }}</p>
+            {% endif %}
+          </div>
+        {% endfor %}
+
+        {% if redirect_field %}
+          {{ redirect_field }}
+        {% endif %}
+
+        <div class="flex flex-wrap gap-2">
+          <button type="submit" class="btn btn-primary btn-sm">{% trans "Confirmar" %}</button>
+          {% if can_resend %}
+            <button type="submit" form="resend" class="btn btn-outline btn-sm">{% trans "Solicitar novo codigo" %}</button>
+          {% endif %}
+          {% if cancel_url %}
+            <a href="{{ cancel_url }}" class="btn btn-ghost btn-sm">{% trans "Cancelar" %}</a>
+          {% else %}
+            <button type="submit" form="logout-from-stage" class="btn btn-ghost btn-sm">{% trans "Cancelar" %}</button>
+          {% endif %}
+        </div>
+      </form>
+
+      <form id="resend" method="post" action="">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="resend" />
+        {% if redirect_field %}
+          {{ redirect_field }}
+        {% endif %}
+      </form>
+
+      {% if not cancel_url %}
+        <form id="logout-from-stage" method="post" action="{% url 'account_logout' %}">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{% url 'account_login' %}" />
+        </form>
+      {% endif %}
+
+      {% if can_change %}
+        <details class="rounded-box border border-base-300 bg-base-200/40 p-4" {% if change_form.errors %}open{% endif %}>
+          <summary class="cursor-pointer text-sm font-medium">{% block change_title %}{% trans "Alterar destinatario" %}{% endblock change_title %}</summary>
+          <form method="post" action="" class="space-y-3 mt-3">
+            {% csrf_token %}
+            {% for hidden_field in change_form.hidden_fields %}
+              {{ hidden_field }}
+            {% endfor %}
+            {% for field in change_form.visible_fields %}
+              <div class="space-y-1">
+                <label class="label" for="{{ field.id_for_label }}">
+                  <span class="label-text">{{ field.label }}</span>
+                </label>
+                {{ field|add_class:"input input-bordered w-full"|add_error_class:"input-error" }}
+                {% if field.errors %}
+                  <p class="text-error text-xs">{{ field.errors|join:", " }}</p>
+                {% endif %}
+              </div>
+            {% endfor %}
+            {% if redirect_field %}
+              {{ redirect_field }}
+            {% endif %}
+            <button type="submit" name="action" value="change" class="btn btn-outline btn-sm">{% trans "Atualizar" %}</button>
+          </form>
+        </details>
+      {% endif %}
+    </div>
+  </article>
+{% endblock content %}

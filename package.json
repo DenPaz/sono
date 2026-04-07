@@ -7,15 +7,15 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "@iconify-json/hugeicons": "^1.2.25",
+    "@iconify-json/hugeicons": "^1.2.24",
     "@iconify-json/lucide": "^1.2.101",
     "@iconify-json/ri": "^1.2.10",
     "@iconify/tailwind4": "^1.2.3",
-    "vite": "^8.0.7"
+    "vite": "^8.0.3"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.2.2",
-    "alpinejs": "^3.15.11",
+    "alpinejs": "^3.15.10",
     "daisyui": "^5.5.19",
     "htmx.org": "^2.0.8",
     "tailwindcss": "^4.2.2",

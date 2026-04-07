@@ -1,0 +1,20 @@
+{% extends "account/_base.html" %}
+{% load i18n %}
+{% load static %}
+{% load django_vite %}
+
+{% block title %}{% trans "Cadastro indisponivel" %}{% endblock title %}
+
+{% block content %}
+  <article class="card bg-base-100 border-base-300 border shadow-sm">
+    <div class="card-body gap-5 p-6 sm:p-8">
+      <header class="space-y-1">
+        <h1 class="text-2xl font-bold">{% trans "Cadastro temporariamente fechado" %}</h1>
+        <p class="text-base-content/70 text-sm">
+          {% trans "No momento, o cadastro de novas contas esta indisponivel." %}
+        </p>
+      </header>
+      <a href="{% url 'account_login' %}" class="btn btn-primary w-full">{% trans "Voltar para login" %}</a>
+    </div>
+  </article>
+{% endblock content %}

@@ -1,0 +1,139 @@
+{% extends "dashboard/_base.html" %}
+{% load i18n %}
+{% load static %}
+{% load django_vite %}
+
+{% block title %}{% trans "Municipios" %}{% endblock title %}
+
+{% block content %}
+  <section class="space-y-6 p-4 md:p-6">
+    <article class="grid gap-4 md:grid-cols-3">
+      {% for item in highlights %}
+        <div class="card bg-base-100 border-base-300 border shadow-sm">
+          <div class="card-body p-5">
+            <p class="text-base-content/70 text-xs uppercase tracking-wide">{{ item.label }}</p>
+            <p class="text-2xl font-bold">{{ item.value }}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </article>
+
+    <article class="card bg-base-100 border-base-300 border shadow-sm">
+      <div class="card-body gap-4 p-5">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 class="text-lg font-semibold">{% trans "Ranking municipal" %}</h2>
+            <p class="text-base-content/70 text-sm">
+              {% trans "Cobertura media consolidada:" %} <strong>{{ coverage_average }}%</strong>
+            </p>
+          </div>
+          <form method="get" class="w-full sm:w-auto">
+            <label class="input input-bordered flex items-center gap-2">
+              <span class="iconify lucide--search size-4 text-base-content/60"></span>
+              <input type="text"
+                     name="query"
+                     value="{{ query }}"
+                     class="grow"
+                     placeholder="{% trans 'Buscar municipio' %}" />
+            </label>
+          </form>
+        </div>
+
+        <div class="rounded-box border border-base-300 bg-base-200/40 p-4">
+          <h3 class="font-medium">{% trans "Indicador de cobertura" %}</h3>
+          <p class="text-sm text-base-content/70">{% trans "Comparativo de cobertura por municipio no periodo atual." %}</p>
+          <div id="municipalities-coverage-chart" class="mt-3 min-h-72"></div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="table table-zebra">
+            <thead>
+              <tr>
+                <th>{% trans "Municipio" %}</th>
+                <th>{% trans "Cobertura" %}</th>
+                <th>{% trans "Concluidas" %}</th>
+                <th>{% trans "Risco alto" %}</th>
+                <th>{% trans "Tendencia" %}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for municipality in municipalities %}
+                <tr>
+                  <td class="font-semibold">{{ municipality.name }}</td>
+                  <td>
+                    <div class="min-w-44 space-y-1">
+                      <div class="flex justify-between text-xs text-base-content/70">
+                        <span>{{ municipality.coverage }}%</span>
+                        <span>100%</span>
+                      </div>
+                      <progress value="{{ municipality.coverage }}" max="100" class="progress progress-primary w-full"></progress>
+                    </div>
+                  </td>
+                  <td>{{ municipality.completed }}</td>
+                  <td>{{ municipality.high_risk }}</td>
+                  <td>
+                    <span class="badge badge-info">{{ municipality.trend }}</span>
+                  </td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="5" class="text-center text-base-content/60 py-8">{% trans "Nenhum municipio encontrado." %}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </article>
+  </section>
+{% endblock content %}
+
+{% block extra_js %}
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      if (typeof ApexCharts === "undefined") {
+        return;
+      }
+
+      const container = document.getElementById("municipalities-coverage-chart");
+      if (!container) {
+        return;
+      }
+
+      const categories = [{% for municipality in municipalities %}"{{ municipality.name|escapejs }}"{% if not forloop.last %}, {% endif %}{% endfor %}];
+      const values = [{% for municipality in municipalities %}{{ municipality.coverage }}{% if not forloop.last %}, {% endif %}{% endfor %}];
+
+      if (!categories.length) {
+        return;
+      }
+
+      const chart = new ApexCharts(container, {
+        chart: {
+          type: "bar",
+          height: 300,
+          toolbar: { show: false },
+        },
+        plotOptions: {
+          bar: {
+            horizontal: true,
+            borderRadius: 4,
+          },
+        },
+        series: [{ name: "Cobertura", data: values }],
+        xaxis: {
+          categories,
+          max: 100,
+        },
+        colors: ["#0ea5e9"],
+        dataLabels: {
+          enabled: true,
+          formatter: (value) => `${value}%`,
+        },
+        grid: { borderColor: "#e5e7eb" },
+      });
+
+      chart.render();
+    });
+  </script>
+{% endblock extra_js %}

@@ -19,90 +19,142 @@
 <header id="layout-topbar"
         role="navigation"
         aria-label="{% trans 'Navigation bar' %}"
-        class="flex items-center justify-between px-4">
-  <div class="inline-flex items-center gap-3" x-data="topbarData()">
-    <label for="layout-sidebar-toggle-trigger"
-           class="btn btn-square btn-ghost btn-sm group-has-[[id=layout-sidebar-hover-trigger]:checked]/html:hidden"
-           aria-label="{% trans 'Sidebar toggle' %}">
-      <span class="iconify lucide--menu size-5"></span>
-    </label>
-    <label for="layout-sidebar-hover-trigger"
-           class="btn btn-square btn-ghost btn-sm hidden group-has-[[id=layout-sidebar-hover-trigger]:checked]/html:flex"
-           aria-label="{% trans 'Sidebar hover toggle' %}">
-      <span class="iconify lucide--menu size-5"></span>
-    </label>
-    <div class="hidden sm:flex flex-col">
-      <p class="leading-none font-medium md:text-lg">
-        <span x-text="greeting"></span>, {{ user.first_name }}.
-      </p>
-    </div>
-  </div>
-  <div class="inline-flex items-center gap-3">
-    <button class="btn btn-circle btn-ghost btn-sm relative overflow-hidden"
-            aria-label="{% trans 'Toggle theme' %}"
-            data-theme-control="toggle">
-      <span class="iconify lucide--sun absolute size-4.5 transition-all duration-300 -translate-y-4 opacity-0 group-data-[theme=material]/html:translate-y-0 group-data-[theme=material]/html:opacity-100"></span>
-      <span class="iconify lucide--moon absolute size-4.5 transition-all duration-300 translate-y-4 opacity-0 group-data-[theme=material-dark]/html:translate-y-0 group-data-[theme=material-dark]/html:opacity-100"></span>
-    </button>
-    <div class="dropdown dropdown-bottom dropdown-end">
-      <div class="btn btn-ghost btn-circle btn-sm" tabindex="0">
-        <img src="https://flagcdn.com/{% if current_language == 'pt-br' %}br{% else %}us{% endif %}.svg"
-             class="rounded-box size-5.5 object-cover"
-             alt="{% trans 'Current language' %}" />
-      </div>
-      <div class="dropdown-content bg-base-100 rounded-box mt-2 shadow-sm"
-           tabindex="0">
-        <ul class="menu w-full p-2">
-          {% for language in language_info_list %}
-            <li>
-              <form method="post" action="{% url 'set_language' %}">
-                {% csrf_token %}
-                <input type="hidden" name="language" value="{{ language.code }}" />
-                <input type="hidden" name="next" value="{{ request.get_full_path }}" />
-                <button type="submit" class="flex items-center w-25 cursor-pointer gap-2">
-                  <img src="https://flagcdn.com/{% if language.code == 'pt-br' %}br{% else %}us{% endif %}.svg"
-                       class="rounded-box size-4.5 object-cover"
-                       alt="{{ language.name_local }}" />
-                  <span>{{ language.code|upper }}</span>
-                  {% if language.code == current_language %}
-                    <span class="iconify lucide--check ms-auto size-4 text-success"></span>
-                  {% endif %}
-                </button>
-              </form>
-            </li>
-          {% endfor %}
-        </ul>
+        class="flex flex-col gap-3 px-4 py-3">
+  <div class="flex items-center justify-between">
+    <div class="inline-flex items-center gap-3" x-data="topbarData()">
+      <label for="layout-sidebar-toggle-trigger"
+             class="btn btn-square btn-ghost btn-sm"
+             aria-label="{% trans 'Sidebar toggle' %}">
+        <span class="iconify lucide--menu size-5"></span>
+      </label>
+      <div class="hidden sm:flex flex-col">
+        <p class="leading-none font-medium md:text-lg">
+          <span x-text="greeting"></span>, {{ user.first_name }}.
+        </p>
+        <p class="text-xs text-base-content/60">{% trans "Painel operacional Sono" %}</p>
       </div>
     </div>
-    <div class="border-base-300 h-7 border-e"></div>
-    <div class="dropdown dropdown-bottom dropdown-end">
-      <div class="btn btn-ghost btn-circle btn-sm" tabindex="0">
-        <div class="avatar bg-base-200 rounded-box size-7 overflow-hidden">
-          <img src="{{ user.profile.get_avatar_url }}" alt="{% trans 'Avatar' %}" />
+
+    <div class="inline-flex items-center gap-3">
+      <button class="btn btn-circle btn-ghost btn-sm relative overflow-hidden"
+              aria-label="{% trans 'Toggle theme' %}"
+              data-theme-control="toggle">
+        <span class="iconify lucide--sun absolute size-4.5 transition-all duration-300 -translate-y-4 opacity-0 group-data-[theme=material]/html:translate-y-0 group-data-[theme=material]/html:opacity-100"></span>
+        <span class="iconify lucide--moon absolute size-4.5 transition-all duration-300 translate-y-4 opacity-0 group-data-[theme=material-dark]/html:translate-y-0 group-data-[theme=material-dark]/html:opacity-100"></span>
+      </button>
+      <div class="dropdown dropdown-bottom dropdown-end">
+        <div class="btn btn-ghost btn-circle btn-sm" tabindex="0">
+          <img src="https://flagcdn.com/{% if current_language == 'pt-br' %}br{% else %}us{% endif %}.svg"
+               class="rounded-box size-5.5 object-cover"
+               alt="{% trans 'Current language' %}" />
+        </div>
+        <div class="dropdown-content bg-base-100 rounded-box mt-2 shadow-sm"
+             tabindex="0">
+          <ul class="menu w-full p-2">
+            {% for language in language_info_list %}
+              <li>
+                <form method="post" action="{% url 'set_language' %}">
+                  {% csrf_token %}
+                  <input type="hidden" name="language" value="{{ language.code }}" />
+                  <input type="hidden" name="next" value="{{ request.get_full_path }}" />
+                  <button type="submit" class="flex items-center w-25 cursor-pointer gap-2">
+                    <img src="https://flagcdn.com/{% if language.code == 'pt-br' %}br{% else %}us{% endif %}.svg"
+                         class="rounded-box size-4.5 object-cover"
+                         alt="{{ language.name_local }}" />
+                    <span>{{ language.code|upper }}</span>
+                    {% if language.code == current_language %}
+                      <span class="iconify lucide--check ms-auto size-4 text-success"></span>
+                    {% endif %}
+                  </button>
+                </form>
+              </li>
+            {% endfor %}
+          </ul>
         </div>
       </div>
-      <div class="dropdown-content bg-base-100 rounded-box mt-2 w-44 shadow-sm"
-           tabindex="0">
-        <ul class="menu w-full p-2">
-          <li>
-            <a href="#">
-              <span class="iconify lucide--settings size-4"></span>
-              <span>{% trans "Settings" %}</span>
-            </a>
-          </li>
-        </ul>
-        <hr class="border-base-300" />
-        <ul class="menu w-full p-2">
-          <li>
-            <button type="button"
-                    class="text-error hover:bg-error/10"
-                    onclick="document.getElementById('logout-modal').showModal()">
-              <span class="iconify lucide--log-out size-4"></span>
-              <span>{% trans "Logout" %}</span>
-            </button>
-          </li>
-        </ul>
+      <div class="border-base-300 h-7 border-e"></div>
+      <div class="dropdown dropdown-bottom dropdown-end">
+        <div class="btn btn-ghost btn-circle btn-sm" tabindex="0">
+          <div class="avatar bg-base-200 rounded-box size-7 overflow-hidden">
+            <img src="{{ user.profile.get_avatar_url }}" alt="{% trans 'Avatar' %}" />
+          </div>
+        </div>
+        <div class="dropdown-content bg-base-100 rounded-box mt-2 w-44 shadow-sm"
+             tabindex="0">
+          <ul class="menu w-full p-2">
+            <li>
+              <a href="{% url 'users:settings' %}">
+                <span class="iconify lucide--settings size-4"></span>
+                <span>{% trans "Configuracoes" %}</span>
+              </a>
+            </li>
+          </ul>
+          <hr class="border-base-300" />
+          <ul class="menu w-full p-2">
+            <li>
+              <button type="button"
+                      class="text-error hover:bg-error/10"
+                      onclick="document.getElementById('logout-modal').showModal()">
+                <span class="iconify lucide--log-out size-4"></span>
+                <span>{% trans "Sair" %}</span>
+              </button>
+            </li>
+          </ul>
+        </div>
       </div>
+    </div>
+  </div>
+
+  <div class="border-base-300/70 flex flex-wrap items-center justify-between gap-3 border-t pt-3">
+    <div>
+      <h1 class="text-base-content text-lg font-semibold leading-none md:text-xl">
+        {% if request.resolver_match.view_name == 'dashboard:index' %}
+          {% trans "Visao Geral" %}
+        {% elif request.resolver_match.view_name == 'dashboard:evaluations' %}
+          {% trans "Gestao de Avaliacoes" %}
+        {% elif request.resolver_match.view_name == 'dashboard:professionals' %}
+          {% trans "Gestao de Profissionais" %}
+        {% elif request.resolver_match.view_name == 'dashboard:municipalities' %}
+          {% trans "Desempenho por Municipio" %}
+        {% elif request.resolver_match.view_name == 'dashboard:reports' %}
+          {% trans "Relatorios Consolidados" %}
+        {% elif request.resolver_match.view_name == 'assessments:questionnaire' %}
+          {% trans "Questionario EDSC" %}
+        {% elif request.resolver_match.view_name == 'assessments:results' %}
+          {% trans "Resultado Clinico" %}
+        {% elif page_title %}
+          {{ page_title }}
+        {% else %}
+          {% trans "Area autenticada" %}
+        {% endif %}
+      </h1>
+      <p class="mt-1 text-xs text-base-content/60 md:text-sm">
+        {% if request.resolver_match.view_name == 'dashboard:index' %}
+          {% trans "Acompanhe indicadores principais e a fila recente de avaliacoes." %}
+        {% elif request.resolver_match.view_name == 'dashboard:evaluations' %}
+          {% trans "Use filtros clinicos para priorizar atendimentos e revisar resultados." %}
+        {% elif request.resolver_match.view_name == 'dashboard:reports' %}
+          {% trans "Consulte consolidacoes por periodo e exporte dados estrategicos." %}
+        {% elif request.resolver_match.view_name == 'users:settings' %}
+          {% trans "Atualize perfil, seguranca e preferencias da conta." %}
+        {% else %}
+          {% trans "Fluxo operacional integrado com dashboard e trilha clinica EDSC." %}
+        {% endif %}
+      </p>
+    </div>
+
+    <div class="inline-flex flex-wrap items-center gap-2">
+      {% if request.resolver_match.view_name == 'dashboard:index' %}
+        <a href="{% url 'assessments:questionnaire' %}" class="btn btn-primary btn-sm">
+          <span class="iconify lucide--file-plus-2 size-4"></span>
+          <span>{% trans "Nova Avaliacao" %}</span>
+        </a>
+      {% endif %}
+
+      <a href="{% url 'dashboard:index' %}" class="btn btn-ghost btn-sm">
+        <span class="iconify lucide--house size-4"></span>
+        <span>{% trans "Inicio" %}</span>
+      </a>
     </div>
   </div>
 </header>

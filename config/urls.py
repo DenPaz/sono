@@ -9,6 +9,7 @@ urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),
     path("i18n/", include("django.conf.urls.i18n")),
     path("accounts/", include("allauth.urls")),
+    path("assessments/", include("apps.assessments.urls", namespace="assessments")),
     path("", include("apps.dashboard.urls", namespace="dashboard")),
     path("users/", include("apps.users.urls", namespace="users")),
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
