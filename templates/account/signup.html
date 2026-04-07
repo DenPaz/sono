@@ -1,0 +1,102 @@
+{% extends "account/_base.html" %}
+{% load i18n %}
+{% load static %}
+{% load django_vite %}
+{% load widget_tweaks %}
+
+{% block title %}{% trans "Cadastrar-se" %}{% endblock title %}
+
+{% block content %}
+  <article class="card bg-base-100 border-base-300 border shadow-sm">
+    <div class="card-body gap-5 p-6 sm:p-8">
+      <header class="space-y-1">
+        <p class="text-base-content/70 text-xs uppercase tracking-wide">{% trans "Cadastro institucional" %}</p>
+        <h1 class="text-2xl font-bold">{% trans "Criar conta na plataforma Sono" %}</h1>
+        <p class="text-base-content/70 text-sm">
+          {% trans "Complete os dados abaixo para iniciar sua jornada clinica com a escala EDSC." %}
+        </p>
+        <p class="text-sm text-base-content/70">
+          {% trans "Ja tem uma conta?" %}
+          <a href="{% url 'account_login' %}" class="link link-primary">{% trans "Entrar" %}</a>
+        </p>
+      </header>
+
+      {% if form.non_field_errors %}
+        <div class="alert alert-error">
+          <span>{{ form.non_field_errors|join:", " }}</span>
+        </div>
+      {% endif %}
+
+      <form method="post" action="{% url 'account_signup' %}" class="space-y-4" novalidate>
+        {% csrf_token %}
+        {% for hidden_field in form.hidden_fields %}
+          {{ hidden_field }}
+        {% endfor %}
+
+        {% for field in form.visible_fields %}
+          <div class="space-y-1">
+            <label class="label" for="{{ field.id_for_label }}">
+              <span class="label-text">{{ field.label }}</span>
+            </label>
+
+            {% if field.field.widget.input_type == "password" %}
+              <div class="relative">
+                {{ field|add_class:"input input-bordered w-full pe-11"|add_error_class:"input-error"|attr:"autocomplete:new-password" }}
+                <button type="button"
+                        class="btn btn-ghost btn-xs absolute end-2 top-1/2 -translate-y-1/2"
+                        data-password-toggle="{{ field.id_for_label }}"
+                        aria-label="{% trans 'Mostrar senha' %}">
+                  <span class="iconify lucide--eye size-4"></span>
+                </button>
+              </div>
+            {% else %}
+              {{ field|add_class:"input input-bordered w-full"|add_error_class:"input-error" }}
+            {% endif %}
+
+            {% if field.help_text %}
+              <div class="text-xs text-base-content/60">{{ field.help_text|safe }}</div>
+            {% endif %}
+            {% if field.errors %}
+              <p class="text-error text-xs">{{ field.errors|join:", " }}</p>
+            {% endif %}
+          </div>
+        {% endfor %}
+
+        {% if redirect_field %}
+          {{ redirect_field }}
+        {% elif redirect_field_value %}
+          <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+        {% endif %}
+
+        <button type="submit" class="btn btn-primary w-full">{% trans "Cadastrar-se" %}</button>
+      </form>
+
+      {% if PASSKEY_SIGNUP_ENABLED and signup_by_passkey_url %}
+        <div class="divider my-1"></div>
+        <a href="{{ signup_by_passkey_url }}" class="btn btn-outline w-full">
+          {% trans "Cadastrar com passkey" %}
+        </a>
+      {% endif %}
+    </div>
+  </article>
+{% endblock content %}
+
+{% block extra_js %}
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll("[data-password-toggle]").forEach((button) => {
+        button.addEventListener("click", () => {
+          const input = document.getElementById(button.dataset.passwordToggle);
+          if (!input) {
+            return;
+          }
+          const isPassword = input.getAttribute("type") === "password";
+          input.setAttribute("type", isPassword ? "text" : "password");
+          button.innerHTML = isPassword
+            ? '<span class="iconify lucide--eye-off size-4"></span>'
+            : '<span class="iconify lucide--eye size-4"></span>';
+        });
+      });
+    });
+  </script>
+{% endblock extra_js %}

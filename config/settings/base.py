@@ -91,6 +91,7 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     "apps.core.config.CoreConfig",
     "apps.dashboard.config.DashboardConfig",
+    "apps.assessments.config.AssessmentsConfig",
     "apps.users.config.UsersConfig",
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -284,7 +285,7 @@ ACCOUNT_ADAPTER = "apps.users.adapters.AccountAdapter"
 ACCOUNT_FORMS = {
     "signup": "apps.users.forms_allauth.UserSignupForm",
 }
-ACCOUNT_LOGIN_BY_CODE_ENABLED = True
+ACCOUNT_LOGIN_BY_CODE_ENABLED = False
 ACCOUNT_EMAIL_UNKNOWN_ACCOUNTS = False
 ACCOUNT_EMAIL_NOTIFICATIONS = True
 ACCOUNT_CHANGE_EMAIL = True

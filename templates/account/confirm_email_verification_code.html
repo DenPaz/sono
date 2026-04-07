@@ -1,0 +1,7 @@
+{% extends "account/base_confirm_code.html" %}
+{% load i18n %}
+
+{% block head_title %}{% trans "Verificacao de e-mail" %}{% endblock head_title %}
+{% block code_title %}{% trans "Informe o codigo de verificacao" %}{% endblock code_title %}
+{% block recipient %}{{ email }}{% endblock recipient %}
+{% block change_title %}{% trans "Usar outro e-mail" %}{% endblock change_title %}

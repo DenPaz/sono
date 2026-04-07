@@ -1,0 +1,43 @@
+{% extends "account/_base.html" %}
+{% load i18n %}
+{% load static %}
+{% load django_vite %}
+{% load account %}
+
+{% block title %}{% trans "Confirmar e-mail" %}{% endblock title %}
+
+{% block content %}
+  <article class="card bg-base-100 border-base-300 border shadow-sm">
+    <div class="card-body gap-5 p-6 sm:p-8">
+      <header class="space-y-1">
+        <h1 class="text-2xl font-bold">{% trans "Confirmar endereco de e-mail" %}</h1>
+      </header>
+
+      {% if confirmation %}
+        {% user_display confirmation.email_address.user as user_name %}
+        {% if can_confirm %}
+          <p class="text-base-content/70 text-sm">
+            {% blocktrans with confirmation.email_address.email as email %}Confirme que <strong>{{ email }}</strong> pertence ao usuario {{ user_name }}.{% endblocktrans %}
+          </p>
+
+          <form method="post" action="{% url 'account_confirm_email' confirmation.key %}" class="space-y-4">
+            {% csrf_token %}
+            {% if redirect_field %}
+              {{ redirect_field }}
+            {% endif %}
+            <button type="submit" class="btn btn-primary w-full">{% trans "Confirmar e-mail" %}</button>
+          </form>
+        {% else %}
+          <div class="alert alert-warning">
+            <span>{% trans "Nao foi possivel confirmar este e-mail porque ele ja foi confirmado por outra conta." %}</span>
+          </div>
+        {% endif %}
+      {% else %}
+        <div class="alert alert-warning">
+          <span>{% trans "Este link expirou ou e invalido. Solicite um novo e-mail de confirmacao." %}</span>
+        </div>
+        <a href="{% url 'account_email' %}" class="btn btn-primary w-full">{% trans "Solicitar novo link" %}</a>
+      {% endif %}
+    </div>
+  </article>
+{% endblock content %}

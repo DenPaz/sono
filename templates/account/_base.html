@@ -1,1 +1,44 @@
 {% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block body_class %}min-h-screen bg-base-200{% endblock body_class %}
+{% block main_class %}min-h-screen{% endblock main_class %}
+
+{% block sidebar %}
+{% endblock sidebar %}
+
+{% block header %}
+{% endblock header %}
+
+{% block footer %}
+{% endblock footer %}
+
+{% block main %}
+	<section class="grid min-h-screen lg:grid-cols-2">
+		<aside class="from-primary/15 to-secondary/20 relative hidden overflow-hidden bg-linear-to-br p-10 lg:flex lg:flex-col lg:justify-between">
+			<div class="space-y-5">
+				<a href="{% url 'account_login' %}"
+					 class="from-primary to-accent bg-linear-to-r bg-clip-text text-4xl font-black text-transparent">Sono</a>
+				<p class="text-base-content/80 max-w-md text-sm leading-relaxed">
+					{% trans "Plataforma clinica para aplicacao da escala EDSC, monitoramento de risco e suporte tatico para decisoes assistenciais." %}
+				</p>
+			</div>
+			<div class="space-y-3 rounded-box border border-base-content/10 bg-base-100/70 p-6 backdrop-blur-sm">
+				<h2 class="text-lg font-semibold">{% trans "Fluxo padrao" %}</h2>
+				<ul class="text-sm text-base-content/70 space-y-1.5">
+					<li>{% trans "1. Acesse com credencial institucional" %}</li>
+					<li>{% trans "2. Inicie nova avaliacao EDSC" %}</li>
+					<li>{% trans "3. Gere resultado com score e risco" %}</li>
+				</ul>
+			</div>
+		</aside>
+
+		<main class="flex min-h-screen items-center justify-center px-4 py-10 sm:px-8">
+			<div class="w-full max-w-xl">
+				{% block content %}
+				{% endblock content %}
+			</div>
+		</main>
+	</section>
+{% endblock main %}

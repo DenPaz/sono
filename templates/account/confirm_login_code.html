@@ -1,0 +1,16 @@
+{% extends "account/base_confirm_code.html" %}
+{% load i18n %}
+
+{% block head_title %}{% trans "Entrar" %}{% endblock head_title %}
+{% block code_title %}{% trans "Informe o codigo de acesso" %}{% endblock code_title %}
+
+{% block recipient %}
+  {% if email %}
+    {{ email }}
+  {% elif phone %}
+    {{ phone }}
+  {% else %}
+    {% trans "seu contato" %}
+  {% endif %}
+{% endblock recipient %}
+{% block change_title %}{% trans "Usar outro e-mail" %}{% endblock change_title %}

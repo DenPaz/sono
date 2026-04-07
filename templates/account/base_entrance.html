@@ -1,0 +1,15 @@
+{% extends "account/_base.html" %}
+{% load i18n %}
+{% load static %}
+{% load django_vite %}
+
+{% block title %}
+  {% block head_title %}
+    {% trans "Acesso" %}
+  {% endblock head_title %}
+{% endblock title %}
+
+{% block content %}
+  {% block entrance_content %}
+  {% endblock entrance_content %}
+{% endblock content %}

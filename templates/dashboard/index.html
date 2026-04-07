@@ -1,4 +1,100 @@
 {% extends "dashboard/_base.html" %}
+{% load i18n %}
+{% load static %}
+{% load django_vite %}
+
+{% block title %}{% trans "Dashboard" %}{% endblock title %}
 
 {% block content %}
+	<section class="space-y-6 p-4 md:p-6">
+		<article class="rounded-box from-primary/10 to-secondary/10 border-base-300 bg-linear-to-br border p-6 shadow-sm">
+			<div class="flex flex-wrap items-center justify-between gap-4">
+				<div class="space-y-1">
+					<p class="text-sm text-base-content/70">{% trans "Resumo operacional" %}</p>
+					<h2 class="text-2xl font-bold">{% trans "Monitoramento clinico em tempo real" %}</h2>
+					<p class="text-base-content/70 max-w-2xl text-sm">
+						{% trans "Visualize indicadores de risco, acompanhe avaliacoes recentes e inicie novas triagens no fluxo EDSC." %}
+					</p>
+				</div>
+				<div class="flex items-center gap-2">
+					<a href="{% url 'assessments:questionnaire' %}" class="btn btn-primary btn-sm">
+						<span class="iconify lucide--file-plus-2 size-4"></span>
+						<span>{% trans "Nova Avaliacao" %}</span>
+					</a>
+					<a href="{% url 'dashboard:reports' %}" class="btn btn-outline btn-sm">
+						<span class="iconify lucide--chart-column size-4"></span>
+						<span>{% trans "Ver Relatorios" %}</span>
+					</a>
+				</div>
+			</div>
+		</article>
+
+		<div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+			{% for card in kpi_cards %}
+				<article class="card bg-base-100 border-base-300 border shadow-sm">
+					<div class="card-body gap-2 p-5">
+						<p class="text-base-content/70 text-xs uppercase tracking-wide">{{ card.label }}</p>
+						<div class="flex items-end justify-between">
+							<h3 class="text-2xl font-bold">{{ card.value }}</h3>
+							<span class="badge {% if card.trend_positive %}badge-success{% else %}badge-warning{% endif %}">{{ card.trend }}</span>
+						</div>
+					</div>
+				</article>
+			{% endfor %}
+		</div>
+
+		<article class="card bg-base-100 border-base-300 border shadow-sm">
+			<div class="card-body gap-4 p-5">
+				<div class="flex flex-wrap items-center justify-between gap-3">
+					<div>
+						<h3 class="text-base font-semibold">{% trans "Fila recente de avaliacoes" %}</h3>
+						<p class="text-base-content/70 text-sm">{{ dashboard_period }}</p>
+					</div>
+					<a href="{% url 'dashboard:evaluations' %}" class="btn btn-ghost btn-sm">
+						{% trans "Ver todas" %}
+					</a>
+				</div>
+
+				<div class="overflow-x-auto">
+					<table class="table table-zebra">
+						<thead>
+							<tr>
+								<th>{% trans "Codigo" %}</th>
+								<th>{% trans "Paciente" %}</th>
+								<th>{% trans "Profissional" %}</th>
+								<th>{% trans "Municipio" %}</th>
+								<th>{% trans "Risco" %}</th>
+								<th>{% trans "Status" %}</th>
+								<th class="text-end">{% trans "Acoes" %}</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for evaluation in recent_evaluations %}
+								<tr>
+									<td class="font-semibold">{{ evaluation.id }}</td>
+									<td>{{ evaluation.patient }}</td>
+									<td>{{ evaluation.professional }}</td>
+									<td>{{ evaluation.municipality }}</td>
+									<td>
+										<span class="badge {% if evaluation.risk == 'Alto' %}badge-error{% elif evaluation.risk == 'Moderado' %}badge-warning{% else %}badge-success{% endif %}">
+											{{ evaluation.risk }}
+										</span>
+									</td>
+									<td>{{ evaluation.status }}</td>
+									<td class="text-end">
+										<a href="{% url 'assessments:results' evaluation.assessment_id %}"
+											 class="btn btn-ghost btn-xs">{% trans "Abrir" %}</a>
+									</td>
+								</tr>
+							{% empty %}
+								<tr>
+									<td colspan="7" class="text-center text-base-content/60">{% trans "Nenhuma avaliacao encontrada." %}</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</article>
+	</section>
 {% endblock content %}

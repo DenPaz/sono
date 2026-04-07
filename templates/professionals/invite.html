@@ -1,0 +1,50 @@
+{% extends "dashboard/_base.html" %}
+{% load i18n %}
+{% load static %}
+{% load django_vite %}
+
+{% block title %}{% trans "Convidar profissional" %}{% endblock title %}
+
+{% block content %}
+  <section class="space-y-6 p-4 md:p-6">
+    <article class="card bg-base-100 border-base-300 border shadow-sm max-w-3xl">
+      <div class="card-body gap-4 p-5">
+        <div>
+          <h2 class="text-lg font-semibold">{% trans "Convidar profissional" %}</h2>
+          <p class="text-base-content/70 text-sm">
+            {% trans "Preencha os dados para enviar um convite de acesso ao painel." %}
+          </p>
+        </div>
+
+        <form method="post" class="grid gap-3 md:grid-cols-2">
+          {% csrf_token %}
+
+          <label class="form-control md:col-span-2">
+            <span class="label-text">{{ form.name.label }}</span>
+            {{ form.name }}
+          </label>
+
+          <label class="form-control md:col-span-2">
+            <span class="label-text">{{ form.email.label }}</span>
+            {{ form.email }}
+          </label>
+
+          <label class="form-control">
+            <span class="label-text">{{ form.role.label }}</span>
+            {{ form.role }}
+          </label>
+
+          <label class="form-control">
+            <span class="label-text">{{ form.municipality.label }}</span>
+            {{ form.municipality }}
+          </label>
+
+          <div class="md:col-span-2 flex flex-wrap gap-2 pt-2">
+            <button type="submit" class="btn btn-primary btn-sm">{% trans "Enviar convite" %}</button>
+            <a href="{% url 'dashboard:professionals' %}" class="btn btn-ghost btn-sm">{% trans "Cancelar" %}</a>
+          </div>
+        </form>
+      </div>
+    </article>
+  </section>
+{% endblock content %}

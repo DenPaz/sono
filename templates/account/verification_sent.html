@@ -1,0 +1,28 @@
+{% extends "account/_base.html" %}
+{% load i18n %}
+{% load static %}
+{% load django_vite %}
+
+{% block title %}{% trans "Verifique seu e-mail" %}{% endblock title %}
+
+{% block content %}
+  <article class="card bg-base-100 border-base-300 border shadow-sm">
+    <div class="card-body gap-5 p-6 sm:p-8">
+      <div class="inline-flex size-12 items-center justify-center rounded-full bg-info/15 text-info">
+        <span class="iconify lucide--mail-check size-6"></span>
+      </div>
+
+      <header class="space-y-1">
+        <h1 class="text-2xl font-bold">{% trans "Verifique seu endereco de e-mail" %}</h1>
+        <p class="text-base-content/70 text-sm">
+          {% blocktrans %}Enviamos um e-mail para voce para verificacao. Siga o link fornecido para finalizar o processo de cadastro. Se voce nao encontrar o e-mail de verificacao em sua caixa de entrada principal, verifique sua pasta de spam. Entre em contato conosco se nao receber o e-mail de verificacao dentro de alguns minutos.{% endblocktrans %}
+        </p>
+      </header>
+
+      <div class="flex flex-wrap gap-2">
+        <a href="{% url 'account_login' %}" class="btn btn-primary btn-sm">{% trans "Voltar para login" %}</a>
+        <a href="{% url 'account_signup' %}" class="btn btn-ghost btn-sm">{% trans "Editar cadastro" %}</a>
+      </div>
+    </div>
+  </article>
+{% endblock content %}

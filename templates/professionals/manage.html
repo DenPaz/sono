@@ -1,0 +1,91 @@
+{% extends "dashboard/_base.html" %}
+{% load i18n %}
+{% load static %}
+{% load django_vite %}
+
+{% block title %}{% trans "Gerenciar profissional" %}{% endblock title %}
+
+{% block content %}
+  <section class="space-y-6 p-4 md:p-6">
+    <article class="card bg-base-100 border-base-300 border shadow-sm max-w-4xl">
+      <div class="card-body gap-4 p-5">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h2 class="text-lg font-semibold">{% trans "Gerenciar profissional" %}</h2>
+            <p class="text-base-content/70 text-sm">{% trans "Atualize informacoes administrativas do profissional selecionado." %}</p>
+          </div>
+          <a href="{% url 'dashboard:professionals' %}" class="btn btn-ghost btn-sm">{% trans "Voltar" %}</a>
+        </div>
+
+        {% if professional_not_found %}
+          <div class="alert alert-warning">
+            <span>{% trans "Profissional nao encontrado para o e-mail informado." %}</span>
+          </div>
+        {% elif not selected_email %}
+          <div class="alert alert-info">
+            <span>{% trans "Selecione um profissional na listagem para gerenciar." %}</span>
+          </div>
+        {% else %}
+          <form method="post" class="grid gap-3 md:grid-cols-2">
+            {% csrf_token %}
+            <input type="hidden" name="email" value="{{ professional.email }}" />
+
+            <label class="form-control md:col-span-2">
+              <span class="label-text">{% trans "Nome" %}</span>
+              <input type="text"
+                     name="name"
+                     value="{{ professional.name }}"
+                     class="input input-bordered w-full" />
+            </label>
+
+            <label class="form-control md:col-span-2">
+              <span class="label-text">{% trans "E-mail" %}</span>
+              <input type="email"
+                     value="{{ professional.email }}"
+                     class="input input-bordered w-full"
+                     disabled />
+            </label>
+
+            <label class="form-control">
+              <span class="label-text">{% trans "Cargo" %}</span>
+              <input type="text"
+                     name="role"
+                     value="{{ professional.role }}"
+                     class="input input-bordered w-full" />
+            </label>
+
+            <label class="form-control">
+              <span class="label-text">{% trans "Municipio" %}</span>
+              <input type="text"
+                     name="municipality"
+                     value="{{ professional.municipality }}"
+                     class="input input-bordered w-full" />
+            </label>
+
+            <label class="form-control">
+              <span class="label-text">{% trans "Casos ativos" %}</span>
+              <input type="number"
+                     name="active_cases"
+                     value="{{ professional.active_cases }}"
+                     class="input input-bordered w-full" />
+            </label>
+
+            <label class="form-control">
+              <span class="label-text">{% trans "Status" %}</span>
+              <select name="status" class="select select-bordered w-full">
+                {% for status_option in status_options %}
+                  <option value="{{ status_option }}" {% if professional.status == status_option %}selected{% endif %}>{{ status_option }}</option>
+                {% endfor %}
+              </select>
+            </label>
+
+            <div class="md:col-span-2 flex flex-wrap gap-2 pt-2">
+              <button type="submit" class="btn btn-primary btn-sm">{% trans "Salvar" %}</button>
+              <a href="{% url 'dashboard:professionals' %}" class="btn btn-ghost btn-sm">{% trans "Cancelar" %}</a>
+            </div>
+          </form>
+        {% endif %}
+      </div>
+    </article>
+  </section>
+{% endblock content %}
