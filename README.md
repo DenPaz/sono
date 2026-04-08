@@ -1,6 +1,6 @@
 # Sono
 
-Sono Project.
+Sono App.
 
 ---
 

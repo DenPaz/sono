@@ -33,7 +33,7 @@ LANGUAGES = [
 ]
 SITE_ID = 1
 SITE_NAME = "Sono"
-SITE_DOMAIN = "sono.app.br"
+SITE_DOMAIN = "sono-app.com.br"
 USE_I18N = True
 USE_TZ = True
 LOCALE_PATHS = [str(BASE_DIR / "locale")]

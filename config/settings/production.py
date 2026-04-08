@@ -13,11 +13,11 @@ from .base import env
 SECRET_KEY = env("DJANGO_SECRET_KEY")
 ALLOWED_HOSTS = env.list(
     "DJANGO_ALLOWED_HOSTS",
-    default=["sono.app.br"],
+    default=["sono-app.com.br"],
 )
 CSRF_TRUSTED_ORIGINS = env.list(
     "DJANGO_CSRF_TRUSTED_ORIGINS",
-    default=["https://sono.app.br"],
+    default=["https://sono-app.com.br"],
 )
 
 # -----------------------------------------------------------------------------
@@ -91,7 +91,7 @@ MEDIA_URL = f"https://{aws_s3_domain}/media/"
 # -----------------------------------------------------------------------------
 DEFAULT_FROM_EMAIL = env(
     "DJANGO_DEFAULT_FROM_EMAIL",
-    default="Sono <noreply@sono.app.br>",
+    default="Sono <noreply@sono-app.com.br>",
 )
 SERVER_EMAIL = env(
     "DJANGO_SERVER_EMAIL",
