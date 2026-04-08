@@ -1,4 +1,4 @@
-.PHONY: help setup-env uv-sync npm-install-all init run \
+.PHONY: help setup-env uv-sync npm-install-deps init \
         migrate migrations reset-db seed fresh \
         dev dev-fresh django shell manage clean \
         test translations \
@@ -23,11 +23,11 @@ uv-sync: ## Install Python dependencies
 	@echo "  📦 Installing Python dependencies..."
 	@uv sync
 
-npm-install-all: ## Install all npm dependencies
+npm-install-deps: ## Install all npm dependencies
 	@echo "  📦 Installing npm dependencies..."
 	@npm install
 
-init: uv-sync npm-install-all npm-build migrate seed ## Full first-time setup
+init: uv-sync npm-install-deps npm-build migrate seed ## Full first-time setup
 	@echo ""
 	@echo "  ✅ Project is ready — run 'make dev' to start."
 	@echo ""
