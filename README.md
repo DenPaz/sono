@@ -121,7 +121,7 @@ After running `make seed`, the following accounts are available:
 ```
 sono/
 ├── apps/
-│   ├── core/               # Shared utilities, mixins, validators, middleware, managers
+│   ├── core/               # Shared utilities, mixins, validators, middleware, managers, etc.
 │   ├── dashboard/          # Main dashboard app
 │   └── users/              # User model, profiles, auth adapters, signals
 ├── config/
