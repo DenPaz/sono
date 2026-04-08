@@ -17,7 +17,7 @@
   <div class="col-span-12 lg:col-span-6">
     <div class="flex flex-col items-stretch p-6 md:p-8 lg:p-16">
       <div class="w-full max-w-lg mx-auto">
-        {% block header %}
+        {% block head %}
           <div class="flex items-center justify-between">
             <a href="{{ account_login }}"
                class="font-black text-4xl text-transparent bg-clip-text bg-linear-to-r from-primary to-accent">Sono</a>
@@ -29,18 +29,20 @@
             </button>
           </div>
           <h3 class="mt-8 font-semibold text-xl text-center md:mt-12 lg:mt-24">
-            {% block header_title %}
-            {% endblock header_title %}
+            {% block head_title %}
+            {% endblock head_title %}
           </h3>
           <h3 class="mt-2 text-sm text-base-content/70 text-center">
-            {% block header_message %}
-            {% endblock header_message %}
+            {% block head_body %}
+            {% endblock head_body %}
           </h3>
-        {% endblock header %}
-        <div class="mt-6 md:mt-10">
-          {% block content %}
-          {% endblock content %}
-        </div>
+        {% endblock head %}
+        {% block content %}
+          <div class="mt-6 md:mt-10">
+            {% block content_body %}
+            {% endblock content_body %}
+          </div>
+        {% endblock content %}
       </div>
     </div>
   </div>
