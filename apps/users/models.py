@@ -2,8 +2,8 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from model_utils.models import UUIDModel
 
+from apps.core.models import BaseModel
 from apps.core.validators import FileSizeValidator
 
 from .managers import UserManager
@@ -12,7 +12,7 @@ from .utils import get_default_avatar_url
 from .utils import get_user_upload_path
 
 
-class User(UUIDModel, AbstractUser):
+class User(BaseModel, AbstractUser):
     first_name = models.CharField(
         verbose_name=_("First name"),
         max_length=150,
@@ -41,7 +41,7 @@ class User(UUIDModel, AbstractUser):
         return f"{self.get_full_name()} <{self.email}>"
 
 
-class UserProfile(UUIDModel):
+class UserProfile(BaseModel):
     user = models.OneToOneField(
         to=User,
         verbose_name=_("User"),
