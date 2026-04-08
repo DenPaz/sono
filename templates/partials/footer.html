@@ -1,21 +1,21 @@
 {% load i18n %}
 {% load static %}
 
-<footer class="flex flex-wrap items-center sm:justify-between justify-center text-center gap-3 px-6 py-4 text-base-content/80 text-sm">
+<footer class="flex flex-wrap gap-3 items-center justify-center px-6 py-4 text-sm text-base-content/80 text-center sm:justify-between">
   <span>© {% now "Y" %} Sono. {% trans "All rights reserved." %}</span>
-  <div class="flex flex-wrap items-center justify-center gap-1">
-    <div class="flex items-center gap-1">
+  <div class="flex flex-wrap gap-1 items-center justify-center">
+    <div class="flex gap-1 items-center">
       <span class="iconify lucide--github"></span>
       <span>{% trans "Developed by" %}</span>
     </div>
-    <div class="flex flex-wrap items-center justify-center gap-1">
+    <div class="flex flex-wrap gap-1 items-center justify-center">
       <a href="https://github.com/DenPaz"
-         class="font-bold bg-linear-to-r from-blue-500 to-green-500 bg-clip-text text-transparent"
+         class="font-bold text-transparent bg-clip-text bg-linear-to-r from-blue-500 to-green-500"
          target="_blank"
          rel="noopener noreferrer">DenPaz</a>
       &amp;
       <a href="https://github.com/alissonpef/alissonpef"
-         class="font-bold bg-linear-to-r from-blue-500 to-green-500 bg-clip-text text-transparent"
+         class="font-bold text-transparent bg-clip-text bg-linear-to-r from-blue-500 to-green-500"
          target="_blank"
          rel="noopener noreferrer">AlissonPef</a>
     </div>

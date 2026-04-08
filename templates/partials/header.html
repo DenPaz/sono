@@ -21,37 +21,37 @@
         aria-label="{% trans 'Navigation bar' %}"
         class="flex items-center justify-between px-4"
         x-data="topbarData()">
-  <div class="inline-flex items-center gap-3">
+  <div class="inline-flex gap-3 items-center">
     <label for="layout-sidebar-toggle-trigger"
-           class="btn btn-square btn-ghost btn-sm group-has-[[id=layout-sidebar-hover-trigger]:checked]/html:hidden"
+           class="btn btn-sm btn-ghost btn-square group-has-[[id=layout-sidebar-hover-trigger]:checked]/html:hidden"
            aria-label="{% trans 'Sidebar toggle' %}">
       <span class="iconify lucide--menu size-5"></span>
     </label>
     <label for="layout-sidebar-hover-trigger"
-           class="btn btn-square btn-ghost btn-sm hidden group-has-[[id=layout-sidebar-hover-trigger]:checked]/html:flex"
+           class="btn btn-sm btn-ghost btn-square hidden group-has-[[id=layout-sidebar-hover-trigger]:checked]/html:flex"
            aria-label="{% trans 'Sidebar hover toggle' %}">
       <span class="iconify lucide--menu size-5"></span>
     </label>
-    <div class="hidden sm:flex flex-col">
-      <p class="leading-none font-medium md:text-lg">
+    <div class="hidden flex-col sm:flex">
+      <p class="font-medium leading-none md:text-lg">
         <span x-text="greeting"></span>, {{ user.first_name }}.
       </p>
     </div>
   </div>
-  <div class="inline-flex items-center gap-3">
-    <button class="btn btn-circle btn-ghost btn-sm relative overflow-hidden"
+  <div class="inline-flex gap-3 items-center">
+    <button class="btn btn-sm btn-circle btn-ghost relative overflow-hidden"
             aria-label="{% trans 'Toggle theme' %}"
             data-theme-control="toggle">
-      <span class="iconify lucide--sun absolute size-4.5 transition-all duration-300 -translate-y-4 opacity-0 group-data-[theme=material]/html:translate-y-0 group-data-[theme=material]/html:opacity-100"></span>
-      <span class="iconify lucide--moon absolute size-4.5 transition-all duration-300 translate-y-4 opacity-0 group-data-[theme=material-dark]/html:translate-y-0 group-data-[theme=material-dark]/html:opacity-100"></span>
+      <span class="iconify lucide--sun absolute size-4.5 opacity-0 -translate-y-4 transition-all duration-300 group-data-[theme=material]/html:opacity-100 group-data-[theme=material]/html:translate-y-0"></span>
+      <span class="iconify lucide--moon absolute size-4.5 opacity-0 translate-y-4 transition-all duration-300 group-data-[theme=material-dark]/html:opacity-100 group-data-[theme=material-dark]/html:translate-y-0"></span>
     </button>
     <div class="dropdown dropdown-bottom dropdown-end">
-      <div class="btn btn-ghost btn-circle btn-sm" tabindex="0">
+      <div class="btn btn-sm btn-circle btn-ghost" tabindex="0">
         <img src="https://flagcdn.com/{% if current_language == 'pt-br' %}br{% else %}us{% endif %}.svg"
-             class="rounded-box size-5.5 object-cover"
+             class="size-5.5 rounded-box object-cover"
              alt="{% trans 'Current language' %}" />
       </div>
-      <div class="dropdown-content bg-base-100 rounded-box mt-2 shadow-sm"
+      <div class="dropdown-content mt-2 bg-base-100 rounded-box shadow-sm"
            tabindex="0">
         <ul class="menu w-full p-2">
           {% for language in language_info_list %}
@@ -60,13 +60,13 @@
                 {% csrf_token %}
                 <input type="hidden" name="language" value="{{ language.code }}" />
                 <input type="hidden" name="next" value="{{ request.get_full_path }}" />
-                <button type="submit" class="flex items-center w-25 cursor-pointer gap-2">
+                <button type="submit" class="flex gap-2 items-center w-25 cursor-pointer">
                   <img src="https://flagcdn.com/{% if language.code == 'pt-br' %}br{% else %}us{% endif %}.svg"
-                       class="rounded-box size-4.5 object-cover"
+                       class="size-4.5 rounded-box object-cover"
                        alt="{{ language.name_local }}" />
                   <span>{{ language.code|upper }}</span>
                   {% if language.code == current_language %}
-                    <span class="iconify lucide--check ms-auto size-4 text-success"></span>
+                    <span class="iconify lucide--check size-4 ms-auto text-success"></span>
                   {% endif %}
                 </button>
               </form>
@@ -75,14 +75,14 @@
         </ul>
       </div>
     </div>
-    <div class="border-base-300 h-7 border-e"></div>
+    <div class="h-7 border-base-300 border-e"></div>
     <div class="dropdown dropdown-bottom dropdown-end">
-      <div class="btn btn-ghost btn-circle btn-sm" tabindex="0">
-        <div class="avatar bg-base-200 rounded-box size-7 overflow-hidden">
+      <div class="btn btn-sm btn-circle btn-ghost" tabindex="0">
+        <div class="avatar overflow-hidden size-7 bg-base-200 rounded-box">
           <img src="{{ user.profile.get_avatar_url }}" alt="{% trans 'Avatar' %}" />
         </div>
       </div>
-      <div class="dropdown-content bg-base-100 rounded-box mt-2 w-44 shadow-sm"
+      <div class="dropdown-content w-44 mt-2 bg-base-100 rounded-box shadow-sm"
            tabindex="0">
         <ul class="menu w-full p-2">
           <li>
