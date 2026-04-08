@@ -3,7 +3,8 @@
         dev dev-fresh django shell manage clean \
         test translations \
         npm-install npm-uninstall npm-build npm-dev \
-        ruff ruff-format ruff-lint \
+        ruff-format djlint-format tailwhip format \
+        ruff-lint djlint-lint lint \
         uv
 
 .DEFAULT_GOAL := help
@@ -115,15 +116,33 @@ npm-uninstall: ## Remove an npm package. E.g. make npm-uninstall htmx.org
 	@npm uninstall $(filter-out $@,$(MAKECMDGOALS))
 
 # ============================================================
-#  Linting
+#  Formatting
 # ============================================================
-ruff-format: ## Run Ruff formatter
+ruff-format: ## Format Python code with Ruff
+	@echo "  🐍 Formatting Python code..."
 	@uv run ruff format .
 
-ruff-lint: ## Run Ruff linter with autofix
+ruff-lint: ## Lint Python code with Ruff
+	@echo "  🐍 Linting Python code..."
 	@uv run ruff check --fix .
 
-ruff: ruff-format ruff-lint ## Run Ruff formatter and linter
+djlint-format: ## Format Django templates with djLint
+	@echo "  🎨 Formatting templates..."
+	@uv run djlint templates/ --reformat
+
+djlint-lint: ## Lint Django templates with djLint
+	@echo "  🎨 Linting templates..."
+	@uv run djlint templates/ --lint
+
+tailwhip: ## Sort Tailwind CSS classes in templates and CSS files
+	@echo "  🌀 Sorting Tailwind classes..."
+	@uv run tailwhip "templates/**/*.html" "static/css/**/*.css" --write
+
+format: tailwhip djlint-format ruff-format ## Format everything (Tailwind classes, templates, Python)
+	@echo "  ✅ Code formatted."
+
+lint: ruff-lint djlint-lint ## Lint everything (Python and templates)
+	@echo "  ✅ Code linted."
 
 # ============================================================
 #  uv passthrough

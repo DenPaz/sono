@@ -119,12 +119,11 @@ lint.select = [
   "YTT",
 ]
 lint.ignore = [
+  "COM812", # Conflicts with Ruff formatter
   "RUF012", # Mutable class attributes should be annotated with `typing.ClassVar`
   "S101",   # Use of assert detected https://docs.astral.sh/ruff/rules/assert/
   "SIM102", # sometimes it's better to nest
-  # of types for comparison.
-  # Deactivated because it can make the code slow:
-  # https://github.com/astral-sh/ruff/issues/7871
+  "TC002",  # Move third-party import into a type-checking block
 ]
 lint.isort.force-single-line = true
 
@@ -160,7 +159,7 @@ indent_size = 2
 
 # ==== tailwhip ====
 [tool.tailwhip]
-default_globs = ["templates/**/*.html", "static/**/*.css"]
+default_globs = ["templates/**/*.html", "static/css/**/*.css"]
 custom_colors = [
   "primary",
   "secondary",
