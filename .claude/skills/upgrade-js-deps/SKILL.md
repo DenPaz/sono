@@ -4,7 +4,7 @@ description: Upgrade JavaScript dependencies using npm-check-updates, then run p
 allowed-tools:
   [
     Bash(npx npm-check-updates *),
-    Bash(make npm-install *),
+    Bash(make npm-install-deps *),
     Bash(make npm-build *),
     Bash(make npm-type-check *),
     Bash(make test *),
@@ -26,7 +26,7 @@ Run `npx npm-check-updates -u` to update `package.json` with the new versions.
 
 ### Step 3: Install updated dependencies
 
-Run `make npm-install` to install the upgraded dependencies and update `package-lock.json`.
+Run `make npm-install-deps` to install the upgraded dependencies and update `package-lock.json`.
 
 ### Step 4: Run post-upgrade checks
 
