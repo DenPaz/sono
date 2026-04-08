@@ -8,10 +8,10 @@ authors = [
   { name = "Dennis Paz", email = "dppazlopez@gmail.com" },
   { name = "Alisson Pereira", email = "alissonpef@gmail.com" },
 ]
-requires-python = "==3.14.*"
+requires-python = ">=3.12"
 classifiers = [
   "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: 3.12",
 ]
 dependencies = [
   "argon2-cffi==25.1.0",
