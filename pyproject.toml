@@ -59,6 +59,7 @@ dev = [
   "pytest-django==4.12.0",
   "pytest-sugar==1.1.1",
   "ruff==0.15.9",
+  "tailwhip==0.13.0",
   "watchfiles==1.1.1",
   "werkzeug[watchdog]==3.1.8",
 ]
@@ -156,3 +157,18 @@ indent_size = 2
 
 [tool.djlint.js]
 indent_size = 2
+
+# ==== tailwhip ====
+[tool.tailwhip]
+default_globs = ["templates/**/*.html", "static/**/*.css"]
+custom_colors = [
+  "primary",
+  "secondary",
+  "accent",
+  "neutral",
+  "base",
+  "info",
+  "success",
+  "warning",
+  "error",
+]
