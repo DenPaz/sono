@@ -1,1 +1,47 @@
 {% extends "base.html" %}
+
+{% load i18n %}
+{% load static %}
+
+{% block main_class %}
+  grid grid-cols-12 overflow-auto sm:h-screen
+{% endblock main_class %}
+{% block main %}
+  <div class="hidden relative bg-linear-to-r from-primary to-accent lg:block lg:col-span-6">
+    <div class="absolute inset-0 flex items-center justify-center">
+      <img src="{% static 'images/auth-hero.png' %}"
+           class="object-cover"
+           alt="{% trans 'Background' %}" />
+    </div>
+  </div>
+  <div class="col-span-12 lg:col-span-6">
+    <div class="flex flex-col items-stretch p-6 md:p-8 lg:p-16">
+      <div class="w-full max-w-lg mx-auto">
+        {% block header %}
+          <div class="flex items-center justify-between">
+            <a href="{{ account_login }}"
+               class="font-black text-5xl text-transparent bg-clip-text bg-linear-to-r from-primary to-accent">Sono</a>
+            <button class="btn btn-circle btn-outline relative overflow-hidden border-base-300"
+                    aria-label="{% trans 'Toggle theme' %}"
+                    data-theme-control="toggle">
+              <span class="iconify lucide--sun absolute size-4.5 opacity-0 -translate-y-4 transition-all duration-300 group-data-[theme=material]/html:opacity-100 group-data-[theme=material]/html:translate-y-0"></span>
+              <span class="iconify lucide--moon absolute size-4.5 opacity-0 translate-y-4 transition-all duration-300 group-data-[theme=material-dark]/html:opacity-100 group-data-[theme=material-dark]/html:translate-y-0"></span>
+            </button>
+          </div>
+          <h3 class="mt-8 font-semibold text-xl text-center md:mt-12 lg:mt-24">
+            {% block header_title %}
+            {% endblock header_title %}
+          </h3>
+          <h3 class="mt-2 text-sm text-base-content/70 text-center">
+            {% block header_message %}
+            {% endblock header_message %}
+          </h3>
+        {% endblock header %}
+        <div class="mt-6 md:mt-10">
+          {% block content %}
+          {% endblock content %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock main %}
