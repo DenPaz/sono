@@ -21,7 +21,7 @@
 
 .menu {
   .menu-title {
-    @apply text-base-content/70 font-medium;
+    @apply font-medium text-base-content/70;
   }
 }
 
@@ -54,11 +54,11 @@
 
 .fieldset {
   .fieldset-legend {
-    @apply text-base-content/80 text-sm font-normal;
+    @apply font-normal text-sm text-base-content/80;
   }
   .fieldset-label,
   .label {
-    @apply text-base-content/80 text-sm;
+    @apply text-sm text-base-content/80;
   }
 }
 

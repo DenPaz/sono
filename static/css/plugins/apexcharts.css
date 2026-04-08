@@ -13,7 +13,7 @@
   }
 
   .apexcharts-menu {
-    @apply border-base-300! bg-base-100!;
+    @apply bg-base-100! border-base-300!;
 
     .apexcharts-menu-item {
       @apply hover:bg-base-200;
@@ -21,7 +21,7 @@
   }
 
   .apexcharts-tooltip {
-    @apply bg-base-100! border-base-300! shadow!;
+    @apply shadow! bg-base-100! border-base-300!;
 
     .apexcharts-tooltip-title {
       @apply bg-base-200! border-base-300!;

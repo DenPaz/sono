@@ -17,7 +17,7 @@
     }
 
     .ql-header .ql-picker-options {
-      @apply bg-base-100 border-base-300! rounded-box shadow-none;
+      @apply bg-base-100 rounded-box border-base-300! shadow-none;
     }
 
     button {
@@ -37,7 +37,7 @@
     }
 
     .ql-active .ql-stroke {
-      @apply stroke-primary! opacity-100;
+      @apply opacity-100 stroke-primary!;
     }
   }
 }

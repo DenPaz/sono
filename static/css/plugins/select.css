@@ -15,10 +15,10 @@
 
   .choices__list.choices__list--multiple {
     .choices__item {
-      @apply bg-primary text-primary-content border-0;
+      @apply text-primary-content bg-primary border-0;
 
       .choices__button {
-        @apply border-primary-content/50 pe-1.5;
+        @apply pe-1.5 border-primary-content/50;
         border-left: 1px solid inherit;
       }
     }
@@ -55,6 +55,6 @@
   }
 
   &::after {
-    @apply border-t-base-content/60! border-transparent! transition-all;
+    @apply border-transparent! border-t-base-content/60! transition-all;
   }
 }
