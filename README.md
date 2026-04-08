@@ -59,8 +59,10 @@ cd sono
 
 ```bash
 cp .env.example .env
-# Edit .env and set DATABASE_URL and any other required variables
+# Edit .env and fill in at minimum DATABASE_URL and REDIS_URL
 ```
+
+> `REDIS_URL` defaults to `redis://localhost:6379/0` if not set.
 
 ### 3. First-time setup
 
@@ -82,17 +84,20 @@ make dev
 
 ## ⚙️ Common Commands
 
-| Command             | Description                          |
-| ------------------- | ------------------------------------ |
-| `make dev`          | 🖥️ Start Django + Vite dev servers   |
-| `make migrate`      | 🗄️ Apply pending database migrations |
-| `make migrations`   | 📝 Create new migrations             |
-| `make fresh`        | 🔄 Drop DB, re-migrate, and re-seed  |
-| `make seed`         | 🌱 Populate DB with test data        |
-| `make test`         | 🧪 Run the test suite                |
-| `make ruff`         | 🔍 Format and lint Python code       |
-| `make translations` | 🌐 Extract and compile i18n strings  |
-| `make shell`        | 🐚 Open the Django shell             |
+| Command             | Description                                       |
+| ------------------- | ------------------------------------------------- |
+| `make dev`          | 🖥️ Start Django + Vite dev servers                |
+| `make dev-fresh`    | 🔄 Full DB reset + seed, then start dev           |
+| `make django`       | 🐍 Start Django server only                       |
+| `make migrate`      | 🗄️ Apply pending database migrations              |
+| `make migrations`   | 📝 Create new migrations                          |
+| `make fresh`        | 🔄 Drop DB, re-migrate, and re-seed               |
+| `make seed`         | 🌱 Populate DB with test data                     |
+| `make test`         | 🧪 Run the test suite                             |
+| `make format`       | 🎨 Format Tailwind classes, templates, and Python |
+| `make lint`         | 🔍 Lint Python and templates                      |
+| `make translations` | 🌐 Extract and compile i18n strings               |
+| `make shell`        | 🐚 Open the Django shell                          |
 
 > Run `make help` to see all available commands.
 
@@ -116,9 +121,9 @@ After running `make seed`, the following accounts are available:
 ```
 sono/
 ├── apps/
-│   ├── core/               # Shared utilities, mixins, validators, middleware
+│   ├── core/               # Shared utilities, mixins, validators, middleware, managers
 │   ├── dashboard/          # Main dashboard app
-│   └── users/              # User model, profiles, auth adapters
+│   └── users/              # User model, profiles, auth adapters, signals
 ├── config/
 │   ├── settings/
 │   │   ├── base.py         # Shared settings
@@ -131,6 +136,11 @@ sono/
 │   ├── css/                # Tailwind + DaisyUI styles and plugin overrides
 │   └── js/                 # Alpine.js + HTMX entry points
 ├── templates/              # Django HTML templates
+│   ├── components/         # django-cotton reusable components
+│   ├── partials/           # Included template fragments
+│   ├── dashboard/
+│   ├── account/
+│   └── users/
 ├── manage.py
 ├── vite.config.mjs
 └── pyproject.toml

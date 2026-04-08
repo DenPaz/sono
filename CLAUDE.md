@@ -69,11 +69,16 @@ make dev    # Start Django + Vite dev servers concurrently
 
 Access the app at http://localhost:8000 and Vite at http://localhost:5173.
 
+---
+
 ### Common Commands
 
 #### Development
 
 ```bash
+make dev                        # Start Django + Vite dev servers
+make dev-fresh                  # Full DB reset + seed, then start dev
+make django                     # Start Django server only
 make shell                      # Open the Django shell
 make manage ARGS='<command>'    # Run any Django management command
 make clean                      # Remove .pyc files, __pycache__, and Django caches
@@ -97,12 +102,17 @@ make test ARGS='-x'          # Stop on first failure
 make test ARGS='apps/users'  # Run tests for a specific app
 ```
 
-#### Python Code Quality
+#### Code Quality
 
 ```bash
+make format         # Format everything: Tailwind classes, templates, and Python
+make lint           # Lint everything: Python and templates
+
 make ruff-format    # Format Python code with Ruff
 make ruff-lint      # Lint and auto-fix Python code with Ruff
-make ruff           # Run both format and lint
+make djlint-format  # Format Django templates with djLint
+make djlint-lint    # Lint Django templates with djLint
+make tailwhip       # Sort Tailwind CSS classes in templates and CSS files
 ```
 
 #### Python / uv
@@ -110,13 +120,13 @@ make ruff           # Run both format and lint
 ```bash
 make uv add '<package>'             # Add a new Python package
 make uv remove '<package>'          # Remove a Python package
-make uv run '<command> <args>'      # Run a command in the project's environment
+make uv-sync                        # Install/sync all Python dependencies
 ```
 
 #### Frontend
 
 ```bash
-make npm-install                    # Install all npm packages
+make npm-install-deps               # Install all npm packages
 make npm-install <package-name>     # Install a specific npm package
 make npm-uninstall <package-name>   # Uninstall a specific npm package
 make npm-dev                        # Start the Vite dev server only
@@ -141,6 +151,8 @@ After running `make seed`, the following accounts are available:
 | `alissonpef@gmail.com` | `12345`  | 👑 Superuser |
 
 1,000 regular test users are also created with password `12345`.
+
+> Note: Test accounts are created via management commands, which bypass Django's password validators. The password `12345` is intentionally weak and for development only.
 
 ---
 
