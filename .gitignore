@@ -329,4 +329,4 @@ $RECYCLE.BIN/
 ### Project template
 media/
 certs/
-# static/dist/
+static/dist/
