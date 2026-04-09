@@ -1,8 +1,13 @@
 {% load widget_tweaks %}
 
-<c-vars :field="None" label="" help_text="" icon="" :hide_help_text="False" />
+<c-vars :field="None"
+        label=""
+        help_text=""
+        :hide_help_text="False"
+        icon=""
+        class="input w-full focus:outline-0" />
 <c-forms.fieldset :field="field" label="{{ label }}" help_text="{{ help_text }}" :hide_help_text="hide_help_text">
-  <label class="input w-full focus:outline-0 {% if field.errors %}input-error{% endif %}">
+  <label class="{{ class }} {% if field.errors %}input-error{% endif %}">
     {% if icon %}<span class="iconify {{ icon }} text-base-content/80 size-5"></span>{% endif %}
     {% render_field field class="grow focus:outline-0" %}
   </label>

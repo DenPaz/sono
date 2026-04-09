@@ -1,10 +1,11 @@
 <c-vars :field="None"
         label=""
         help_text=""
+        :hide_help_text="False"
         :errors="None"
-        :hide_help_text="False" />
+        class="fieldset" />
 {% with field_label=label|default:field.label field_help_text=help_text|default:field.help_text field_errors=errors|default:field.errors %}
-  <fieldset class="fieldset">
+  <fieldset class="{{ class }}">
     {% if field_label %}
       <label class="fieldset-legend" for="{{ field.id_for_label }}">{{ field_label }}</label>
     {% endif %}
