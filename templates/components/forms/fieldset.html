@@ -1,0 +1,19 @@
+<c-vars :field="None"
+        label=""
+        help_text=""
+        :errors="None"
+        :hide_help_text="False" />
+{% with field_label=label|default:field.label field_help_text=help_text|default:field.help_text field_errors=errors|default:field.errors %}
+  <fieldset class="fieldset">
+    {% if field_label %}
+      <label class="fieldset-legend" for="{{ field.id_for_label }}">{{ field_label }}</label>
+    {% endif %}
+    {{ slot }}
+    {% if field_errors %}
+      <ul class="text-sm text-error">
+        {% for error in field_errors %}<li>{{ error }}</li>{% endfor %}
+      </ul>
+    {% endif %}
+    {% if field_help_text and not hide_help_text %}<p class="label">{{ field_help_text }}</p>{% endif %}
+  </fieldset>
+{% endwith %}
