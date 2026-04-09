@@ -3,18 +3,32 @@
         help_text=""
         :hide_help_text="False"
         :errors="None"
-        class="fieldset" />
-{% with field_label=label|default:field.label field_help_text=help_text|default:field.help_text field_errors=errors|default:field.errors %}
-  <fieldset class="{{ class }}">
-    {% if field_label %}
-      <label class="fieldset-legend" for="{{ field.id_for_label }}">{{ field_label }}</label>
-    {% endif %}
+        class="fieldset"
+        label_class="fieldset-legend"
+        error_class="text-sm text-error"
+        help_text_class="label" />
+<fieldset class="{{ class }}">
+  {% if field %}
+    {% with field_label=label|default:field.label field_help_text=help_text|default:field.help_text field_errors=errors|default:field.errors %}
+      {% if field_label %}
+        <label class="{{ label_class }}" for="{{ field.id_for_label }}">{{ field_label }}</label>
+      {% endif %}
+      {{ slot }}
+      {% if field_errors %}
+        <ul class="{{ error_class }}">
+          {% for error in field_errors %}<li>{{ error }}</li>{% endfor %}
+        </ul>
+      {% endif %}
+      {% if field_help_text and not hide_help_text %}<p class="{{ help_text_class }}">{{ field_help_text }}</p>{% endif %}
+    {% endwith %}
+  {% else %}
+    {% if label %}<legend class="{{ label_class }}">{{ label }}</legend>{% endif %}
     {{ slot }}
-    {% if field_errors %}
-      <ul class="text-sm text-error">
-        {% for error in field_errors %}<li>{{ error }}</li>{% endfor %}
+    {% if errors %}
+      <ul class="{{ error_class }}">
+        {% for error in errors %}<li>{{ error }}</li>{% endfor %}
       </ul>
     {% endif %}
-    {% if field_help_text and not hide_help_text %}<p class="label">{{ field_help_text }}</p>{% endif %}
-  </fieldset>
-{% endwith %}
+    {% if help_text and not hide_help_text %}<p class="{{ help_text_class }}">{{ help_text }}</p>{% endif %}
+  {% endif %}
+</fieldset>
