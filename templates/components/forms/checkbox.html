@@ -1,0 +1,13 @@
+{% load widget_tweaks %}
+
+<c-vars :field="None"
+        label=""
+        class="checkbox"
+        group_class="label"
+        label_class="" />
+{% with field_label=label|default:field.label %}
+  <label class="{{ group_class }}" for="{{ field.id_for_label }}">
+    {% render_field field class=class %}
+    {% if field_label %}<span class="{{ label_class }}">{{ field_label }}</span>{% endif %}
+  </label>
+{% endwith %}
