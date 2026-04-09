@@ -1,0 +1,34 @@
+{% extends "account/_base.html" %}
+
+{% load i18n %}
+
+{% block title %}
+  {% trans "Login" %}
+{% endblock title %}
+{% block head_title %}
+  {% trans "Login" %}
+{% endblock head_title %}
+{% block head_body %}
+  {% trans "Don't have an account?" %} <a href="{% url 'account_signup' %}"
+    class="text-primary hover:underline">{% trans "Sign up" %}</a>
+{% endblock head_body %}
+{% block content_body %}
+  <form method="post" action="{% url 'account_login' %}">
+    {% csrf_token %}
+    <c-forms.input :field="form.login" icon="lucide--mail" />
+    <c-forms.password :field="form.password" icon="lucide--key-round" hide_help_text />
+    {{ redirect_field }}
+    <div class="flex items-center justify-between mt-6">
+      {% if form.remember %}
+        <c-forms.checkbox :field="form.remember" class="checkbox checkbox-sm checkbox-primary" label_class="text-sm" />
+      {% endif %}
+      <a href="{% url 'account_reset_password' %}"
+         class="ms-auto text-sm text-primary hover:underline">{% trans "Forgot password?" %}</a>
+    </div>
+    <button type="submit"
+            class="btn btn-primary btn-wide gap-3 max-w-full mt-4 md:mt-6">
+      <span class="iconify lucide--log-in size-4"></span>
+      {% trans "Login" %}
+    </button>
+  </form>
+{% endblock content_body %}
