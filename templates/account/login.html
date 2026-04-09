@@ -18,7 +18,7 @@
     <c-forms.input :field="form.login" icon="lucide--mail" />
     <c-forms.password :field="form.password" icon="lucide--key-round" hide_help_text />
     {{ redirect_field }}
-    <div class="flex items-center justify-between mt-6">
+    <div class="flex flex-wrap gap-2 items-center justify-between mt-6">
       {% if form.remember %}
         <c-forms.checkbox :field="form.remember" class="checkbox checkbox-sm checkbox-primary" label_class="text-sm" />
       {% endif %}
