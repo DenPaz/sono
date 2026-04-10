@@ -30,3 +30,6 @@
 html {
   scroll-behavior: smooth;
 }
+
+/* Safelist for dynamically constructed class names */
+@source inline("{alert-,hover:text-,hover:border-}{error,warning,success,info}");
