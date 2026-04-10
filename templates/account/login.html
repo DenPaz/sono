@@ -29,9 +29,17 @@
       <a href="{% url 'account_reset_password' %}"
          class="text-sm text-primary sm:ms-auto hover:underline">{% trans "Forgot password?" %}</a>
     </div>
-    <button type="submit" class="btn btn-primary gap-2">
+    <button type="submit" class="btn btn-primary gap-2 w-full">
       <span class="iconify lucide--log-in size-4"></span>
       {% trans "Login" %}
     </button>
   </form>
+  {% if LOGIN_BY_CODE_ENABLED %}
+    <div class="divider my-6">{% trans "or" %}</div>
+    <a href="{% url 'account_request_login_code' %}"
+       class="btn btn-outline gap-2 w-full">
+      <span class="iconify lucide--mail size-5"></span>
+      {% trans "Send me a sign-in code" %}
+    </a>
+  {% endif %}
 {% endblock content_body %}
