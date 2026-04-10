@@ -54,6 +54,9 @@
           {% endblock drawers %}
         {% endblock main %}
       </main>
+      {% block messages %}
+        {% include "partials/toasts.html" %}
+      {% endblock messages %}
       {% block js %}
         {% include "partials/scripts.html" %}
       {% endblock js %}

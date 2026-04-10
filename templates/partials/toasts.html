@@ -1,0 +1,30 @@
+{% load i18n %}
+
+<template id="toast-template">
+  <div class="alert alert-soft min-w-72 max-w-[20rem] shadow-sm"
+       x-data="{ show: true }"
+       x-show="show"
+       x-transition.opacity
+       role="alert">
+    <span data-toast-message></span>
+    <button class="btn btn-xs btn-circle btn-ghost self-start ms-auto"
+            aria-label="{% trans 'Dismiss' %}">
+      <span class="iconify lucide--x size-3"></span>
+    </button>
+  </div>
+</template>
+{% if messages %}
+  {# djlint:off #}
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      window.showToasts([
+        {% for message in messages %}
+          {
+            "message": "{{ message|escapejs }}",
+            "tags": "{{ message.tags|escapejs }}"
+          }{{ forloop.last|yesno:" ," }}
+        {% endfor %}]);
+    });
+</script>
+  {# djlint:on #}
+{% endif %}
