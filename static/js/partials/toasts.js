@@ -15,6 +15,8 @@ function initToastTimer(toast) {
   const controller = new AbortController();
   const { signal } = controller;
   let timeoutId = null;
+  let remaining = TOAST_DELAY;
+  let startedAt = null;
 
   function dismiss() {
     controller.abort();
@@ -27,12 +29,13 @@ function initToastTimer(toast) {
   }
 
   function start() {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(dismiss, TOAST_DELAY);
+    startedAt = Date.now();
+    timeoutId = setTimeout(dismiss, remaining);
   }
 
   function pause() {
     clearTimeout(timeoutId);
+    remaining -= Date.now() - startedAt;
   }
 
   toast.querySelector("button").addEventListener("click", dismiss, { signal });
