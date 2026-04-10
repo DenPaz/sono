@@ -68,7 +68,6 @@
       </div>
     </div>
     <div class="h-7 border-base-300 border-e" aria-hidden="true"></div>
-    {# User menu #}
     <div class="dropdown dropdown-bottom dropdown-end">
       <button type="button"
               class="btn btn-sm btn-circle btn-ghost"
@@ -82,6 +81,14 @@
       <div class="dropdown-content w-44 mt-2 bg-base-100 rounded-box shadow-sm"
            tabindex="0">
         <ul class="menu w-full p-2">
+          {% if user.is_staff %}
+            <li>
+              <a href="{% url 'admin:index' %}">
+                <span class="iconify lucide--shield size-4" aria-hidden="true"></span>
+                <span>{% trans "Admin" %}</span>
+              </a>
+            </li>
+          {% endif %}
           <li>
             <a href="#">
               <span class="iconify lucide--settings size-4" aria-hidden="true"></span>
