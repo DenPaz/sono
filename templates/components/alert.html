@@ -6,7 +6,7 @@
         :dismissable="True"
         list_class="grow text-sm" />
 {% if messages %}
-  <div class="alert alert-soft alert-{{ severity }} {{ class }}"
+  <div class="alert alert-{{ severity }} alert-soft {{ class }}"
        x-data="{ show: true }"
        x-show="show"
        x-transition>
