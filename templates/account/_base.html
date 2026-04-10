@@ -40,13 +40,7 @@
         {% block content %}
           <div class="mt-6 md:mt-8">
             {% block content_body %}
-              {% if form.non_field_errors %}
-                <div class="alert alert-error alert-soft mb-4">
-                  <ul class="text-sm">
-                    {% for error in form.non_field_errors %}<li>{{ error }}</li>{% endfor %}
-                  </ul>
-                </div>
-              {% endif %}
+              {% if form.non_field_errors %}<c-alert :messages="form.non_field_errors" class="mb-2" />{% endif %}
             {% endblock content_body %}
           </div>
         {% endblock content %}
