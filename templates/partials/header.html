@@ -39,12 +39,7 @@
     </div>
   </div>
   <div class="inline-flex gap-3 items-center">
-    <button class="btn btn-sm btn-circle btn-ghost relative overflow-hidden"
-            aria-label="{% trans 'Toggle theme' %}"
-            data-theme-control="toggle">
-      <span class="iconify lucide--sun absolute size-4.5 opacity-0 -translate-y-4 transition-all duration-300 group-data-[theme=material]/html:opacity-100 group-data-[theme=material]/html:translate-y-0"></span>
-      <span class="iconify lucide--moon absolute size-4.5 opacity-0 translate-y-4 transition-all duration-300 group-data-[theme=material-dark]/html:opacity-100 group-data-[theme=material-dark]/html:translate-y-0"></span>
-    </button>
+    <c-brand.theme_toggle class="btn-sm btn-ghost" />
     <div class="dropdown dropdown-bottom dropdown-end">
       <div class="btn btn-sm btn-circle btn-ghost" tabindex="0">
         <img src="https://flagcdn.com/{% if current_language == 'pt-br' %}br{% else %}us{% endif %}.svg"
