@@ -5,46 +5,53 @@
 <input id="layout-sidebar-toggle-trigger"
        type="checkbox"
        class="hidden"
-       aria-label="{% trans 'Toggle layout sidebar' %}" />
+       aria-hidden="true" />
 <input id="layout-sidebar-hover-trigger"
        type="checkbox"
        class="hidden"
-       aria-label="{% trans 'Dense layout sidebar' %}" />
-<div id="layout-sidebar-hover" class="w-1 h-screen bg-base-300"></div>
-<div id="layout-sidebar" class="sidebar-menu py-3">
+       aria-hidden="true" />
+<div id="layout-sidebar-hover"
+     class="w-1 h-screen bg-base-300"
+     aria-hidden="true"></div>
+<aside id="layout-sidebar"
+       class="sidebar-menu py-3"
+       aria-label="{% trans 'Main navigation' %}">
   <div class="flex gap-3 items-center justify-between min-h-10 px-5">
     <a href="{% url 'dashboard:index' %}"
        class="font-black text-3xl text-transparent bg-clip-text bg-linear-to-r from-primary to-accent">Sono</a>
     <label for="layout-sidebar-hover-trigger"
            title="{% trans 'Toggle sidebar hover' %}"
            class="btn btn-sm btn-circle btn-ghost relative text-base-content/50 max-lg:hidden">
-      <span class="iconify lucide--panel-left-close absolute size-4.5 opacity-100 transition-all duration-300 group-has-[[id=layout-sidebar-hover-trigger]:checked]/html:opacity-0"></span>
-      <span class="iconify lucide--panel-left-dashed absolute size-4.5 opacity-0 transition-all duration-300 group-has-[[id=layout-sidebar-hover-trigger]:checked]/html:opacity-100"></span>
+      <span class="iconify lucide--panel-left-close absolute size-4.5 opacity-100 transition-all duration-300 group-has-[[id=layout-sidebar-hover-trigger]:checked]/html:opacity-0"
+            aria-hidden="true"></span>
+      <span class="iconify lucide--panel-left-dashed absolute size-4.5 opacity-0 transition-all duration-300 group-has-[[id=layout-sidebar-hover-trigger]:checked]/html:opacity-100"
+            aria-hidden="true"></span>
     </label>
   </div>
-  <div class="custom-scrollbar overflow-auto grow">
+  <nav class="custom-scrollbar overflow-auto grow"
+       aria-label="{% trans 'Sidebar navigation' %}">
     <div class="space-y-0.5 mt-5 px-2.5">
       <a href="{% url 'dashboard:index' %}"
          class="menu-item {% active_class 'dashboard:index' %}">
-        <span class="iconify lucide--monitor-dot size-4"></span>
-        <p>{% trans "Dashboard" %}</p>
+        <span class="iconify lucide--monitor-dot size-4" aria-hidden="true"></span>
+        <span>{% trans "Dashboard" %}</span>
       </a>
     </div>
-  </div>
+  </nav>
   <div class="sidebar-menu space-y-0.5 mt-3 px-2.5 pt-2 border-base-200 border-t">
     <button type="button"
             class="menu-item w-full cursor-pointer hover:bg-base-200"
             onclick="document.getElementById('logout-modal').showModal()">
-      <span class="iconify lucide--log-out size-4"></span>
-      <p>{% trans "Logout" %}</p>
+      <span class="iconify lucide--log-out size-4" aria-hidden="true"></span>
+      <span>{% trans "Logout" %}</span>
     </button>
   </div>
-</div>
+</aside>
 <label id="layout-sidebar-backdrop" for="layout-sidebar-toggle-trigger"></label>
-<dialog id="logout-modal" class="modal">
+<dialog id="logout-modal" class="modal" aria-labelledby="logout-modal-title">
   <form method="post" action="{% url 'account_logout' %}" class="modal-box">
     {% csrf_token %}
-    <h3 class="font-bold text-lg">{% trans "Confirm Logout" %}</h3>
+    <h2 id="logout-modal-title" class="font-bold text-lg">{% trans "Confirm Logout" %}</h2>
     <p class="py-4">{% trans "Are you sure you want to logout?" %}</p>
     <div class="modal-action">
       <button type="submit" class="btn btn-error">{% trans "Confirm" %}</button>

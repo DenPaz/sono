@@ -3,18 +3,20 @@
 {% load i18n %}
 {% load static %}
 
-{% block main_class %}
+{% block layout_class %}
   grid grid-cols-12 overflow-auto sm:h-screen
-{% endblock main_class %}
-{% block main %}
-  <div class="hidden relative bg-linear-to-r from-primary to-accent lg:block lg:col-span-6">
+{% endblock layout_class %}
+{% block layout %}
+  <div class="hidden relative bg-linear-to-r from-primary to-accent lg:block lg:col-span-6"
+       aria-hidden="true">
     <div class="absolute inset-0 flex items-center justify-center">
       <img src="{% static 'images/auth-hero.png' %}"
            class="object-cover"
-           alt="{% trans 'Background' %}" />
+           alt=""
+           loading="lazy" />
     </div>
   </div>
-  <div class="col-span-12 lg:col-span-6">
+  <section class="col-span-12 lg:col-span-6">
     <div class="flex flex-col items-stretch p-6 md:p-8 lg:p-16">
       <div class="w-full max-w-lg mx-auto">
         {% block head %}
@@ -23,14 +25,14 @@
                class="font-black text-4xl text-transparent bg-clip-text bg-linear-to-r from-primary to-accent">Sono</a>
             <c-brand.theme-toggle class="btn-outline border-base-300" />
           </div>
-          <h3 class="mt-8 font-semibold text-xl text-center md:mt-12 lg:mt-24">
+          <h1 class="mt-8 font-semibold text-xl text-center md:mt-12 lg:mt-24">
             {% block head_title %}
             {% endblock head_title %}
-          </h3>
-          <h3 class="mt-4 text-sm text-base-content/70 text-center">
+          </h1>
+          <p class="mt-4 text-sm text-base-content/70 text-center">
             {% block head_body %}
             {% endblock head_body %}
-          </h3>
+          </p>
         {% endblock head %}
         {% block content %}
           <div class="mt-6 md:mt-8">
@@ -41,5 +43,5 @@
         {% endblock content %}
       </div>
     </div>
-  </div>
-{% endblock main %}
+  </section>
+{% endblock layout %}

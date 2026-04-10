@@ -7,9 +7,10 @@
        x-transition.opacity
        role="alert">
     <span data-toast-message></span>
-    <button class="btn btn-xs btn-circle btn-ghost self-start ms-auto"
+    <button type="button"
+            class="btn btn-xs btn-circle btn-ghost self-start ms-auto"
             aria-label="{% trans 'Dismiss' %}">
-      <span class="iconify lucide--x size-3"></span>
+      <span class="iconify lucide--x size-3" aria-hidden="true"></span>
     </button>
   </div>
 </template>

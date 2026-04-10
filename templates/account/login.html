@@ -3,25 +3,27 @@
 {% load i18n %}
 
 {% block title %}
-  {% trans "Login" %}
+  {% trans "Sign in" %}
 {% endblock title %}
 {% block head_title %}
-  {% trans "Login" %}
+  {% trans "Sign in" %}
 {% endblock head_title %}
 {% block head_body %}
-  {% trans "Don't have an account?" %} <a href="{% url 'account_signup' %}"
-    class="text-primary hover:underline">{% trans "Sign up" %}</a>
+  {% blocktranslate trimmed with signup_url=signup_url %}
+    Don't have an account? <a href="{{ signup_url }}" class="text-primary hover:underline">Sign up</a>
+  {% endblocktranslate %}
 {% endblock head_body %}
 {% block content_body %}
   {{ block.super }}
   <form method="post"
         action="{% url 'account_login' %}"
-        class="flex flex-col gap-6">
+        class="flex flex-col gap-6"
+        autocomplete="on">
     {% csrf_token %}
     {{ redirect_field }}
     <div class="flex flex-col gap-1">
-      <c-forms.input :field="form.login" icon="lucide--mail" />
-      <c-forms.password :field="form.password" icon="lucide--key-round" hide_help_text />
+      <c-forms.input :field="form.login" icon="lucide--mail" autocomplete="email" />
+      <c-forms.password :field="form.password" icon="lucide--key-round" hide_help_text autocomplete="current-password" />
     </div>
     <div class="flex flex-wrap gap-4 items-center justify-between">
       {% if form.remember %}
@@ -31,15 +33,15 @@
          class="text-sm text-primary sm:ms-auto hover:underline">{% trans "Forgot password?" %}</a>
     </div>
     <button type="submit" class="btn btn-primary gap-2 w-full">
-      <span class="iconify lucide--log-in size-4"></span>
-      {% trans "Login" %}
+      <span class="iconify lucide--log-in size-4" aria-hidden="true"></span>
+      {% trans "Sign in" %}
     </button>
   </form>
   {% if LOGIN_BY_CODE_ENABLED %}
     <div class="divider my-6">{% trans "or" %}</div>
     <a href="{% url 'account_request_login_code' %}"
        class="btn btn-outline gap-2 w-full">
-      <span class="iconify lucide--mail size-5"></span>
+      <span class="iconify lucide--mail size-5" aria-hidden="true"></span>
       {% trans "Send me a sign-in code" %}
     </a>
   {% endif %}

@@ -7,13 +7,13 @@
 {% get_current_language as LANGUAGE_CODE %}
 <html lang="{{ LANGUAGE_CODE }}" data-theme="material" class="group/html">
   <head>
+    <meta charset="utf-8" />
     <title>
       {% block title %}
         {{ page_title|default:_("Welcome") }}
       {% endblock title %}
       | Sono
     </title>
-    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Sono App" />
     <meta name="author" content="Dennis Paz" />
@@ -29,8 +29,8 @@
   <body class="{% block body_class %}{% endblock body_class %}"
         hx-headers='{"x-csrftoken": "{{ csrf_token }}"}'>
     {% block body %}
-      <main class="{% block main_class %}size-full{% endblock main_class %}">
-        {% block main %}
+      <div class="{% block layout_class %}size-full{% endblock layout_class %}">
+        {% block layout %}
           <div class="flex">
             {% block sidebar %}
               {% include "partials/sidebar.html" %}
@@ -39,10 +39,10 @@
               {% block header %}
                 {% include "partials/header.html" %}
               {% endblock header %}
-              <div id="layout-content">
+              <main id="layout-content">
                 {% block content %}
                 {% endblock content %}
-              </div>
+              </main>
               {% block footer %}
                 {% include "partials/footer.html" %}
               {% endblock footer %}
@@ -52,8 +52,8 @@
           {% endblock modals %}
           {% block drawers %}
           {% endblock drawers %}
-        {% endblock main %}
-      </main>
+        {% endblock layout %}
+      </div>
       {% block messages %}
         {% include "partials/toasts.html" %}
       {% endblock messages %}
