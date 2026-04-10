@@ -43,7 +43,7 @@
             class="menu-item w-full cursor-pointer hover:bg-base-200"
             onclick="document.getElementById('logout-modal').showModal()">
       <span class="iconify lucide--log-out size-4" aria-hidden="true"></span>
-      <span>{% trans "Logout" %}</span>
+      <span>{% trans "Sign out" %}</span>
     </button>
   </div>
 </aside>
@@ -51,8 +51,8 @@
 <dialog id="logout-modal" class="modal" aria-labelledby="logout-modal-title">
   <form method="post" action="{% url 'account_logout' %}" class="modal-box">
     {% csrf_token %}
-    <h2 id="logout-modal-title" class="font-bold text-lg">{% trans "Confirm Logout" %}</h2>
-    <p class="py-4">{% trans "Are you sure you want to logout?" %}</p>
+    <h2 id="logout-modal-title" class="font-bold text-lg">{% trans "Confirm sign out" %}</h2>
+    <p class="py-4">{% trans "Are you sure you want to sign out?" %}</p>
     <div class="modal-action">
       <button type="submit" class="btn btn-error">{% trans "Confirm" %}</button>
       <button type="button"
