@@ -1,0 +1,8 @@
+{% load i18n %}
+
+<button class="btn btn-circle btn-ghost relative overflow-hidden {{ class }}"
+        aria-label="{% trans 'Toggle theme' %}"
+        data-theme-control="toggle">
+  <span class="iconify lucide--sun absolute size-4.5 opacity-0 -translate-y-4 transition-all duration-300 group-data-[theme=material]/html:opacity-100 group-data-[theme=material]/html:translate-y-0"></span>
+  <span class="iconify lucide--moon absolute size-4.5 opacity-0 translate-y-4 transition-all duration-300 group-data-[theme=material-dark]/html:opacity-100 group-data-[theme=material-dark]/html:translate-y-0"></span>
+</button>
