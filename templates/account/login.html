@@ -13,20 +13,23 @@
     class="text-primary hover:underline">{% trans "Sign up" %}</a>
 {% endblock head_body %}
 {% block content_body %}
-  <form method="post" action="{% url 'account_login' %}">
+  <form method="post"
+        action="{% url 'account_login' %}"
+        class="flex flex-col gap-6">
     {% csrf_token %}
-    <c-forms.input :field="form.login" icon="lucide--mail" />
-    <c-forms.password :field="form.password" icon="lucide--key-round" hide_help_text />
     {{ redirect_field }}
-    <div class="flex flex-wrap gap-2 items-center justify-between mt-6">
+    <div class="flex flex-col gap-1">
+      <c-forms.input :field="form.login" icon="lucide--mail" />
+      <c-forms.password :field="form.password" icon="lucide--key-round" hide_help_text />
+    </div>
+    <div class="flex flex-wrap gap-4 items-center justify-between">
       {% if form.remember %}
-        <c-forms.checkbox :field="form.remember" class="checkbox checkbox-sm checkbox-primary" label_class="text-sm" />
+        <c-forms.checkbox :field="form.remember" class="checkbox checkbox-sm" label_class="text-sm" />
       {% endif %}
       <a href="{% url 'account_reset_password' %}"
-         class="ms-auto text-sm text-primary hover:underline">{% trans "Forgot password?" %}</a>
+         class="text-sm text-primary sm:ms-auto hover:underline">{% trans "Forgot password?" %}</a>
     </div>
-    <button type="submit"
-            class="btn btn-primary btn-wide gap-3 max-w-full mt-4 md:mt-6">
+    <button type="submit" class="btn btn-primary gap-2">
       <span class="iconify lucide--log-in size-4"></span>
       {% trans "Login" %}
     </button>
