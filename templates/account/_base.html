@@ -19,7 +19,7 @@
       <div class="w-full max-w-lg mx-auto">
         {% block head %}
           <div class="flex items-center justify-between">
-            <a href="{{ account_login }}"
+            <a href="{% url 'account_login' %}"
                class="font-black text-4xl text-transparent bg-clip-text bg-linear-to-r from-primary to-accent">Sono</a>
             <button class="btn btn-circle btn-outline relative overflow-hidden border-base-300"
                     aria-label="{% trans 'Toggle theme' %}"
@@ -40,6 +40,13 @@
         {% block content %}
           <div class="mt-6 md:mt-8">
             {% block content_body %}
+              {% if form.non_field_errors %}
+                <div class="alert alert-error alert-soft mb-4">
+                  <ul class="text-sm">
+                    {% for error in form.non_field_errors %}<li>{{ error }}</li>{% endfor %}
+                  </ul>
+                </div>
+              {% endif %}
             {% endblock content_body %}
           </div>
         {% endblock content %}

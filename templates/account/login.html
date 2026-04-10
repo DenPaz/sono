@@ -13,6 +13,7 @@
     class="text-primary hover:underline">{% trans "Sign up" %}</a>
 {% endblock head_body %}
 {% block content_body %}
+  {{ block.super }}
   <form method="post"
         action="{% url 'account_login' %}"
         class="flex flex-col gap-6">
