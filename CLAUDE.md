@@ -100,6 +100,7 @@ make fresh          # reset-db + migrate + seed
 make test                    # Run the full test suite
 make test ARGS='-x'          # Stop on first failure
 make test ARGS='apps/users'  # Run tests for a specific app
+make test-fresh              # Run tests with a fresh database (use after new migrations)
 ```
 
 #### Code Quality

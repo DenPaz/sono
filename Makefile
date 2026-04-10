@@ -1,7 +1,7 @@
 .PHONY: help setup-env uv-sync npm-install-deps init \
         migrate migrations reset-db seed fresh \
         dev dev-fresh django shell manage clean \
-        test translations \
+        test test-fresh translations \
         npm-install npm-uninstall npm-build npm-dev \
         ruff-format djlint-format tailwhip format \
         ruff-lint djlint-lint lint \
@@ -88,6 +88,10 @@ clean: ## Remove .pyc files, __pycache__ and Django caches
 test: ## Run test suite. E.g. make test ARGS='-x'
 	@echo "  🧪 Running tests..."
 	@uv run pytest ${ARGS}
+
+test-fresh: ## Run test suite with fresh database
+	@echo "  🧪 Running tests with fresh database..."
+	@uv run pytest --create-db ${ARGS}
 
 # ============================================================
 #  i18n

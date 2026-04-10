@@ -94,6 +94,7 @@ make dev
 | `make fresh`        | 🔄 Drop DB, re-migrate, and re-seed               |
 | `make seed`         | 🌱 Populate DB with test data                     |
 | `make test`         | 🧪 Run the test suite                             |
+| `make test-fresh`   | 🧪 Run tests with a fresh database                |
 | `make format`       | 🎨 Format Tailwind classes, templates, and Python |
 | `make lint`         | 🔍 Lint Python and templates                      |
 | `make translations` | 🌐 Extract and compile i18n strings               |
