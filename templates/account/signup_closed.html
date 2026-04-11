@@ -1,0 +1,22 @@
+{% extends "account/_base.html" %}
+
+{% load i18n %}
+
+{% block title %}
+  {% trans "Sign up closed" %}
+{% endblock title %}
+{% block head_title %}
+  {% trans "Sign up is closed" %}
+{% endblock head_title %}
+{% block head_body %}
+  {% blocktranslate trimmed %}
+    We are not accepting new registrations at this time. Please check back later.
+  {% endblocktranslate %}
+{% endblock head_body %}
+{% block content_body %}
+  <a href="{% url 'account_login' %}"
+     class="btn btn-ghost gap-2 w-full border-base-300">
+    <span class="iconify lucide--log-in size-4" aria-hidden="true"></span>
+    {% trans "Back to sign in" %}
+  </a>
+{% endblock content_body %}
