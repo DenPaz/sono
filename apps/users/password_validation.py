@@ -34,3 +34,20 @@ class LowercaseValidator:
 
     def get_help_text(self):
         return _("Your password must contain at least one lowercase letter.")
+
+
+class SymbolValidator:
+    """Validate that the password contains at least one symbol."""
+
+    def validate(self, password, user=None):
+        if not any(not char.isalnum() for char in password):
+            raise ValidationError(
+                self.get_error_message(),
+                code="password_no_symbol",
+            )
+
+    def get_error_message(self):
+        return _("This password does not contain a symbol.")
+
+    def get_help_text(self):
+        return _("Your password must contain at least one symbol.")
