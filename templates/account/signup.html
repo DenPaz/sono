@@ -22,8 +22,10 @@
     {% csrf_token %}
     {{ redirect_field }}
     <div class="flex flex-col gap-1">
-      <c-forms.input :field="form.first_name" icon="lucide--user" autocomplete="given-name" />
-      <c-forms.input :field="form.last_name" icon="lucide--user" autocomplete="family-name" />
+      <div class="grid grid-cols-1 gap-x-4 gap-y-1 lg:grid-cols-2">
+        <c-forms.input :field="form.first_name" icon="lucide--user" autocomplete="given-name" />
+        <c-forms.input :field="form.last_name" icon="lucide--user" autocomplete="family-name" />
+      </div>
       <c-forms.input :field="form.email" icon="lucide--mail" autocomplete="email" />
       <c-forms.password :field="form.password1" icon="lucide--key-round" autocomplete="new-password" hide_help_text password_meter />
       <c-forms.password :field="form.password2" icon="lucide--key-round" autocomplete="new-password" />
