@@ -1,0 +1,36 @@
+{% extends "account/_base.html" %}
+
+{% load i18n %}
+
+{% block title %}
+  {% trans "Sign up" %}
+{% endblock title %}
+{% block head_title %}
+  {% trans "Sign up" %}
+{% endblock head_title %}
+{% block head_body %}
+  {% blocktranslate trimmed with login_url=login_url %}
+    Already have an account? <a href="{{ login_url }}" class="text-primary hover:underline">Sign in</a>
+  {% endblocktranslate %}
+{% endblock head_body %}
+{% block content_body %}
+  {{ block.super }}
+  <form method="post"
+        action="{% url 'account_signup' %}"
+        class="flex flex-col gap-6"
+        autocomplete="on">
+    {% csrf_token %}
+    {{ redirect_field }}
+    <div class="flex flex-col gap-1">
+      <c-forms.input :field="form.first_name" icon="lucide--user" autocomplete="given-name" />
+      <c-forms.input :field="form.last_name" icon="lucide--user" autocomplete="family-name" />
+      <c-forms.input :field="form.email" icon="lucide--mail" autocomplete="email" />
+      <c-forms.password :field="form.password1" icon="lucide--key-round" autocomplete="new-password" hide_help_text password_meter />
+      <c-forms.password :field="form.password2" icon="lucide--key-round" autocomplete="new-password" />
+    </div>
+    <button type="submit" class="btn btn-primary gap-2 w-full mt-2">
+      <span class="iconify lucide--user-plus size-4" aria-hidden="true"></span>
+      {% trans "Sign up" %}
+    </button>
+  </form>
+{% endblock content_body %}
