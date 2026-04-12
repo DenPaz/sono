@@ -289,7 +289,7 @@ ACCOUNT_LOGIN_BY_CODE_ENABLED = True
 ACCOUNT_EMAIL_UNKNOWN_ACCOUNTS = False
 ACCOUNT_EMAIL_NOTIFICATIONS = True
 ACCOUNT_CHANGE_EMAIL = True
-ACCOUNT_LOGIN_BY_CODE_SUPPORTS_RESEND=True
+ACCOUNT_LOGIN_BY_CODE_SUPPORTS_RESEND = True
 
 # -----------------------------------------------------------------------------
 # django-vite
