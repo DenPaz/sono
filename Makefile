@@ -1,4 +1,4 @@
-.PHONY: help setup-env uv-sync npm-install-deps init \
+.PHONY: help uv-sync npm-install-deps init \
         migrate migrations reset-db seed fresh \
         dev dev-fresh django shell manage clean \
         test test-fresh translations \
