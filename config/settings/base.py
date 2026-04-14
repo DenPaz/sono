@@ -48,7 +48,6 @@ DATABASES = {
     ),
 }
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # -----------------------------------------------------------------------------
 # URLS
@@ -221,10 +220,7 @@ EMAIL_TIMEOUT = 5
 # ADMIN
 # -----------------------------------------------------------------------------
 ADMIN_URL = "admin/"
-ADMINS = [
-    ("""Dennis Paz""", "dppazlopez@gmail.com"),
-    ("""Alisson Pereira""", "alissonpef@gmail.com"),
-]
+ADMINS = ["dppazlopez@gmail.com", "alissonpef@gmail.com"]
 MANAGERS = ADMINS
 DJANGO_ADMIN_FORCE_ALLAUTH = env.bool("DJANGO_ADMIN_FORCE_ALLAUTH", True)
 
