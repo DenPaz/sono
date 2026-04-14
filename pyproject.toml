@@ -55,6 +55,7 @@ dev = [
   "factory-boy==3.3.3",
   "ipdb==0.13.13",
   "pre-commit==4.5.1",
+  "psycopg[binary]==3.3.3",
   "pytest==9.0.3",
   "pytest-django==4.12.0",
   "pytest-sugar==1.1.1",
@@ -66,7 +67,10 @@ dev = [
 
 # ==== ruff ====
 [tool.ruff]
-extend-exclude = [ "*/migrations/*.py", "staticfiles/*" ]
+extend-exclude = [
+  "*/migrations/*.py",
+  "staticfiles/*",
+]
 lint.select = [
   "A",
   "ASYNC",
