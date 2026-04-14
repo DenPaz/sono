@@ -4,7 +4,9 @@ import path from 'path';
 
 export default defineConfig({
   plugins: [tailwindcss()],
-  resolve: { alias: { '@': path.resolve(__dirname, './static/js') } },
+  resolve: {
+    alias: { '@': path.resolve(__dirname, './static/js') },
+  },
   base: '/static/',
   build: {
     minify: process.env.DJANGO_VITE_BUILD_MINIFY || true,
@@ -13,8 +15,8 @@ export default defineConfig({
     emptyOutDir: true,
     rollupOptions: {
       input: {
-        styles: path.resolve(__dirname, './static/css/styles.css'),
         main: path.resolve(__dirname, './static/js/main.js'),
+        styles: path.resolve(__dirname, './static/css/styles.css'),
       },
       output: {
         entryFileNames: `js/[name]-[hash].js`,
