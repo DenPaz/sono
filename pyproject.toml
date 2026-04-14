@@ -48,9 +48,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-  "coverage==7.13.5",
   "django-browser-reload==1.21.0",
-  "django-coverage-plugin==3.2.2",
   "django-debug-toolbar==6.3.0",
   "django-extensions==4.1",
   "django-watchfiles==1.4.0",
@@ -138,12 +136,6 @@ keep_full_version = true
 ini_options.minversion = "6.0"
 ini_options.addopts = "--ds=config.settings.test --reuse-db --import-mode=importlib"
 ini_options.python_files = [ "tests.py", "test_*.py" ]
-
-[tool.coverage]
-# ==== Coverage ====
-run.include = [ "apps/**" ]
-run.omit = [ "*/migrations/*", "*/tests/*" ]
-run.plugins = [ "django_coverage_plugin" ]
 
 # ==== djLint ====
 [tool.djlint]
