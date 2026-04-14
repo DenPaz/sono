@@ -5,7 +5,7 @@
 
 <!DOCTYPE html>
 {% get_current_language as LANGUAGE_CODE %}
-<html lang="{{ LANGUAGE_CODE }}" data-theme="material" class="group/html">
+<html lang="{{ LANGUAGE_CODE }}" class="group/html">
   <head>
     <meta charset="utf-8" />
     <title>
@@ -17,7 +17,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Sono App" />
     <meta name="author" content="Dennis Paz" />
-    <link href="{% static 'images/favicons/favicon.ico' %}" rel="icon" />
+    <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}" />
     {% block css %}
       {% include "partials/styles.html" %}
     {% endblock css %}
