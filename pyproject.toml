@@ -36,7 +36,6 @@ dependencies = [
   "django-storages[s3]==1.14.6",
   "django-vite==3.1.0",
   "django-widget-tweaks==1.5.1",
-  "flower==2.0.1",
   "gunicorn==25.3.0",
   "hiredis==3.3.1",
   "pillow==12.2.0",
@@ -131,8 +130,8 @@ lint.isort.force-single-line = true
 [tool.pyproject-fmt]
 keep_full_version = true
 
-[tool.pytest]
 # ==== pytest ====
+[tool.pytest]
 ini_options.minversion = "6.0"
 ini_options.addopts = "--ds=config.settings.test --reuse-db --import-mode=importlib"
 ini_options.python_files = [ "tests.py", "test_*.py" ]
