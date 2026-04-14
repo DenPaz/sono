@@ -126,6 +126,7 @@ lint.ignore = [
 ]
 lint.isort.force-single-line = true
 
+# ==== pyproject-fmt ====
 [tool.pyproject-fmt]
 keep_full_version = true
 
