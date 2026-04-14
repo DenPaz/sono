@@ -27,7 +27,11 @@ npm-install-deps: ## Install all npm dependencies
 	@echo "  📦 Installing npm dependencies..."
 	@npm install
 
-init: uv-sync npm-install-deps npm-build migrate seed ## Full first-time setup
+pre-commit-install: ## Install pre-commit hooks
+	@echo "  🪝 Installing pre-commit hooks..."
+	@uv run pre-commit install
+
+init: uv-sync npm-install-deps npm-build migrate seed pre-commit-install ## Full first-time setup
 	@echo ""
 	@echo "  ✅ Project is ready — run 'make dev' to start."
 	@echo ""
