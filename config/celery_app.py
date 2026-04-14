@@ -4,7 +4,7 @@ from celery import Celery
 from celery.signals import setup_logging
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.local")
-app = Celery("sono")
+app = Celery("apps")
 app.config_from_object("django.conf:settings", namespace="CELERY")
 
 
