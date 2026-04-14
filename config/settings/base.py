@@ -220,7 +220,10 @@ EMAIL_TIMEOUT = 5
 # ADMIN
 # -----------------------------------------------------------------------------
 ADMIN_URL = "admin/"
-ADMINS = ["dppazlopez@gmail.com", "alissonpef@gmail.com"]
+ADMINS = [
+    '"Dennis Paz" <dppazlopez@gmail.com>',
+    '"Alisson Pereira" <alissonpef@gmail.com>',
+]
 MANAGERS = ADMINS
 DJANGO_ADMIN_FORCE_ALLAUTH = env.bool("DJANGO_ADMIN_FORCE_ALLAUTH", True)
 
