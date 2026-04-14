@@ -3,7 +3,7 @@ name = "sono"
 version = "0.1.0"
 description = "Sono App"
 readme = "README.md"
-license = { file = "LICENSE" }
+license = { text = "MIT" }
 authors = [
   { name = "Dennis Paz", email = "dppazlopez@gmail.com" },
   { name = "Alisson Pereira", email = "alissonpef@gmail.com" },
