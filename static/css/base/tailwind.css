@@ -1,19 +1,19 @@
 /* Tailwind CSS */
-@import "tailwindcss";
+@import 'tailwindcss';
 
 /* Dark theme variant */
 @variant dark {
   &:where(
-    [data-theme="dark"] *,
-    [data-theme="dim"] *,
-    [data-theme="material-dark"] *
+    [data-theme='dark'] *,
+    [data-theme='dim'] *,
+    [data-theme='material-dark'] *
   ) {
     @slot;
   }
   &:not(
-    [data-theme="light"] *,
-    [data-theme="contrast"] *,
-    [data-theme="material"] *
+    [data-theme='light'] *,
+    [data-theme='contrast'] *,
+    [data-theme='material'] *
   ) {
     @media (prefers-color-scheme: dark) {
       @slot;

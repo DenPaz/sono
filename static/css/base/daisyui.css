@@ -5,7 +5,7 @@
 
 /* Dark theme */
 @plugin "daisyui/theme" {
-  name: "dark";
+  name: 'dark';
   color-scheme: dark;
   prefersdark: true;
 
@@ -56,7 +56,7 @@
 
 /* Light theme */
 @plugin "daisyui/theme" {
-  name: "light";
+  name: 'light';
   default: true;
   color-scheme: light;
 
@@ -107,7 +107,7 @@
 
 /* Contrast theme */
 @plugin "daisyui/theme" {
-  name: "contrast";
+  name: 'contrast';
   color-scheme: light;
 
   /* == Layout Colors == */
@@ -157,7 +157,7 @@
 
 /* Material theme */
 @plugin "daisyui/theme" {
-  name: "material";
+  name: 'material';
   color-scheme: light;
 
   /* == Layout Colors == */
@@ -206,7 +206,7 @@
 
 /* Dim theme */
 @plugin "daisyui/theme" {
-  name: "dim";
+  name: 'dim';
   color-scheme: dark;
 
   /* == Layout Colors == */
@@ -256,7 +256,7 @@
 
 /* Material Dark theme */
 @plugin "daisyui/theme" {
-  name: "material-dark";
+  name: 'material-dark';
   color-scheme: dark;
 
   /* == Layout Colors == */

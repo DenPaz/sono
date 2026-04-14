@@ -1,7 +1,7 @@
 class PasswordMeter {
   constructor(target) {
     this.input =
-      typeof target === "string" ? document.querySelector(target) : target;
+      typeof target === 'string' ? document.querySelector(target) : target;
     this.rules = [
       (v) => v.length >= 8, // r1: minimum length
       (v) => /[^0-9]/.test(v), // r2: not entirely numeric
@@ -10,7 +10,7 @@ class PasswordMeter {
       (v) => /\W/.test(v), // r5: symbol
     ];
     this.update = this.update.bind(this);
-    this.input?.addEventListener("input", this.update);
+    this.input?.addEventListener('input', this.update);
   }
 
   update() {
@@ -20,7 +20,7 @@ class PasswordMeter {
     this.rules.forEach((rule, i) => {
       const attr = `data-pass-r${i + 1}`;
       if (rule(val)) {
-        this.input.setAttribute(attr, "");
+        this.input.setAttribute(attr, '');
         passed++;
       } else {
         this.input.removeAttribute(attr);
@@ -29,7 +29,7 @@ class PasswordMeter {
     for (let i = 1; i <= this.rules.length; i++) {
       const attr = `data-pass-p${i * 20}`;
       if (i <= passed) {
-        this.input.setAttribute(attr, "");
+        this.input.setAttribute(attr, '');
       } else {
         this.input.removeAttribute(attr);
       }
@@ -38,7 +38,7 @@ class PasswordMeter {
 
   destroy() {
     if (!this.input) return;
-    this.input.removeEventListener("input", this.update);
+    this.input.removeEventListener('input', this.update);
     for (let i = 1; i <= this.rules.length; i++) {
       this.input.removeAttribute(`data-pass-r${i}`);
       this.input.removeAttribute(`data-pass-p${i * 20}`);
@@ -46,7 +46,7 @@ class PasswordMeter {
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  const input = document.querySelector("[data-password-meter]");
+document.addEventListener('DOMContentLoaded', () => {
+  const input = document.querySelector('[data-password-meter]');
   if (input) new PasswordMeter(input);
 });

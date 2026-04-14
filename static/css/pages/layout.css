@@ -48,7 +48,7 @@
     .collapse-content {
       &:before {
         @apply absolute inset-s-4 top-10 bottom-2 w-px bg-base-content/10;
-        content: "";
+        content: '';
       }
     }
   }
@@ -130,7 +130,7 @@ html[data-monochrome-enabled] #layout-monochrome-layer {
 }
 
 /* == Overrides: specific to material theme and non-material theme == */
-html:not([data-theme="material"], [data-theme="material-dark"]) {
+html:not([data-theme='material'], [data-theme='material-dark']) {
   #layout-sidebar {
     @apply border-base-200 border-e;
   }
@@ -140,8 +140,8 @@ html:not([data-theme="material"], [data-theme="material-dark"]) {
   }
 }
 
-html[data-theme="material"],
-html[data-theme="material-dark"] {
+html[data-theme='material'],
+html[data-theme='material-dark'] {
   #layout-sidebar {
     max-height: calc(100vh - 32px);
     @apply top-4 bottom-4 ms-4 rounded-box;

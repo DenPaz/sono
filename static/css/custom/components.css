@@ -83,8 +83,8 @@ input:-webkit-autofill:active {
 }
 
 /* Theme Specific */
-[data-theme="material"],
-[data-theme="material-dark"] {
+[data-theme='material'],
+[data-theme='material-dark'] {
   .card {
     @apply shadow-none;
     &:not(.card-border) {

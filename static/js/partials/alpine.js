@@ -1,7 +1,7 @@
-import Alpine from "alpinejs";
+import Alpine from 'alpinejs';
 
 window.Alpine = Alpine;
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener('DOMContentLoaded', () => {
   Alpine.start();
 });

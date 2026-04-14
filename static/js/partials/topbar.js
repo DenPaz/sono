@@ -1,6 +1,6 @@
-document.addEventListener("alpine:init", () => {
-  Alpine.data("topbarData", () => {
-    const el = document.getElementById("layout-topbar");
+document.addEventListener('alpine:init', () => {
+  Alpine.data('topbarData', () => {
+    const el = document.getElementById('layout-topbar');
 
     return {
       get greeting() {

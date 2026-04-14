@@ -79,7 +79,7 @@
 
       &::after {
         @apply absolute inset-e-1 top-1 bg-primary rounded-full;
-        content: "";
+        content: '';
         width: 5px;
         height: 5px;
       }
