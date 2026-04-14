@@ -70,7 +70,7 @@ dev = [
 
 # ==== ruff ====
 [tool.ruff]
-extend-exclude = ["*/migrations/*.py", "staticfiles/*"]
+extend-exclude = [ "*/migrations/*.py", "staticfiles/*" ]
 lint.select = [
   "A",
   "ASYNC",
@@ -137,13 +137,13 @@ keep_full_version = true
 # ==== pytest ====
 ini_options.minversion = "6.0"
 ini_options.addopts = "--ds=config.settings.test --reuse-db --import-mode=importlib"
-ini_options.python_files = ["tests.py", "test_*.py"]
+ini_options.python_files = [ "tests.py", "test_*.py" ]
 
 [tool.coverage]
 # ==== Coverage ====
-run.include = ["apps/**"]
-run.omit = ["*/migrations/*", "*/tests/*"]
-run.plugins = ["django_coverage_plugin"]
+run.include = [ "apps/**" ]
+run.omit = [ "*/migrations/*", "*/tests/*" ]
+run.plugins = [ "django_coverage_plugin" ]
 
 # ==== djLint ====
 [tool.djlint]
@@ -164,7 +164,7 @@ js.indent_size = 2
 
 # ==== tailwhip ====
 [tool.tailwhip]
-default_globs = ["templates/**/*.html", "static/css/**/*.css"]
+default_globs = [ "templates/**/*.html", "static/css/**/*.css" ]
 custom_colors = [
   "primary",
   "secondary",

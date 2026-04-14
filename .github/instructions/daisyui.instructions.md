@@ -1,7 +1,7 @@
 ---
 description: daisyUI 5
 alwaysApply: true
-applyTo: "**"
+applyTo: '**'
 downloadedFrom: https://daisyui.com/llms.txt
 version: 5.5.x
 ---
@@ -37,7 +37,7 @@ daisyUI 5 provides class names for common UI components
 5. A CSS file with Tailwind CSS and daisyUI looks like this (if it's a node dependency)
 
 ```css
-@import "tailwindcss";
+@import 'tailwindcss';
 @plugin "daisyui";
 ```
 
@@ -103,7 +103,7 @@ daisyUI with all the default configs:
   themes:
     light --default,
     dark --prefersdark;
-  root: ":root";
+  root: ':root';
   include:;
   exclude:;
   prefix:;
@@ -154,7 +154,7 @@ root scrollbar gutter is excluded. `daisy-` prefix is used for all daisyUI class
     caramellatte,
     abyss,
     silk;
-  root: ":root";
+  root: ':root';
   include:;
   exclude: rootscrollgutter, checkbox;
   prefix: daisy-;
@@ -205,10 +205,10 @@ root scrollbar gutter is excluded. `daisy-` prefix is used for all daisyUI class
 A CSS file with Tailwind CSS, daisyUI and a custom daisyUI theme looks like this:
 
 ```css
-@import "tailwindcss";
+@import 'tailwindcss';
 @plugin "daisyui";
 @plugin "daisyui/theme" {
-  name: "mytheme";
+  name: 'mytheme';
   default: true; /* set as default */
   prefersdark: false; /* set as default dark mode (prefers-color-scheme:dark) */
   color-scheme: light; /* color of browser-provided UI */
