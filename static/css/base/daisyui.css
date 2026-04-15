@@ -1,10 +1,10 @@
 /* DaisyUI Plugin */
-@plugin "daisyui" {
+@plugin 'daisyui' {
   exclude: rootscrollgutter;
 }
 
 /* Dark theme */
-@plugin "daisyui/theme" {
+@plugin 'daisyui/theme' {
   name: 'dark';
   color-scheme: dark;
   prefersdark: true;
@@ -55,7 +55,7 @@
 }
 
 /* Light theme */
-@plugin "daisyui/theme" {
+@plugin 'daisyui/theme' {
   name: 'light';
   default: true;
   color-scheme: light;
@@ -106,7 +106,7 @@
 }
 
 /* Contrast theme */
-@plugin "daisyui/theme" {
+@plugin 'daisyui/theme' {
   name: 'contrast';
   color-scheme: light;
 
@@ -156,7 +156,7 @@
 }
 
 /* Material theme */
-@plugin "daisyui/theme" {
+@plugin 'daisyui/theme' {
   name: 'material';
   color-scheme: light;
 
@@ -205,7 +205,7 @@
 }
 
 /* Dim theme */
-@plugin "daisyui/theme" {
+@plugin 'daisyui/theme' {
   name: 'dim';
   color-scheme: dark;
 
@@ -255,7 +255,7 @@
 }
 
 /* Material Dark theme */
-@plugin "daisyui/theme" {
+@plugin 'daisyui/theme' {
   name: 'material-dark';
   color-scheme: dark;
 

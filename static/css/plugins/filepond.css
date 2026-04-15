@@ -4,6 +4,6 @@
 
   .filepond--drop-label,
   .filepond--panel-root {
-    @apply text-base-content bg-base-200 rounded-box;
+    @apply rounded-box bg-base-200 text-base-content;
   }
 }

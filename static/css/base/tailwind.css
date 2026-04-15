@@ -32,4 +32,6 @@ html {
 }
 
 /* Safelist for dynamically constructed class names */
-@source inline("{alert-,hover:text-,hover:border-}{error,warning,success,info}");
+@source inline(
+  '{alert-,hover:text-,hover:border-}{error,warning,success,info}'
+);
