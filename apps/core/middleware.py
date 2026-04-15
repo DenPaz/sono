@@ -22,7 +22,7 @@ class HtmxMessagesMiddleware:
             return response
 
         messages = [
-            {"message": message.message, "tags": message.tags}
+            {"message": str(message.message), "tags": str(message.tags)}
             for message in get_messages(request)
         ]
         if not messages:
@@ -32,10 +32,13 @@ class HtmxMessagesMiddleware:
         if hx_trigger is None:
             triggers = {}
         elif hx_trigger.startswith("{"):
-            triggers = json.loads(hx_trigger)
+            try:
+                triggers = json.loads(hx_trigger)
+            except json.JSONDecodeError:
+                triggers = {}
         else:
             triggers = {hx_trigger: True}
 
         triggers["messages"] = messages
-        response.headers["HX-Trigger"] = json.dumps(triggers)
+        response.headers["HX-Trigger"] = json.dumps(triggers, default=str)
         return response
