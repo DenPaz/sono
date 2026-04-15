@@ -1,14 +1,14 @@
 #!/bin/bash
 set -e
 
-# Load environment variables from .env if it exists
+# Load environment variables from .env
 if [ -f .env ]; then
     set -a
     source .env
     set +a
 fi
 
-# Function to clean up background processes on exit
+# Function to clean up background processes
 cleanup() {
     echo ""
     echo "Stopping servers..."
