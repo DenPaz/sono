@@ -13,7 +13,7 @@
   }
 
   .apexcharts-menu {
-    @apply bg-base-100! border-base-300!;
+    @apply border-base-300! bg-base-100!;
 
     .apexcharts-menu-item {
       @apply hover:bg-base-200;
@@ -21,10 +21,10 @@
   }
 
   .apexcharts-tooltip {
-    @apply shadow! bg-base-100! border-base-300!;
+    @apply border-base-300! bg-base-100! shadow!;
 
     .apexcharts-tooltip-title {
-      @apply bg-base-200! border-base-300!;
+      @apply border-base-300! bg-base-200!;
     }
   }
 
@@ -40,7 +40,7 @@
   }
 
   .apexcharts-xaxistooltip {
-    @apply bg-base-100! border-base-300!;
+    @apply border-base-300! bg-base-100!;
 
     &:before {
       @apply border-b-base-300!;
