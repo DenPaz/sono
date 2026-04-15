@@ -274,7 +274,7 @@ Accordion is used for showing and hiding content but only one item can stay open
 #### Syntax
 
 ```html
-<div class="{MODIFIER} collapse">{CONTENT}</div>
+<div class="collapse {MODIFIER}">{CONTENT}</div>
 ```
 
 where content is:
@@ -309,7 +309,7 @@ Alert informs users about important events
 #### Syntax
 
 ```html
-<div role="alert" class="{MODIFIER} alert">{CONTENT}</div>
+<div role="alert" class="alert {MODIFIER}">{CONTENT}</div>
 ```
 
 #### Rules
@@ -331,7 +331,7 @@ Avatars are used to show a thumbnail
 #### Syntax
 
 ```html
-<div class="{MODIFIER} avatar">
+<div class="avatar {MODIFIER}">
   <div>
     <img src="{image-url}" />
   </div>
@@ -361,7 +361,7 @@ Badges are used to inform the user of the status of specific data
 #### Syntax
 
 ```html
-<span class="{MODIFIER} badge">Badge</span>
+<span class="badge {MODIFIER}">Badge</span>
 ```
 
 #### Rules
@@ -414,7 +414,7 @@ Buttons allow the user to take actions
 #### Syntax
 
 ```html
-<button class="{MODIFIER} btn">Button</button>
+<button class="btn {MODIFIER}">Button</button>
 ```
 
 #### Rules
@@ -448,7 +448,7 @@ For Cally:
 For Pikaday:
 
 ```html
-<input type="text" class="pika-single input" />
+<input type="text" class="input pika-single" />
 ```
 
 For React Day Picker:
@@ -478,7 +478,7 @@ Cards are used to group and display content
 #### Syntax
 
 ```html
-<div class="{MODIFIER} card">
+<div class="card {MODIFIER}">
   <figure><img src="{image-url}" alt="{alt-text}" /></figure>
   <div class="card-body">
     <h2 class="card-title">{title}</h2>
@@ -511,7 +511,7 @@ Carousel show images or content in a scrollable area
 #### Syntax
 
 ```html
-<div class="{MODIFIER} carousel">{CONTENT}</div>
+<div class="carousel {MODIFIER}">{CONTENT}</div>
 ```
 
 #### Rules
@@ -536,10 +536,10 @@ Chat bubbles are used to show one line of conversation and all its data, includi
 #### Syntax
 
 ```html
-<div class="{PLACEMENT} chat">
+<div class="chat {PLACEMENT}">
   <div class="chat-image"></div>
   <div class="chat-header"></div>
-  <div class="{COLOR} chat-bubble">Message text</div>
+  <div class="chat-bubble {COLOR}">Message text</div>
   <div class="chat-footer"></div>
 </div>
 ```
@@ -548,7 +548,7 @@ Chat bubbles are used to show one line of conversation and all its data, includi
 
 - {PLACEMENT} is required and must be either `chat-start` or `chat-end`
 - {COLOR} is optional and can have one of the color class names
-- To add an avatar, use `<div class="chat-image avatar">` and nest the avatar content inside
+- To add an avatar, use `<div class="avatar chat-image">` and nest the avatar content inside
 
 ### checkbox
 
@@ -565,7 +565,7 @@ Checkboxes are used to select or deselect a value
 #### Syntax
 
 ```html
-<input type="checkbox" class="{MODIFIER} checkbox" />
+<input type="checkbox" class="checkbox {MODIFIER}" />
 ```
 
 #### Rules
@@ -587,7 +587,7 @@ Collapse is used for showing and hiding content
 #### Syntax
 
 ```html
-<div tabindex="0" class="{MODIFIER} collapse">
+<div tabindex="0" class="collapse {MODIFIER}">
   <div class="collapse-title">{title}</div>
   <div class="collapse-content">{CONTENT}</div>
 </div>
@@ -664,7 +664,7 @@ Divider will be used to separate content vertically or horizontally
 #### Syntax
 
 ```html
-<div class="{MODIFIER} divider">{text}</div>
+<div class="divider {MODIFIER}">{text}</div>
 ```
 
 #### Rules
@@ -688,7 +688,7 @@ Dock (also know as Bottom navigation or Bottom bar) is a UI element that provide
 #### Syntax
 
 ```html
-<div class="{MODIFIER} dock">{CONTENT}</div>
+<div class="dock {MODIFIER}">{CONTENT}</div>
 ```
 
 where content is a list of buttons:
@@ -723,7 +723,7 @@ Drawer is a grid layout that can show/hide a sidebar on the left or right side o
 #### Syntax
 
 ```html
-<div class="{MODIFIER} drawer">
+<div class="drawer {MODIFIER}">
   <input id="my-drawer" type="checkbox" class="drawer-toggle" />
   <div class="drawer-content">{CONTENT}</div>
   <div class="drawer-side">{SIDEBAR}</div>
@@ -734,7 +734,7 @@ where {CONTENT} can be navbar, site content, footer, etc
 and {SIDEBAR} can be a menu like:
 
 ```html
-<ul class="menu min-h-full w-80 bg-base-100 p-4 text-base-content">
+<ul class="menu w-80 min-h-full p-4 text-base-content bg-base-100">
   <li><a>Item 1</a></li>
   <li><a>Item 2</a></li>
 </ul>
@@ -743,7 +743,7 @@ and {SIDEBAR} can be a menu like:
 To open/close the drawer, use a label that points to the `drawer-toggle` input:
 
 ```html
-<label for="my-drawer" class="drawer-button btn">Open/close drawer</label>
+<label for="my-drawer" class="btn drawer-button">Open/close drawer</label>
 ```
 
 Example: This sidebar is always visible on large screen, can be toggled on small screen:
@@ -753,7 +753,7 @@ Example: This sidebar is always visible on large screen, can be toggled on small
   <input id="my-drawer-3" type="checkbox" class="drawer-toggle" />
   <div class="drawer-content flex flex-col items-center justify-center">
     <!-- Page content here -->
-    <label for="my-drawer-3" class="drawer-button btn lg:hidden">
+    <label for="my-drawer-3" class="btn drawer-button lg:hidden">
       Open drawer
     </label>
   </div>
@@ -763,7 +763,7 @@ Example: This sidebar is always visible on large screen, can be toggled on small
       aria-label="close sidebar"
       class="drawer-overlay"
     ></label>
-    <ul class="menu min-h-full w-80 bg-base-200 p-4">
+    <ul class="menu w-80 min-h-full p-4 bg-base-200">
       <!-- Sidebar content here -->
       <li><button>Sidebar Item 1</button></li>
       <li><button>Sidebar Item 2</button></li>
@@ -787,10 +787,10 @@ Example: This sidebar is always visible. When it's close we only see iocns, when
       class="drawer-overlay"
     ></label>
     <div
-      class="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-14 is-drawer-open:w-64"
+      class="flex flex-col items-start min-h-full bg-base-200 is-drawer-close:w-14 is-drawer-open:w-64"
     >
       <!-- Sidebar content here -->
-      <ul class="menu w-full grow">
+      <ul class="menu grow w-full">
         <!-- list item -->
         <li>
           <button
@@ -819,7 +819,7 @@ Example: This sidebar is always visible. When it's close we only see iocns, when
       >
         <label
           for="my-drawer-4"
-          class="drawer-button btn btn-circle btn-ghost is-drawer-open:rotate-y-180"
+          class="btn btn-circle btn-ghost drawer-button is-drawer-open:rotate-y-180"
         >
           ↔️
         </label>
@@ -914,7 +914,7 @@ A single FAB in the corder of screen
 
 ```html
 <div class="fab">
-  <button class="btn btn-circle btn-lg">{IconOriginal}</button>
+  <button class="btn btn-lg btn-circle">{IconOriginal}</button>
 </div>
 ```
 
@@ -922,12 +922,12 @@ A FAB that opens a 3 other buttons in the corner of page vertically
 
 ```html
 <div class="fab">
-  <div tabindex="0" role="button" class="btn btn-circle btn-lg btn-primary">
+  <div tabindex="0" role="button" class="btn btn-lg btn-primary btn-circle">
     {IconOriginal}
   </div>
-  <button class="btn btn-circle btn-lg">{Icon1}</button>
-  <button class="btn btn-circle btn-lg">{Icon2}</button>
-  <button class="btn btn-circle btn-lg">{Icon3}</button>
+  <button class="btn btn-lg btn-circle">{Icon1}</button>
+  <button class="btn btn-lg btn-circle">{Icon2}</button>
+  <button class="btn btn-lg btn-circle">{Icon3}</button>
 </div>
 ```
 
@@ -935,12 +935,12 @@ A FAB that opens a 3 other buttons in the corner of page vertically and they hav
 
 ```html
 <div class="fab">
-  <div tabindex="0" role="button" class="btn btn-circle btn-lg btn-primary">
+  <div tabindex="0" role="button" class="btn btn-lg btn-primary btn-circle">
     {IconOriginal}
   </div>
-  <div>{Label1}<button class="btn btn-circle btn-lg">{Icon1}</button></div>
-  <div>{Label2}<button class="btn btn-circle btn-lg">{Icon2}</button></div>
-  <div>{Label3}<button class="btn btn-circle btn-lg">{Icon3}</button></div>
+  <div>{Label1}<button class="btn btn-lg btn-circle">{Icon1}</button></div>
+  <div>{Label2}<button class="btn btn-lg btn-circle">{Icon2}</button></div>
+  <div>{Label3}<button class="btn btn-lg btn-circle">{Icon3}</button></div>
 </div>
 ```
 
@@ -948,7 +948,7 @@ FAB with rectangle buttons. These are not circular buttons so they can have more
 
 ```html
 <div class="fab">
-  <div tabindex="0" role="button" class="btn btn-circle btn-lg btn-primary">
+  <div tabindex="0" role="button" class="btn btn-lg btn-primary btn-circle">
     {IconOriginal}
   </div>
   <button class="btn btn-lg">{Label1}</button>
@@ -961,15 +961,15 @@ FAB with close button. When FAB is open, the original button is replaced with a 
 
 ```html
 <div class="fab">
-  <div tabindex="0" role="button" class="btn btn-circle btn-lg btn-primary">
+  <div tabindex="0" role="button" class="btn btn-lg btn-primary btn-circle">
     {IconOriginal}
   </div>
   <div class="fab-close">
-    Close <span class="btn btn-circle btn-lg btn-error">✕</span>
+    Close <span class="btn btn-lg btn-error btn-circle">✕</span>
   </div>
-  <div>{Label1}<button class="btn btn-circle btn-lg">{Icon1}</button></div>
-  <div>{Label2}<button class="btn btn-circle btn-lg">{Icon2}</button></div>
-  <div>{Label3}<button class="btn btn-circle btn-lg">{Icon3}</button></div>
+  <div>{Label1}<button class="btn btn-lg btn-circle">{Icon1}</button></div>
+  <div>{Label2}<button class="btn btn-lg btn-circle">{Icon2}</button></div>
+  <div>{Label3}<button class="btn btn-lg btn-circle">{Icon3}</button></div>
 </div>
 ```
 
@@ -977,17 +977,17 @@ FAB with Main Action button. When FAB is open, the original button is replaced w
 
 ```html
 <div class="fab">
-  <div tabindex="0" role="button" class="btn btn-circle btn-lg btn-primary">
+  <div tabindex="0" role="button" class="btn btn-lg btn-primary btn-circle">
     {IconOriginal}
   </div>
   <div class="fab-main-action">
-    {LabelMainAction}<button class="btn btn-circle btn-lg btn-secondary">
+    {LabelMainAction}<button class="btn btn-lg btn-secondary btn-circle">
       {IconMainAction}
     </button>
   </div>
-  <div>{Label1}<button class="btn btn-circle btn-lg">{Icon1}</button></div>
-  <div>{Label2}<button class="btn btn-circle btn-lg">{Icon2}</button></div>
-  <div>{Label3}<button class="btn btn-circle btn-lg">{Icon3}</button></div>
+  <div>{Label1}<button class="btn btn-lg btn-circle">{Icon1}</button></div>
+  <div>{Label2}<button class="btn btn-lg btn-circle">{Icon2}</button></div>
+  <div>{Label3}<button class="btn btn-lg btn-circle">{Icon3}</button></div>
 </div>
 ```
 
@@ -995,15 +995,15 @@ FAB Flower. It opens the buttons in a flower shape (quarter circle) arrangement 
 
 ```html
 <div class="fab fab-flower">
-  <div tabindex="0" role="button" class="btn btn-circle btn-lg btn-primary">
+  <div tabindex="0" role="button" class="btn btn-lg btn-primary btn-circle">
     {IconOriginal}
   </div>
-  <button class="fab-main-action btn btn-circle btn-lg">
+  <button class="btn btn-lg btn-circle fab-main-action">
     {IconMainAction}
   </button>
-  <button class="btn btn-circle btn-lg">{Icon1}</button>
-  <button class="btn btn-circle btn-lg">{Icon2}</button>
-  <button class="btn btn-circle btn-lg">{Icon3}</button>
+  <button class="btn btn-lg btn-circle">{Icon1}</button>
+  <button class="btn btn-lg btn-circle">{Icon2}</button>
+  <button class="btn btn-lg btn-circle">{Icon3}</button>
 </div>
 ```
 
@@ -1011,20 +1011,20 @@ FAB Flower with tooltips. There's no space for a text label in a quarter circle,
 
 ```html
 <div class="fab fab-flower">
-  <div tabindex="0" role="button" class="btn btn-circle btn-lg btn-primary">
+  <div tabindex="0" role="button" class="btn btn-lg btn-primary btn-circle">
     {IconOriginal}
   </div>
-  <button class="fab-main-action btn btn-circle btn-lg">
+  <button class="btn btn-lg btn-circle fab-main-action">
     {IconMainAction}
   </button>
   <div class="tooltip tooltip-left" data-tip="{Label1}">
-    <button class="btn btn-circle btn-lg">{Icon1}</button>
+    <button class="btn btn-lg btn-circle">{Icon1}</button>
   </div>
   <div class="tooltip tooltip-left" data-tip="{Label2}">
-    <button class="btn btn-circle btn-lg">{Icon2}</button>
+    <button class="btn btn-lg btn-circle">{Icon2}</button>
   </div>
   <div class="tooltip tooltip-left" data-tip="{Label3}">
-    <button class="btn btn-circle btn-lg">{Icon3}</button>
+    <button class="btn btn-lg btn-circle">{Icon3}</button>
   </div>
 </div>
 ```
@@ -1078,7 +1078,7 @@ File Input is a an input field for uploading files
 #### Syntax
 
 ```html
-<input type="file" class="{MODIFIER} file-input" />
+<input type="file" class="file-input {MODIFIER}" />
 ```
 
 #### Rules
@@ -1112,7 +1112,7 @@ Without HTML form
 
 ```html
 <div class="filter">
-  <input class="filter-reset btn" type="radio" name="{NAME}" aria-label="×" />
+  <input class="btn filter-reset" type="radio" name="{NAME}" aria-label="×" />
   <input class="btn" type="radio" name="{NAME}" aria-label="Tab 1 title" />
   <input class="btn" type="radio" name="{NAME}" aria-label="Tab 2 title" />
 </div>
@@ -1141,7 +1141,7 @@ Footer can contain logo, copyright notice, and links to other pages
 #### Syntax
 
 ```html
-<footer class="{MODIFIER} footer">{CONTENT}</footer>
+<footer class="footer {MODIFIER}">{CONTENT}</footer>
 ```
 
 where content can contain several `<nav>` tags with `footer-title` and links inside
@@ -1166,7 +1166,7 @@ Hero is a component for displaying a large box or image with a title and descrip
 #### Syntax
 
 ```html
-<div class="{MODIFIER} hero">{CONTENT}</div>
+<div class="hero {MODIFIER}">{CONTENT}</div>
 ```
 
 #### Rules
@@ -1287,7 +1287,7 @@ Text Input is a simple input field
 #### Syntax
 
 ```html
-<input type="{type}" placeholder="Type here" class="{MODIFIER} input" />
+<input type="{type}" placeholder="Type here" class="input {MODIFIER}" />
 ```
 
 #### Rules
@@ -1310,7 +1310,7 @@ Join is a container for grouping multiple items, it can be used to group buttons
 #### Syntax
 
 ```html
-<div class="{MODIFIER} join">{CONTENT}</div>
+<div class="join {MODIFIER}">{CONTENT}</div>
 ```
 
 #### Rules
@@ -1334,7 +1334,7 @@ Kbd is used to display keyboard shortcuts
 #### Syntax
 
 ```html
-<kbd class="{MODIFIER} kbd">K</kbd>
+<kbd class="kbd {MODIFIER}">K</kbd>
 ```
 
 #### Rules
@@ -1391,7 +1391,7 @@ Link adds the missing underline style to links
 #### Syntax
 
 ```html
-<a class="{MODIFIER} link">Click me</a>
+<a class="link {MODIFIER}">Click me</a>
 ```
 
 #### Rules
@@ -1438,7 +1438,7 @@ Loading shows an animation to indicate that something is loading
 #### Syntax
 
 ```html
-<span class="{MODIFIER} loading"></span>
+<span class="loading {MODIFIER}"></span>
 ```
 
 #### Rules
@@ -1460,7 +1460,7 @@ Mask crops the content of the element to common shapes
 #### Syntax
 
 ```html
-<img class="{MODIFIER} mask" src="{image-url}" />
+<img class="mask {MODIFIER}" src="{image-url}" />
 ```
 
 #### Rules
@@ -1712,7 +1712,7 @@ Progress bar can be used to show the progress of a task or to show the passing o
 #### Syntax
 
 ```html
-<progress class="{MODIFIER} progress" value="50" max="100"></progress>
+<progress class="progress {MODIFIER}" value="50" max="100"></progress>
 ```
 
 #### Rules
@@ -1765,7 +1765,7 @@ Radio buttons allow the user to select one option
 #### Syntax
 
 ```html
-<input type="radio" name="{name}" class="{MODIFIER} radio" />
+<input type="radio" name="{name}" class="radio {MODIFIER}" />
 ```
 
 #### Rules
@@ -1789,7 +1789,7 @@ Range slider is used to select a value by sliding a handle
 #### Syntax
 
 ```html
-<input type="range" min="0" max="100" value="40" class="{MODIFIER} range" />
+<input type="range" min="0" max="100" value="40" class="range {MODIFIER}" />
 ```
 
 #### Rules
@@ -1812,7 +1812,7 @@ Rating is a set of radio buttons that allow the user to rate something
 #### Syntax
 
 ```html
-<div class="{MODIFIER} rating">
+<div class="rating {MODIFIER}">
   <input type="radio" name="rating-1" class="mask mask-star" />
 </div>
 ```
@@ -1889,7 +1889,7 @@ Stack visually puts elements on top of each other
 #### Syntax
 
 ```html
-<div class="{MODIFIER} stack">{CONTENT}</div>
+<div class="stack {MODIFIER}">{CONTENT}</div>
 ```
 
 #### Rules
@@ -1912,7 +1912,7 @@ Stat is used to show numbers and data in a block
 #### Syntax
 
 ```html
-<div class="{MODIFIER} stats">
+<div class="stats {MODIFIER}">
   <div class="stat">{CONTENT}</div>
 </div>
 ```
@@ -1938,7 +1938,7 @@ Status is a really small icon to visually show the current status of an element,
 #### Syntax
 
 ```html
-<span class="{MODIFIER} status"></span>
+<span class="status {MODIFIER}"></span>
 ```
 
 #### Rules
@@ -1962,7 +1962,7 @@ Steps can be used to show a list of steps in a process
 #### Syntax
 
 ```html
-<ul class="{MODIFIER} steps">
+<ul class="steps {MODIFIER}">
   <li class="step">{step content}</li>
 </ul>
 ```
@@ -1992,7 +1992,7 @@ Swap allows you to toggle the visibility of two elements using a checkbox or a c
 Using checkbox
 
 ```html
-<label class="{MODIFIER} swap">
+<label class="swap {MODIFIER}">
   <input type="checkbox" />
   <div class="swap-on">{content when active}</div>
   <div class="swap-off">{content when inactive}</div>
@@ -2002,7 +2002,7 @@ Using checkbox
 Using class name
 
 ```html
-<div class="{MODIFIER} swap">
+<div class="swap {MODIFIER}">
   <div class="swap-on">{content when active}</div>
   <div class="swap-off">{content when inactive}</div>
 </div>
@@ -2033,7 +2033,7 @@ Tabs can be used to show a list of links in a tabbed format
 Using buttons:
 
 ```html
-<div role="tablist" class="{MODIFIER} tabs">
+<div role="tablist" class="tabs {MODIFIER}">
   <button role="tab" class="tab">Tab</button>
 </div>
 ```
@@ -2041,7 +2041,7 @@ Using buttons:
 Using radio inputs:
 
 ```html
-<div role="tablist" class="tabs-box tabs">
+<div role="tablist" class="tabs tabs-box">
   <input type="radio" name="my_tabs" class="tab" aria-label="Tab" />
 </div>
 ```
@@ -2117,7 +2117,7 @@ Example:
 Big font size, horizontally centered
 
 ```html
-<span class="font-title text-rotate text-7xl max-md:text-3xl">
+<span class="font-title text-7xl text-rotate max-md:text-3xl">
   <span class="justify-items-center">
     <span>DESIGN</span>
     <span>DEVELOP</span>
@@ -2136,9 +2136,9 @@ Rotating words in a sentence, different colors for each word
   Providing AI Agents for
   <span class="text-rotate">
     <span>
-      <span class="bg-teal-400 px-2 text-teal-800">Designers</span>
-      <span class="bg-red-400 px-2 text-red-800">Developers</span>
-      <span class="bg-blue-400 px-2 text-blue-800">Managers</span>
+      <span class="px-2 text-teal-800 bg-teal-400">Designers</span>
+      <span class="px-2 text-red-800 bg-red-400">Developers</span>
+      <span class="px-2 text-blue-800 bg-blue-400">Managers</span>
     </span>
   </span>
 </span>
@@ -2147,7 +2147,7 @@ Rotating words in a sentence, different colors for each word
 Custom line height in case you have a tall font or need more vertical spacing between lines
 
 ```html
-<span class="font-title text-rotate text-7xl leading-[2] max-md:text-3xl">
+<span class="font-title text-7xl text-rotate leading-[2] max-md:text-3xl">
   <span class="justify-items-center">
     <span>📐 DESIGN</span>
     <span>⌨️ DEVELOP</span>
@@ -2181,7 +2181,7 @@ Textarea allows users to enter text in multiple lines
 #### Syntax
 
 ```html
-<textarea class="{MODIFIER} textarea" placeholder="Bio"></textarea>
+<textarea class="textarea {MODIFIER}" placeholder="Bio"></textarea>
 ```
 
 #### Rules
@@ -2224,7 +2224,7 @@ Timeline component shows a list of events in chronological order
 #### Syntax
 
 ```html
-<ul class="{MODIFIER} timeline">
+<ul class="timeline {MODIFIER}">
   <li>
     <div class="timeline-start">{start}</div>
     <div class="timeline-middle">{icon}</div>
@@ -2254,7 +2254,7 @@ Toast is a wrapper to stack elements, positioned on the corner of page
 #### Syntax
 
 ```html
-<div class="{MODIFIER} toast">{CONTENT}</div>
+<div class="toast {MODIFIER}">{CONTENT}</div>
 ```
 
 #### Rules
@@ -2276,7 +2276,7 @@ Toggle is a checkbox that is styled to look like a switch button
 #### Syntax
 
 ```html
-<input type="checkbox" class="{MODIFIER} toggle" />
+<input type="checkbox" class="toggle {MODIFIER}" />
 ```
 
 #### Rules
@@ -2300,7 +2300,7 @@ Tooltip can be used to show a message when hovering over an element
 #### Syntax
 
 ```html
-<div class="{MODIFIER} tooltip" data-tip="Tooltip text">
+<div class="tooltip {MODIFIER}" data-tip="Tooltip text">
   <button class="btn">Hover me</button>
 </div>
 ```
@@ -2323,7 +2323,7 @@ Validator class changes the color of form elements to error or success based on 
 #### Syntax
 
 ```html
-<input type="{type}" class="validator input" required />
+<input type="{type}" class="input validator" required />
 <p class="validator-hint">Error message</p>
 ```
 
