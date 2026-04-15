@@ -1,2 +1,6 @@
-.claude/
-.github/
+# Build output
+static/dist/
+staticfiles/
+
+# Django templates (formatted by djlint)
+templates/

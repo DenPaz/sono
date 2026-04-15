@@ -3,7 +3,7 @@
         dev dev-fresh django shell manage clean \
         test test-fresh translations \
         npm-install npm-uninstall npm-build npm-dev \
-        ruff-format djlint-format tailwhip format \
+        ruff-format djlint-format prettier-format tailwhip format \
         ruff-lint djlint-lint lint \
         uv
 
@@ -142,11 +142,15 @@ djlint-lint: ## Lint Django templates with djLint
 	@echo "  🎨 Linting templates..."
 	@uv run djlint templates/ --lint
 
+prettier-format: ## Format JS/CSS/JSON with Prettier
+	@echo "  🎨 Formatting JS/CSS/JSON/YAML..."
+	@npx prettier --write .
+
 tailwhip: ## Sort Tailwind CSS classes in templates and CSS files
 	@echo "  🌀 Sorting Tailwind classes..."
 	@uv run tailwhip "templates/**/*.html" "static/css/**/*.css" --write
 
-format: tailwhip djlint-format ruff-format ## Format everything (Tailwind classes, templates, Python)
+format: tailwhip djlint-format ruff-format prettier-format ## Format everything (Tailwind, templates, Python, JS/CSS/JSON/YAML)
 	@echo "  ✅ Code formatted."
 
 lint: ruff-lint djlint-lint ## Lint everything (Python and templates)

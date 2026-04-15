@@ -25,17 +25,6 @@ repos:
     rev: v4.0.0-alpha.8
     hooks:
       - id: prettier
-        args:
-          [
-            '--tab-width',
-            '2',
-            '--single-quote',
-            '--jsx-single-quote',
-            '--trailing-comma',
-            'es5',
-            '--end-of-line',
-            'auto',
-          ]
         exclude: 'templates/'
 
   - repo: https://github.com/adamchainz/django-upgrade
