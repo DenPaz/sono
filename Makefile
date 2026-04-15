@@ -31,7 +31,7 @@ pre-commit-install: ## Install pre-commit hooks
 	@echo "  🪝 Installing pre-commit hooks..."
 	@uv run pre-commit install
 
-init: uv-sync npm-install-deps npm-build migrate seed pre-commit-install ## Full first-time setup
+init: uv-sync npm-install-deps npm-build migrate pre-commit-install ## Full first-time setup
 	@echo ""
 	@echo "  ✅ Project is ready — run 'make dev' to start."
 	@echo ""
@@ -47,17 +47,11 @@ migrate: ## Run pending migrations
 	@echo "  🗄️  Running migrations..."
 	@uv run manage.py migrate
 
-reset-db: ## Drop and recreate the database
-	@echo "  🗄️  Resetting database..."
-	@uv run manage.py reset_db --noinput
-	@echo "  ✅ Database reset."
+reset-db: ## Clean database data (flush)
+	@bash scripts/db_clean.sh
 
-seed: ## Populate database with test data
-	@echo "  🌱 Seeding database..."
-	@uv run manage.py update_site
-	@uv run manage.py create_test_superusers
-	@uv run manage.py create_test_users
-	@echo "  ✅ Test data seeded."
+seed: ## Populate database with development data
+	@bash scripts/db_seed.sh
 
 fresh: reset-db migrate seed ## reset-db + migrate + seed
 	@echo "  ✅ Fresh database ready."

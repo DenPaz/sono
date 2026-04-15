@@ -1,5 +1,7 @@
 from allauth.account.models import EmailAddress
+from django.conf import settings
 from django.core.management.base import BaseCommand
+from django.core.management.base import CommandError
 
 from apps.users.models import User
 
@@ -22,6 +24,10 @@ class Command(BaseCommand):
     help = "Create or update test superusers with predefined credentials."
 
     def handle(self, *args, **kwargs):
+        if not settings.DEBUG:
+            msg = "Este comando só pode ser executado em ambiente DEBUG."
+            raise CommandError(msg)
+
         for superuser in superusers:
             user, created = User.objects.update_or_create(
                 email=superuser["email"],

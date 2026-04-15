@@ -3,7 +3,7 @@
 ## Architecture
 
 - This is a Django project called **Sono**, built on Python 3.14.
-- User authentication uses `django-allauth` (with MFA support via `allauth.mfa`).
+- User authentication uses `django-allauth`.
 - The front end is mostly standard Django views and templates.
 - HTMX and Alpine.js are used to provide single-page-app user experience with Django templates.
 - HTMX is used for interactions which require accessing the backend, and Alpine.js is used for browser-only interactions.
@@ -58,7 +58,7 @@ make help   # Same as above
 ### First-time Setup
 
 ```bash
-make init   # Install Python + npm deps, build assets, run migrations, seed data
+make init   # Install Python + npm deps, build assets, run migrations
 ```
 
 ### Starting the Application
@@ -89,8 +89,8 @@ make clean                      # Remove .pyc files, __pycache__, and Django cac
 ```bash
 make migrations     # Create new migrations (makemigrations)
 make migrate        # Apply pending migrations
-make reset-db       # Drop and recreate the database
-make seed           # Populate the database with test data
+make reset-db       # Clean database data (flush)
+make seed           # Populate the database with development data
 make fresh          # reset-db + migrate + seed
 ```
 
@@ -150,8 +150,9 @@ After running `make seed`, the following accounts are available:
 | ---------------------- | -------- | ------------ |
 | `dppazlopez@gmail.com` | `12345`  | 👑 Superuser |
 | `alissonpef@gmail.com` | `12345`  | 👑 Superuser |
+| `user@email.com`       | `12345`  | 👤 Profissional |
 
-1,000 regular test users are also created with password `12345`.
+Additional bulk users can be created with `uv run manage.py create_test_users` (password `12345`).
 
 > Note: Test accounts are created via management commands, which bypass Django's password validators. The password `12345` is intentionally weak and for development only.
 

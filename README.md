@@ -8,13 +8,13 @@ Sono App.
 
 ### Backend
 
-|     | Library                                                          | Purpose                         |
-| --- | ---------------------------------------------------------------- | ------------------------------- |
-| 🐍  | [Django 6.0](https://www.djangoproject.com/)                     | Web framework                   |
-| 🐘  | [PostgreSQL](https://www.postgresql.org/)                        | Primary database                |
-| 🌿  | [Celery](https://docs.celeryq.dev/) + [Redis](https://redis.io/) | Async task queue and cache      |
-| 🔐  | [django-allauth](https://allauth.readthedocs.io/)                | Authentication with MFA support |
-| 🦄  | [Gunicorn](https://gunicorn.org/)                                | WSGI server for production      |
+|     | Library                                                          | Purpose                               |
+| --- | ---------------------------------------------------------------- | ------------------------------------- |
+| 🐍  | [Django 6.0](https://www.djangoproject.com/)                     | Web framework                         |
+| 🐘  | [PostgreSQL](https://www.postgresql.org/)                        | Primary database                      |
+| 🌿  | [Celery](https://docs.celeryq.dev/) + [Redis](https://redis.io/) | Async task queue and cache            |
+| 🔐  | [django-allauth](https://allauth.readthedocs.io/)                | Authentication and account management |
+| 🦄  | [Gunicorn](https://gunicorn.org/)                                | WSGI server for production            |
 
 ### Frontend
 
@@ -70,7 +70,7 @@ cp .env.example .env
 make init
 ```
 
-> Runs: Python deps → npm deps → JS/CSS build → DB migrations → seed data.
+> Runs: Python deps → npm deps → JS/CSS build → DB migrations.
 
 ### 4. Start the development servers
 
@@ -87,12 +87,12 @@ make dev
 | Command                    | Description                                       |
 | -------------------------- | ------------------------------------------------- |
 | `make dev`                 | 🖥️ Start Django + Vite dev servers                |
-| `make dev-fresh`           | 🔄 Full DB reset + seed, then start dev           |
+| `make dev-fresh`           | 🔄 Full DB clean + seed, then start dev           |
 | `make django`              | 🐍 Start Django server only                       |
 | `make migrate`             | 🗄️ Apply pending database migrations              |
 | `make migrations`          | 📝 Create new migrations                          |
-| `make fresh`               | 🔄 Drop DB, re-migrate, and re-seed               |
-| `make seed`                | 🌱 Populate DB with test data                     |
+| `make fresh`               | 🔄 Clean DB, re-migrate, and re-seed              |
+| `make seed`                | 🌱 Populate DB with development data              |
 | `make test`                | 🧪 Run the test suite                             |
 | `make test-fresh`          | 🧪 Run tests with a fresh database                |
 | `make format`              | 🎨 Format Tailwind classes, templates, and Python |
@@ -119,8 +119,9 @@ After running `make seed`, the following accounts are available:
 | ---------------------- | -------- | ------------ |
 | `dppazlopez@gmail.com` | `12345`  | 👑 Superuser |
 | `alissonpef@gmail.com` | `12345`  | 👑 Superuser |
+| `user@email.com`       | `12345`  | 👤 Profissional |
 
-> 1,000 regular test users are also created with password `12345`.
+> To create extra bulk users for stress/testing, run `uv run manage.py create_test_users`.
 
 ---
 
