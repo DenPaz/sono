@@ -106,14 +106,15 @@ make test-fresh              # Run tests with a fresh database (use after new mi
 #### Code Quality
 
 ```bash
-make format         # Format everything: Tailwind classes, templates, and Python
-make lint           # Lint everything: Python and templates
+make format           # Format everything: Tailwind classes, templates, and Python
+make lint             # Lint everything: Python and templates
 
-make ruff-format    # Format Python code with Ruff
-make ruff-lint      # Lint and auto-fix Python code with Ruff
-make djlint-format  # Format Django templates with djLint
-make djlint-lint    # Lint Django templates with djLint
-make tailwhip       # Sort Tailwind CSS classes in templates and CSS files
+make ruff-format      # Format Python code with Ruff
+make ruff-lint        # Lint and auto-fix Python code with Ruff
+make djlint-format    # Format Django templates with djLint
+make djlint-lint      # Lint Django templates with djLint
+make tailwhip         # Sort Tailwind CSS classes in templates and CSS files
+make prettier-format  # Format JS/JSON/YAML with Prettier
 ```
 
 #### Python / uv

@@ -142,7 +142,7 @@ djlint-lint: ## Lint Django templates with djLint
 	@echo "  🎨 Linting templates..."
 	@uv run djlint templates/ --lint
 
-prettier-format: ## Format JS/CSS/JSON with Prettier
+prettier-format: ## Format JS/JSON/YAML with Prettier
 	@echo "  🎨 Formatting JS/JSON/YAML..."
 	@npx prettier --write "**/*.{js,mjs,json,jsonc,yaml,yml}"
 
