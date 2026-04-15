@@ -149,7 +149,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
     "django_htmx.middleware.HtmxMiddleware",
-    "apps.core.middleware.HtmxMessagesMiddleware",
+    "apps.core.middleware.messages.HtmxMessagesMiddleware",
 ]
 
 # -----------------------------------------------------------------------------
