@@ -56,7 +56,7 @@ function createToast({ message, tags }) {
     .classList.add(
       `hover:text-${tags}`,
       `hover:border-${tags}`,
-      'hover:bg-transparent',
+      'hover:bg-transparent'
     );
 
   Alpine.initTree(toast);
