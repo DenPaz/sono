@@ -63,6 +63,7 @@ DJANGO_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.sites",
+    "django.contrib.postgres",
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.humanize",
@@ -77,20 +78,20 @@ THIRD_PARTY_APPS = [
     "allauth.mfa",
     "django_celery_beat",
     "django_vite",
-    "django_filters",
-    "django_jsonform",
-    "phonenumber_field",
-    "formtools",
     "braces",
     "extra_views",
     "django_htmx",
     "widget_tweaks",
     "django_cotton",
+    "formtools",
+    "django_filters",
+    "django_jsonform",
+    "phonenumber_field",
 ]
 LOCAL_APPS = [
     "apps.core.config.CoreConfig",
-    "apps.dashboard.config.DashboardConfig",
     "apps.users.config.UsersConfig",
+    "apps.dashboard.config.DashboardConfig",
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
