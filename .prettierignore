@@ -1,6 +1,6 @@
 # Build output
-static/dist/
-staticfiles/
+/static/dist/
+/staticfiles/
 
 # Django templates (formatted by djlint)
 templates/
