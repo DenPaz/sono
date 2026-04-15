@@ -26,8 +26,6 @@ repos:
     hooks:
       - id: prettier
         exclude: 'templates/'
-        additional_dependencies:
-          - 'prettier-plugin-tailwindcss@^0.7.2'
 
   - repo: https://github.com/adamchainz/django-upgrade
     rev: '1.30.0'

@@ -159,7 +159,7 @@ js.indent_size = 2
 
 # ==== tailwhip ====
 [tool.tailwhip]
-default_globs = [ "templates/**/*.html" ]
+default_globs = [ "templates/**/*.html", "static/css/**/*.css" ]
 custom_colors = [
   "primary",
   "secondary",
