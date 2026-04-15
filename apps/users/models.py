@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import FileExtensionValidator
 from django.db import models
@@ -57,6 +58,17 @@ class UserProfile(BaseModel):
         ],
         blank=True,
         help_text=_("Maximum size: 5MB. Allowed formats: .jpg, .jpeg, .png"),
+    )
+    language = models.CharField(
+        verbose_name=_("Language"),
+        max_length=10,
+        choices=settings.LANGUAGES,
+        default=settings.LANGUAGE_CODE,
+    )
+    timezone = models.CharField(
+        verbose_name=_("Timezone"),
+        max_length=100,
+        default=settings.TIME_ZONE,
     )
 
     objects = UserProfileManager()

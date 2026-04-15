@@ -150,6 +150,8 @@ MIDDLEWARE = [
     "allauth.account.middleware.AccountMiddleware",
     "django_htmx.middleware.HtmxMiddleware",
     "apps.core.middleware.messages.HtmxMessagesMiddleware",
+    "apps.users.middleware.locale.UserLocaleMiddleware",
+    "apps.users.middleware.locale.UserTimezoneMiddleware",
 ]
 
 # -----------------------------------------------------------------------------
