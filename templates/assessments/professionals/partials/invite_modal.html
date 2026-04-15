@@ -1,0 +1,55 @@
+{% load i18n %}
+{% load widget_tweaks %}
+
+<div class="modal-box w-full max-w-xl">
+  <div class="flex gap-3 items-start justify-between mb-4">
+    <div>
+      <h3 id="invite-professional-title" class="font-bold text-lg">{% trans "Convidar Profissional" %}</h3>
+      <p class="text-sm text-base-content/70">{% trans "Envie um convite de acesso ao módulo operacional." %}</p>
+    </div>
+    <button type="button"
+            class="btn btn-sm btn-circle btn-ghost"
+            onclick="document.getElementById('invite-professional-modal').close()"
+            aria-label="{% trans 'Fechar' %}">
+      <span class="iconify lucide--x size-4" aria-hidden="true"></span>
+    </button>
+  </div>
+  <form hx-post="{% url 'assessments:professional_invite' %}"
+        hx-target="#invite-modal-content"
+        hx-swap="innerHTML"
+        class="space-y-3">
+    {% csrf_token %}
+    <div class="grid gap-3 md:grid-cols-2">
+      <label class="form-control gap-1.5">
+        <span class="label-text">{{ invite_form.first_name.label }}</span>
+        {% render_field invite_form.first_name class="input w-full" %}
+      </label>
+      <label class="form-control gap-1.5">
+        <span class="label-text">{{ invite_form.last_name.label }}</span>
+        {% render_field invite_form.last_name class="input w-full" %}
+      </label>
+    </div>
+    <label class="form-control gap-1.5">
+      <span class="label-text">{{ invite_form.email.label }}</span>
+      {% render_field invite_form.email class="input w-full" %}
+      {% if invite_form.email.errors %}
+        <span class="text-sm text-error">{{ invite_form.email.errors|join:", " }}</span>
+      {% endif %}
+    </label>
+    <label class="form-control gap-1.5">
+      <span class="label-text">{{ invite_form.municipality.label }}</span>
+      {% render_field invite_form.municipality class="w-full select" %}
+    </label>
+    {% if invite_form.non_field_errors %}
+      <c-alert :messages="invite_form.non_field_errors"
+               severity="error"
+               class="mt-2" />
+    {% endif %}
+    <div class="modal-action mt-6">
+      <button type="submit" class="btn btn-primary">{% trans "Enviar convite" %}</button>
+      <button type="button"
+              class="btn"
+              onclick="document.getElementById('invite-professional-modal').close()">{% trans "Cancelar" %}</button>
+    </div>
+  </form>
+</div>

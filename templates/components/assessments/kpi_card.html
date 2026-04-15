@@ -1,0 +1,13 @@
+<c-vars title="" value="0" hint="" icon="lucide--activity" tone="primary" />
+<article class="card bg-base-100 border border-base-300 shadow-sm">
+  <div class="card-body gap-2 p-4">
+    <div class="flex gap-2 items-start justify-between">
+      <p class="text-sm text-base-content/70">{{ title }}</p>
+      <span class="inline-flex size-9 items-center justify-center rounded-box bg-{{ tone }}/15 text-{{ tone }}">
+        <span class="iconify {{ icon }} size-4.5" aria-hidden="true"></span>
+      </span>
+    </div>
+    <p class="font-extrabold text-3xl text-base-content tracking-tight">{{ value }}</p>
+    {% if hint %}<p class="text-xs text-base-content/60">{{ hint }}</p>{% endif %}
+  </div>
+</article>

@@ -1,0 +1,16 @@
+{% extends "assessments/_base.html" %}
+
+{% load i18n %}
+
+{% block assessments_description %}
+  <p class="text-sm text-base-content/70 md:text-base">
+    {% trans "Painel consolidado com indicadores de risco e fila recente de avaliações EDSC." %}
+  </p>
+{% endblock assessments_description %}
+{% block assessments_content %}
+  <section class="space-y-5">
+    {% include "assessments/overview/partials/kpis.html" %}
+    {% include "assessments/overview/partials/risk_indicators.html" %}
+    {% include "assessments/overview/partials/recent_queue_table.html" %}
+  </section>
+{% endblock assessments_content %}

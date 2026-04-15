@@ -1,0 +1,21 @@
+<c-vars class=""
+        form_id=""
+        action=""
+        :use_get="True"
+        hx_get=""
+        hx_target=""
+        hx_trigger=""
+        submit_label="Aplicar" />
+<form id="{{ form_id }}"
+      {% if use_get %}method="get"{% else %}method="post"{% endif %}
+      {% if action %}action="{{ action }}"{% endif %}
+      {% if hx_get %}hx-get="{{ hx_get }}"{% endif %}
+      {% if hx_target %}hx-target="{{ hx_target }}"{% endif %}
+      {% if hx_trigger %}hx-trigger="{{ hx_trigger }}"{% endif %}
+      data-assessments-filters="true"
+      class="card border border-base-300 bg-base-100 shadow-sm {{ class }}">
+  <div class="card-body gap-4 p-4 md:p-5">{{ slot }}</div>
+  <div class="card-actions items-center justify-end p-4 border-base-300 border-t">
+    <button type="submit" class="btn btn-sm btn-primary">{{ submit_label }}</button>
+  </div>
+</form>

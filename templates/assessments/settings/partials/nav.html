@@ -1,0 +1,8 @@
+{% load i18n %}
+
+<nav class="tabs tabs-box p-1 bg-base-100 border border-base-300">
+  {% for link in settings_links %}
+    <a href="{{ link.url }}"
+       class="tab {% if settings_section == link.section %}tab-active{% endif %}">{{ link.label }}</a>
+  {% endfor %}
+</nav>

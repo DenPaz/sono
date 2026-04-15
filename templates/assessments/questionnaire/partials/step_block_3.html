@@ -1,0 +1,28 @@
+{% load i18n %}
+
+<div id="questionnaire-step-target"
+     data-current-step="{{ current_step }}"
+     class="space-y-4">
+  {% include "assessments/questionnaire/partials/progress.html" %}
+  <form hx-post="{% url 'assessments:questionnaire_step_partial' 3 %}"
+        hx-target="#questionnaire-step-target"
+        hx-swap="outerHTML"
+        class="space-y-3">
+    {% csrf_token %}
+    <input type="hidden" name="evaluation_id" value="{{ evaluation.id }}" />
+    {% for field in form %}
+      <c-assessments.questionnaire.question_item :field="field" item_index="{{ field.name|cut:'q_' }}" />
+    {% endfor %}
+    {% if form.non_field_errors %}<c-alert :messages="form.non_field_errors" severity="error" />{% endif %}
+    <div class="card bg-base-100 border border-base-300 shadow-sm">
+      <div class="card-body flex-row justify-between p-4 md:p-5">
+        <button type="submit"
+                name="action"
+                value="back"
+                class="btn btn-ghost"
+                formnovalidate>{% trans "Voltar" %}</button>
+        <button type="submit" name="action" value="next" class="btn btn-primary">{% trans "Revisar respostas" %}</button>
+      </div>
+    </div>
+  </form>
+</div>

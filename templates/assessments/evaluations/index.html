@@ -1,0 +1,22 @@
+{% extends "assessments/_base.html" %}
+
+{% load i18n %}
+
+{% block assessments_description %}
+  <p class="text-sm text-base-content/70 md:text-base">
+    {% trans "Listagem de avaliações com filtros server-side e escopo por papel." %}
+  </p>
+{% endblock assessments_description %}
+{% block assessments_actions %}
+  <a href="{% url 'assessments:evaluation_new' %}"
+     class="btn btn-sm btn-primary">
+    <span class="iconify lucide--plus size-4" aria-hidden="true"></span>
+    <span>{% trans "Nova avaliação" %}</span>
+  </a>
+{% endblock assessments_actions %}
+{% block assessments_content %}
+  <section class="space-y-4">
+    {% include "assessments/evaluations/partials/filters.html" %}
+    <div id="evaluations-table-container">{% include "assessments/evaluations/partials/table.html" %}</div>
+  </section>
+{% endblock assessments_content %}

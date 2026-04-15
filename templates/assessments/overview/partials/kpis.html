@@ -1,0 +1,8 @@
+{% load i18n %}
+
+<div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+  <c-assessments.kpi_card title="{% trans 'Total de avaliações' %}" value="{{ kpis.total }}" hint="{% trans 'Registros visíveis para o seu perfil' %}" icon="lucide--notebook-tabs" tone="primary" />
+  <c-assessments.kpi_card title="{% trans 'Concluídas' %}" value="{{ kpis.concluded_total }}" hint="{% trans 'Questionários finalizados' %}" icon="lucide--check-check" tone="success" />
+  <c-assessments.kpi_card title="{% trans 'Rascunhos' %}" value="{{ kpis.draft_total }}" hint="{% trans 'Em andamento no wizard' %}" icon="lucide--file-pen-line" tone="warning" />
+  <c-assessments.kpi_card title="{% trans 'Alto risco' %}" value="{{ kpis.high_risk_total }}" hint="{% trans 'Subescalas acima do aceitável' %}" icon="lucide--triangle-alert" tone="error" />
+</div>

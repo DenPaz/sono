@@ -1,0 +1,12 @@
+{% load i18n %}
+
+<c-vars status="rascunho" />
+<span class="badge badge-soft {% if status == 'rascunho' %}badge-neutral {% elif status == 'revisada' %}badge-info {% else %}badge-success{% endif %}">
+  {% if status == "rascunho" %}
+    {% trans "Rascunho" %}
+  {% elif status == "revisada" %}
+    {% trans "Revisada" %}
+  {% else %}
+    {% trans "Concluída" %}
+  {% endif %}
+</span>

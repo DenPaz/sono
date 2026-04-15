@@ -1,0 +1,74 @@
+{% extends "assessments/_base.html" %}
+
+{% load i18n %}
+
+{% block assessments_description %}
+  <p class="text-sm text-base-content/70 md:text-base">
+    {% trans "Acompanhe permissões, grupos e convites pendentes da equipe." %}
+  </p>
+{% endblock assessments_description %}
+{% block assessments_content %}
+  {% include "assessments/settings/partials/nav.html" %}
+  <section class="grid gap-4 xl:grid-cols-[1.4fr,1fr]">
+    <article class="card bg-base-100 border border-base-300 shadow-sm">
+      <div class="card-body gap-4 p-4 md:p-5">
+        <div class="space-y-1">
+          <h2 class="font-bold text-lg">{% trans "Convites pendentes" %}</h2>
+          <p class="text-sm text-base-content/70">
+            {% trans "Lista dos últimos convites enviados para novos profissionais." %}
+          </p>
+        </div>
+        <div class="overflow-x-auto rounded-box border border-base-300">
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th>{% trans "Nome" %}</th>
+                <th>{% trans "E-mail" %}</th>
+                <th>{% trans "Município" %}</th>
+                <th>{% trans "Enviado por" %}</th>
+                <th>{% trans "Data" %}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for invite in pending_invites %}
+                <tr>
+                  <td class="font-semibold">{{ invite.first_name }} {{ invite.last_name }}</td>
+                  <td>{{ invite.email }}</td>
+                  <td>{{ invite.municipality|default:'-' }}</td>
+                  <td>{{ invite.invited_by.get_full_name|default:invite.invited_by.email }}</td>
+                  <td>{{ invite.created|date:"d/m/Y H:i" }}</td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="5" class="py-8 text-base-content/60 text-center">{% trans "Não há convites pendentes." %}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </article>
+    <article class="card bg-base-100 border border-base-300 shadow-sm">
+      <div class="card-body gap-4 p-4 md:p-5">
+        <div class="space-y-1">
+          <h2 class="font-bold text-lg">{% trans "Resumo de acesso" %}</h2>
+          <p class="text-sm text-base-content/70">{% trans "Estado atual dos perfis e convites de acesso." %}</p>
+        </div>
+        <ul class="space-y-2 text-sm">
+          <li class="flex items-center justify-between px-3 py-2 bg-base-200/40 rounded-box border border-base-300">
+            <span>{% trans "Chefes administrativos ativos" %}</span>
+            <span class="font-semibold">{{ access_snapshot.chief_admins }}</span>
+          </li>
+          <li class="flex items-center justify-between px-3 py-2 bg-base-200/40 rounded-box border border-base-300">
+            <span>{% trans "Profissionais ativos" %}</span>
+            <span class="font-semibold">{{ access_snapshot.professionals }}</span>
+          </li>
+          <li class="flex items-center justify-between px-3 py-2 bg-base-200/40 rounded-box border border-base-300">
+            <span>{% trans "Convites pendentes" %}</span>
+            <span class="font-semibold">{{ access_snapshot.pending_invites }}</span>
+          </li>
+        </ul>
+      </div>
+    </article>
+  </section>
+{% endblock assessments_content %}

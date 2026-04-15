@@ -1,0 +1,11 @@
+{% load i18n %}
+
+<c-vars :can_invite="False" />
+{% if can_invite %}
+  <button type="button"
+          class="btn btn-sm btn-primary"
+          onclick="document.getElementById('invite-professional-modal').showModal()">
+    <span class="iconify lucide--user-plus size-4" aria-hidden="true"></span>
+    <span>{% trans "Convidar Profissional" %}</span>
+  </button>
+{% endif %}

@@ -1,0 +1,12 @@
+{% load i18n %}
+
+<c-vars risk_level="sem_alerta" />
+<span class="badge badge-soft {% if risk_level == 'alto_risco' %}badge-error {% elif risk_level == 'atencao' %}badge-warning {% else %}badge-success{% endif %}">
+  {% if risk_level == "alto_risco" %}
+    {% trans "Alto risco" %}
+  {% elif risk_level == "atencao" %}
+    {% trans "Atenção" %}
+  {% else %}
+    {% trans "Sem alerta" %}
+  {% endif %}
+</span>

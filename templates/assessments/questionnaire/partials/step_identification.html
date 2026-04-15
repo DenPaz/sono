@@ -1,0 +1,45 @@
+{% load i18n %}
+{% load widget_tweaks %}
+
+<div id="questionnaire-step-target"
+     data-current-step="{{ current_step }}"
+     class="space-y-4">
+  {% include "assessments/questionnaire/partials/progress.html" %}
+  <section class="card bg-base-100 border border-base-300 shadow-sm">
+    <form hx-post="{% url 'assessments:questionnaire_step_partial' 0 %}"
+          hx-target="#questionnaire-step-target"
+          hx-swap="outerHTML"
+          class="card-body gap-4 p-4 md:p-5">
+      {% csrf_token %}
+      <input type="hidden" name="evaluation_id" value="{{ evaluation.id }}" />
+      <h2 class="font-bold text-lg">{% trans "Identificação da avaliação" %}</h2>
+      <div class="grid gap-3 md:grid-cols-2">
+        <label class="form-control gap-1.5 md:col-span-2">
+          <span class="label-text">{{ form.child_name.label }}</span>
+          {% render_field form.child_name class="input w-full" %}
+          {% if form.child_name.errors %}
+            <span class="text-sm text-error">{{ form.child_name.errors|join:", " }}</span>
+          {% endif %}
+        </label>
+        <label class="form-control gap-1.5">
+          <span class="label-text">{{ form.child_age.label }}</span>
+          {% render_field form.child_age class="input w-full" %}
+          {% if form.child_age.errors %}
+            <span class="text-sm text-error">{{ form.child_age.errors|join:", " }}</span>
+          {% endif %}
+        </label>
+        <label class="form-control gap-1.5">
+          <span class="label-text">{{ form.municipality.label }}</span>
+          {% render_field form.municipality class="w-full select" %}
+          {% if form.municipality.errors %}
+            <span class="text-sm text-error">{{ form.municipality.errors|join:", " }}</span>
+          {% endif %}
+        </label>
+      </div>
+      {% if form.non_field_errors %}<c-alert :messages="form.non_field_errors" severity="error" />{% endif %}
+      <div class="card-actions justify-end pt-2">
+        <button type="submit" name="action" value="next" class="btn btn-primary">{% trans "Continuar" %}</button>
+      </div>
+    </form>
+  </section>
+</div>

@@ -1,0 +1,84 @@
+{% extends "assessments/_base.html" %}
+
+{% load i18n %}
+{% load widget_tweaks %}
+
+{% block assessments_description %}
+  <p class="text-sm text-base-content/70 md:text-base">
+    {% trans "Atalhos de conta, senha e proteção de acesso do usuário atual." %}
+  </p>
+{% endblock assessments_description %}
+{% block assessments_content %}
+  {% include "assessments/settings/partials/nav.html" %}
+  <section class="grid gap-4 xl:grid-cols-2">
+    <article class="card bg-base-100 border border-base-300 shadow-sm">
+      <div class="card-body gap-4 p-4 md:p-5">
+        <div class="space-y-1">
+          <h2 class="font-bold text-lg">{% trans "Gerenciar e-mail" %}</h2>
+          <p class="text-sm text-base-content/70">{% trans "Atualize o e-mail de login da conta." %}</p>
+        </div>
+        <form method="post" class="space-y-3">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="update_email" />
+          <label class="form-control gap-1.5">
+            <span class="label-text">{{ email_form.email.label }}</span>
+            {% render_field email_form.email class="input w-full" autocomplete="email" %}
+            {% if email_form.email.errors %}
+              <span class="text-sm text-error">{{ email_form.email.errors|join:", " }}</span>
+            {% endif %}
+          </label>
+          <label class="form-control gap-1.5">
+            <span class="label-text">{{ email_form.current_password.label }}</span>
+            {% render_field email_form.current_password class="input w-full" autocomplete="current-password" %}
+            {% if email_form.current_password.errors %}
+              <span class="text-sm text-error">{{ email_form.current_password.errors|join:", " }}</span>
+            {% endif %}
+          </label>
+          {% if email_form.non_field_errors %}<c-alert :messages="email_form.non_field_errors" severity="error" />{% endif %}
+          <div class="card-actions justify-end pt-2">
+            <button type="submit" class="btn btn-primary">{% trans "Atualizar e-mail" %}</button>
+          </div>
+        </form>
+      </div>
+    </article>
+    <article class="card bg-base-100 border border-base-300 shadow-sm">
+      <div class="card-body gap-4 p-4 md:p-5">
+        <div class="space-y-1">
+          <h2 class="font-bold text-lg">{% trans "Gerenciar senha" %}</h2>
+          <p class="text-sm text-base-content/70">{% trans "Defina uma nova senha para acesso." %}</p>
+        </div>
+        <form method="post" class="space-y-3">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="update_password" />
+          <label class="form-control gap-1.5">
+            <span class="label-text">{{ password_form.old_password.label }}</span>
+            {% render_field password_form.old_password class="input w-full" autocomplete="current-password" %}
+            {% if password_form.old_password.errors %}
+              <span class="text-sm text-error">{{ password_form.old_password.errors|join:", " }}</span>
+            {% endif %}
+          </label>
+          <label class="form-control gap-1.5">
+            <span class="label-text">{{ password_form.new_password1.label }}</span>
+            {% render_field password_form.new_password1 class="input w-full" autocomplete="new-password" %}
+            {% if password_form.new_password1.errors %}
+              <span class="text-sm text-error">{{ password_form.new_password1.errors|join:", " }}</span>
+            {% endif %}
+          </label>
+          <label class="form-control gap-1.5">
+            <span class="label-text">{{ password_form.new_password2.label }}</span>
+            {% render_field password_form.new_password2 class="input w-full" autocomplete="new-password" %}
+            {% if password_form.new_password2.errors %}
+              <span class="text-sm text-error">{{ password_form.new_password2.errors|join:", " }}</span>
+            {% endif %}
+          </label>
+          {% if password_form.non_field_errors %}
+            <c-alert :messages="password_form.non_field_errors" severity="error" />
+          {% endif %}
+          <div class="card-actions justify-end pt-2">
+            <button type="submit" class="btn btn-primary">{% trans "Atualizar senha" %}</button>
+          </div>
+        </form>
+      </div>
+    </article>
+  </section>
+{% endblock assessments_content %}

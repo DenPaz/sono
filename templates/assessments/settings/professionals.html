@@ -1,0 +1,70 @@
+{% extends "assessments/_base.html" %}
+
+{% load i18n %}
+
+{% block assessments_description %}
+  <p class="text-sm text-base-content/70 md:text-base">
+    {% trans "Gerencie permissões operacionais, acesso administrativo e status dos profissionais." %}
+  </p>
+{% endblock assessments_description %}
+{% block assessments_content %}
+  {% include "assessments/settings/partials/nav.html" %}
+  <section class="card bg-base-100 border border-base-300 shadow-sm">
+    <div class="card-body gap-4 p-0">
+      <div class="p-4 pb-0 md:p-5 md:pb-0">
+        <h2 class="font-bold text-lg">{% trans "Gestão de profissionais" %}</h2>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="table table-sm md:table-md">
+          <thead>
+            <tr>
+              <th>{% trans "Profissional" %}</th>
+              <th>{% trans "Município" %}</th>
+              <th>{% trans "Papel" %}</th>
+              <th>{% trans "Avaliações" %}</th>
+              <th>{% trans "Status" %}</th>
+              <th class="text-right">{% trans "Ações" %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in managed_professionals %}
+              <tr>
+                <td>
+                  <p class="font-semibold">{{ row.name }}</p>
+                  <p class="text-xs text-base-content/60">{{ row.email }}</p>
+                </td>
+                <td>{{ row.municipality|default:"-" }}</td>
+                <td>{{ row.role_label }}</td>
+                <td>{{ row.total_evaluations }}</td>
+                <td>
+                  {% if row.is_active %}
+                    <span class="badge badge-success badge-soft">{% trans "Ativo" %}</span>
+                  {% else %}
+                    <span class="badge badge-neutral badge-soft">{% trans "Inativo" %}</span>
+                  {% endif %}
+                </td>
+                <td class="text-right">
+                  <div class="flex flex-wrap gap-1 justify-end">
+                    {% for action in row.actions %}
+                      <form method="post"
+                            action="{% url 'assessments:settings_professionals_action' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="profile_id" value="{{ row.id }}" />
+                        <input type="hidden" name="action" value="{{ action.value }}" />
+                        <button type="submit" class="{{ action.css_class }}">{{ action.label }}</button>
+                      </form>
+                    {% endfor %}
+                  </div>
+                </td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="6" class="py-8 text-base-content/60 text-center">{% trans "Nenhum profissional encontrado." %}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+{% endblock assessments_content %}

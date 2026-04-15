@@ -1,0 +1,89 @@
+{% extends "assessments/_base.html" %}
+
+{% load i18n %}
+
+{% block assessments_description %}
+  <p class="text-sm text-base-content/70 md:text-base">
+    {% trans "Centralize atalhos e visão operacional da área de avaliações." %}
+  </p>
+{% endblock assessments_description %}
+{% block assessments_content %}
+  {% include "assessments/settings/partials/nav.html" %}
+  <section class="grid gap-4 xl:grid-cols-[1.4fr,1fr]">
+    <article class="card bg-base-100 border border-base-300 shadow-sm">
+      <div class="card-body gap-4 p-4 md:p-5">
+        <div class="space-y-1">
+          <h2 class="font-bold text-lg">{% trans "Atalhos administrativos" %}</h2>
+          <p class="text-sm text-base-content/70">{% trans "Acesse as áreas mais usadas para manutenção da operação." %}</p>
+        </div>
+        <div class="grid gap-2 md:grid-cols-2">
+          <a href="{% url 'assessments:settings_professionals' %}"
+             class="btn btn-outline justify-start w-full">
+            <span class="iconify lucide--users size-4" aria-hidden="true"></span>
+            <span>{% trans "Gerenciar profissionais" %}</span>
+          </a>
+          <a href="{% url 'assessments:municipalities' %}"
+             class="btn btn-outline justify-start w-full">
+            <span class="iconify lucide--map-pinned size-4" aria-hidden="true"></span>
+            <span>{% trans "Municípios" %}</span>
+          </a>
+          <a href="{% url 'assessments:reports' %}"
+             class="btn btn-outline justify-start w-full">
+            <span class="iconify lucide--chart-column-big size-4" aria-hidden="true"></span>
+            <span>{% trans "Relatórios" %}</span>
+          </a>
+          {% if user.is_staff %}
+            <a href="{% url 'admin:index' %}"
+               class="btn btn-outline justify-start w-full">
+              <span class="iconify lucide--shield size-4" aria-hidden="true"></span>
+              <span>{% trans "Admin" %}</span>
+            </a>
+          {% endif %}
+        </div>
+        <div class="alert alert-info alert-soft mt-1 text-sm">
+          <span class="iconify lucide--info size-4" aria-hidden="true"></span>
+          <span>{% trans "As preferências experimentais foram removidas desta área. Agora as configurações exibidas são apenas funcionalidades já ativas no sistema." %}</span>
+        </div>
+      </div>
+    </article>
+    <article class="card bg-base-100 border border-base-300 shadow-sm">
+      <div class="card-body gap-4 p-4 md:p-5">
+        <div class="space-y-1">
+          <h2 class="font-bold text-lg">{% trans "Resumo Operacional" %}</h2>
+          <p class="text-sm text-base-content/70">{% trans "Panorama rápido para tomada de decisão." %}</p>
+        </div>
+        <ul class="space-y-2 text-sm">
+          <li class="flex items-center justify-between px-3 py-2 bg-base-200/40 rounded-box border border-base-300">
+            <span>{% trans "Profissionais ativos" %}</span>
+            <span class="font-semibold">{{ operational_snapshot.active_professionals }}</span>
+          </li>
+          <li class="flex items-center justify-between px-3 py-2 bg-base-200/40 rounded-box border border-base-300">
+            <span>{% trans "Municípios ativos" %}</span>
+            <span class="font-semibold">{{ operational_snapshot.active_municipalities }}</span>
+          </li>
+          <li class="flex items-center justify-between px-3 py-2 bg-base-200/40 rounded-box border border-base-300">
+            <span>{% trans "Convites pendentes" %}</span>
+            <span class="font-semibold">{{ operational_snapshot.pending_invites }}</span>
+          </li>
+          <li class="flex items-center justify-between px-3 py-2 bg-base-200/40 rounded-box border border-base-300">
+            <span>{% trans "Avaliações criadas hoje" %}</span>
+            <span class="font-semibold">{{ operational_snapshot.evaluations_today }}</span>
+          </li>
+        </ul>
+        <div class="divider my-0"></div>
+        <div class="space-y-2">
+          <a href="{% url 'assessments:settings_access' %}"
+             class="btn btn-sm btn-primary justify-start w-full">
+            <span class="iconify lucide--shield-check size-4" aria-hidden="true"></span>
+            <span>{% trans "Acessos e convites" %}</span>
+          </a>
+          <a href="{% url 'assessments:settings_account' %}"
+             class="btn btn-sm btn-outline justify-start w-full">
+            <span class="iconify lucide--mail size-4" aria-hidden="true"></span>
+            <span>{% trans "Conta e segurança" %}</span>
+          </a>
+        </div>
+      </div>
+    </article>
+  </section>
+{% endblock assessments_content %}

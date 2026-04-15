@@ -1,0 +1,48 @@
+{% load i18n %}
+
+<section class="card bg-base-100 border border-base-300 shadow-sm">
+  <div class="card-body gap-4 p-0">
+    <div class="flex items-center justify-between p-4 pb-0 md:p-5 md:pb-0">
+      <h2 class="font-bold text-lg">{% trans "Fila Recente" %}</h2>
+      <a href="{% url 'assessments:evaluations' %}"
+         class="btn btn-sm btn-ghost">{% trans "Ver todas" %}</a>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>{% trans "Criança (ID)" %}</th>
+            <th>{% trans "Município" %}</th>
+            <th>{% trans "Status" %}</th>
+            <th>{% trans "Risco" %}</th>
+            <th>{% trans "Atualizado" %}</th>
+            <th class="text-right">{% trans "Ações" %}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in recent_queue %}
+            <tr>
+                <td class="font-semibold">{{ row.get_child_reference }}</td>
+              <td>{{ row.municipality }}</td>
+              <td>
+                <c-assessments.status_badge :status="row.status" />
+              </td>
+              <td>
+                <c-assessments.risk_badge :risk_level="row.risk_level" />
+              </td>
+              <td>{{ row.modified|date:"d/m/Y H:i" }}</td>
+              <td class="text-right">
+                <a href="{% url 'assessments:evaluation_detail' row.id %}"
+                   class="btn btn-xs btn-ghost">{% trans "Abrir" %}</a>
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="6" class="py-8 text-base-content/60 text-center">{% trans "Nenhuma avaliação encontrada." %}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>

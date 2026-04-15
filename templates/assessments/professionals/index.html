@@ -1,0 +1,24 @@
+{% extends "assessments/_base.html" %}
+
+{% load i18n %}
+
+{% block assessments_description %}
+  <p class="text-sm text-base-content/70 md:text-base">
+    {% trans "Gestão de profissionais, status de atividade e convites com RBAC." %}
+  </p>
+{% endblock assessments_description %}
+{% block assessments_actions %}
+  <c-assessments.professionals.invite_button :can_invite="can_invite_professional" />
+{% endblock assessments_actions %}
+{% block assessments_content %}
+  <section class="space-y-4">
+    {% include "assessments/professionals/partials/table.html" %}
+    {% if can_invite_professional %}
+      <dialog id="invite-professional-modal"
+              class="modal"
+              aria-labelledby="invite-professional-title">
+        <div id="invite-modal-content">{% include "assessments/professionals/partials/invite_modal.html" %}</div>
+      </dialog>
+    {% endif %}
+  </section>
+{% endblock assessments_content %}

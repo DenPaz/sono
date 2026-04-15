@@ -1,0 +1,59 @@
+{% load i18n %}
+
+<section class="grid gap-4 xl:grid-cols-[2fr,1fr]">
+  <article class="card bg-base-100 border border-base-300 shadow-sm">
+    <div class="overflow-x-auto">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>{% trans "Profissional" %}</th>
+            <th>{% trans "Município" %}</th>
+            <th>{% trans "Registro" %}</th>
+            <th>{% trans "Avaliações" %}</th>
+            <th>{% trans "Status" %}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in professionals %}
+            <tr>
+              <td>
+                <p class="font-semibold">{{ row.user.get_full_name }}</p>
+                <p class="text-xs text-base-content/60">{{ row.user.email }}</p>
+              </td>
+              <td>{{ row.municipality|default:"-" }}</td>
+              <td>{{ row.registration_code|default:"-" }}</td>
+              <td>{{ row.total_evaluations }}</td>
+              <td>
+                {% if row.is_active %}
+                  <span class="badge badge-success badge-soft">{% trans "Ativo" %}</span>
+                {% else %}
+                  <span class="badge badge-neutral badge-soft">{% trans "Inativo" %}</span>
+                {% endif %}
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="5" class="py-8 text-base-content/60 text-center">{% trans "Nenhum profissional encontrado." %}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </article>
+  <article class="card bg-base-100 border border-base-300 shadow-sm">
+    <div class="card-body gap-3 p-4">
+      <h3 class="font-bold text-base">{% trans "Convites recentes" %}</h3>
+      <ul class="space-y-2 text-sm">
+        {% for invite in recent_invites %}
+          <li class="p-2 bg-base-200/40 rounded-box border border-base-300">
+            <p class="font-semibold">{{ invite.first_name }} {{ invite.last_name }}</p>
+            <p class="text-xs text-base-content/70">{{ invite.email }}</p>
+            <p class="mt-1 text-base-content/60 text-[11px]">{{ invite.created|date:"d/m/Y H:i" }}</p>
+          </li>
+        {% empty %}
+          <li class="text-base-content/60">{% trans "Sem convites recentes." %}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </article>
+</section>

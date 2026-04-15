@@ -1,0 +1,23 @@
+{% load i18n %}
+
+<c-vars title=""
+        score="0"
+        acceptable_max="0"
+        :is_alert="False"
+        item_indexes="" />
+<article class="card border {% if is_alert %}border-error/40{% else %}border-success/40{% endif %} bg-base-100 shadow-sm">
+  <div class="card-body gap-3 p-4">
+    <div class="flex gap-2 items-start justify-between">
+      <h3 class="font-semibold text-sm text-base-content md:text-base">{{ title }}</h3>
+      <span class="badge {% if is_alert %}badge-error{% else %}badge-success{% endif %}">
+        {% if is_alert %}
+          {% trans "Alerta" %}
+        {% else %}
+          {% trans "Aceitável" %}
+        {% endif %}
+      </span>
+    </div>
+    <p class="text-sm text-base-content/70">{% trans "Itens" %}: {{ item_indexes }}</p>
+    <p class="font-bold text-xl text-base-content">{{ score }} / {{ acceptable_max }}</p>
+  </div>
+</article>

@@ -1,0 +1,47 @@
+{% load i18n %}
+
+<div id="questionnaire-step-target"
+     data-current-step="{{ current_step }}"
+     data-status="completed"
+     class="space-y-4">
+  {% include "assessments/questionnaire/partials/progress.html" %}
+  <section class="card bg-base-100 border border-success/30 shadow-sm">
+    <div class="card-body gap-4 p-4 md:p-5">
+      <div class="space-y-1">
+        <h2 class="font-bold text-lg text-success">{% trans "Questionário concluído" %}</h2>
+        <p class="text-sm text-base-content/70">
+          {% trans "Cálculo oficial EDSC executado no servidor com persistência final do resultado." %}
+        </p>
+      </div>
+      <div class="grid gap-3 md:grid-cols-3">
+        <article class="p-3 bg-base-200/40 rounded-box border border-base-300">
+          <p class="text-xs text-base-content/60 tracking-wider uppercase">{% trans "Score total" %}</p>
+          <p class="font-black text-2xl">{{ evaluation.total_score }}</p>
+        </article>
+        <article class="p-3 bg-base-200/40 rounded-box border border-base-300">
+          <p class="text-xs text-base-content/60 tracking-wider uppercase">{% trans "Alertas" %}</p>
+          <p class="font-black text-2xl">{{ evaluation.alert_count }}</p>
+        </article>
+        <article class="p-3 bg-base-200/40 rounded-box border border-base-300">
+          <p class="text-xs text-base-content/60 tracking-wider uppercase">{% trans "Nível de risco" %}</p>
+          <div class="mt-2">
+            <c-assessments.risk_badge :risk_level="evaluation.risk_level" />
+          </div>
+        </article>
+      </div>
+      <div class="grid gap-3 lg:grid-cols-2">
+        {% for row in subscale_results %}
+          <c-assessments.questionnaire.subscale_result_card title="{{ row.title }}" score="{{ row.score }}" acceptable_max="{{ row.acceptable_max }}" :is_alert="row.is_alert" item_indexes="{{ row.item_indexes }}" />
+        {% empty %}
+          <div class="alert alert-warning alert-soft lg:col-span-2">
+            <span class="iconify lucide--triangle-alert size-4" aria-hidden="true"></span>
+            <span>{% trans "Não foi possível carregar o detalhamento das subescalas." %}</span>
+          </div>
+        {% endfor %}
+      </div>
+      <div class="card-actions justify-end">
+        <a href="{% url 'assessments:evaluations' %}" class="btn btn-primary">{% trans "Voltar para avaliações" %}</a>
+      </div>
+    </div>
+  </section>
+</div>

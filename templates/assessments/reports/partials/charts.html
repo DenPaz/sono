@@ -1,0 +1,106 @@
+{% load i18n %}
+
+<section class="grid gap-4 xl:grid-cols-2">
+  <article class="card bg-base-100 border border-base-300 shadow-sm">
+    <div class="card-body gap-3 p-4 md:p-5">
+      <div class="flex items-center justify-between">
+        <h2 class="font-bold text-lg">{% trans "Distribuição de risco" %}</h2>
+        <span class="text-xs text-base-content/60">{{ total_reports }} {% trans "avaliações" %}</span>
+      </div>
+      <div class="space-y-3">
+        {% for row in risk_distribution %}
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between text-sm">
+              <span>{{ row.label }}</span>
+              <span class="font-semibold">{{ row.value }} ({{ row.percent }}%)</span>
+            </div>
+            <progress class="progress {% if row.level == 'alto_risco' %}progress-error {% elif row.level == 'atencao' %}progress-warning {% else %}progress-success{% endif %} w-full"
+                      value="{{ row.percent }}"
+                      max="100"></progress>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </article>
+  <article class="card bg-base-100 border border-base-300 shadow-sm">
+    <div class="card-body gap-3 p-4 md:p-5">
+      <h2 class="font-bold text-lg">{% trans "Alertas por subescala" %}</h2>
+      <ul class="space-y-2 text-sm">
+        {% for row in subscale_alerts %}
+          <li class="p-2 bg-base-200/40 rounded-box border border-base-300">
+            <div class="flex gap-2 items-center justify-between">
+              <span class="font-medium">{{ row.label }}</span>
+              <span class="badge badge-error badge-soft">{{ row.value }}</span>
+            </div>
+          </li>
+        {% empty %}
+          <li class="text-base-content/60">{% trans "Sem alertas no período." %}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </article>
+</section>
+<section class="grid gap-4 mt-4 xl:grid-cols-2">
+  <article class="card bg-base-100 border border-base-300 shadow-sm">
+    <div class="card-body p-0">
+      <div class="p-4 pb-0 md:p-5 md:pb-0">
+        <h2 class="font-bold text-lg">{% trans "Resumo por município" %}</h2>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>{% trans "Município" %}</th>
+              <th>{% trans "Total" %}</th>
+              <th>{% trans "Alto risco" %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in municipality_summary %}
+              <tr>
+                <td class="font-semibold">{{ row.municipality__name }}</td>
+                <td>{{ row.total }}</td>
+                <td>{{ row.high_risk }}</td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="3" class="py-8 text-base-content/60 text-center">{% trans "Sem dados para exibição." %}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </article>
+  <article class="card bg-base-100 border border-base-300 shadow-sm">
+    <div class="card-body p-0">
+      <div class="p-4 pb-0 md:p-5 md:pb-0">
+        <h2 class="font-bold text-lg">{% trans "Tendência mensal" %}</h2>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>{% trans "Mês" %}</th>
+              <th>{% trans "Total" %}</th>
+              <th>{% trans "Alto risco" %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in monthly_trend %}
+              <tr>
+                <td>{{ row.month|date:"m/Y" }}</td>
+                <td>{{ row.total }}</td>
+                <td>{{ row.high_risk }}</td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="3" class="py-8 text-base-content/60 text-center">{% trans "Sem tendência no período selecionado." %}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </article>
+</section>

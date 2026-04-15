@@ -1,0 +1,39 @@
+{% load i18n %}
+
+<section class="card bg-base-100 border border-base-300 shadow-sm">
+  <div class="card-body p-0">
+    <div class="flex items-center justify-between p-4 pb-0 md:p-5 md:pb-0">
+      <h2 class="font-bold text-lg">{% trans "Tendência Mensal" %}</h2>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>{% trans "Mês" %}</th>
+            <th>{% trans "Município" %}</th>
+            <th>{% trans "Avaliações" %}</th>
+            <th>{% trans "Alto risco" %}</th>
+            <th>{% trans "Média" %}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in trend_rows %}
+            <tr>
+              <td>{{ row.month|date:"m/Y" }}</td>
+              <td>{{ row.municipality__name }}</td>
+              <td>{{ row.total_evaluations }}</td>
+              <td>{{ row.high_risk_total }}</td>
+              <td>{{ row.average_score|default:0|floatformat:1 }}</td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="5" class="py-8 text-base-content/60 text-center">
+                {% trans "Não há tendências registradas no período." %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>

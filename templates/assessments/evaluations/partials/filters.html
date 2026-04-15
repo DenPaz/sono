@@ -1,0 +1,29 @@
+{% load i18n %}
+{% load widget_tweaks %}
+
+<c-assessments.filter_bar form_id="evaluations-filters" action="{% url 'assessments:evaluations' %}" hx_get="{% url 'assessments:evaluations_table_partial' %}" hx_target="#evaluations-table-container" submit_label="{% trans 'Filtrar' %}">
+  <div class="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+    <label class="form-control gap-1.5">
+      <span class="label-text font-semibold text-xs text-base-content/60 tracking-wider uppercase">{% trans "Busca" %}</span>
+      {% render_field filter_form.search class="input w-full" placeholder="ID da criança (CR-xxxx) ou profissional" %}
+    </label>
+    <label class="form-control gap-1.5">
+      <span class="label-text font-semibold text-xs text-base-content/60 tracking-wider uppercase">{{ filter_form.status.label }}</span>
+      {% render_field filter_form.status class="w-full select" %}
+    </label>
+    <label class="form-control gap-1.5">
+      <span class="label-text font-semibold text-xs text-base-content/60 tracking-wider uppercase">{{ filter_form.risk_level.label }}</span>
+      {% render_field filter_form.risk_level class="w-full select" %}
+    </label>
+    <label class="form-control gap-1.5">
+      <span class="label-text font-semibold text-xs text-base-content/60 tracking-wider uppercase">{{ filter_form.municipality.label }}</span>
+      {% render_field filter_form.municipality class="w-full select" %}
+    </label>
+    {% if filter_form.professional %}
+      <label class="form-control gap-1.5 md:col-span-2 xl:col-span-4">
+        <span class="label-text font-semibold text-xs text-base-content/60 tracking-wider uppercase">{{ filter_form.professional.label }}</span>
+        {% render_field filter_form.professional class="w-full select" %}
+      </label>
+    {% endif %}
+  </div>
+</c-assessments.filter_bar>

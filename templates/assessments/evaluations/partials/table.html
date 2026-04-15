@@ -1,0 +1,68 @@
+{% load i18n %}
+
+<section class="card bg-base-100 border border-base-300 shadow-sm">
+  <div class="overflow-x-auto">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>{% trans "Criança (ID)" %}</th>
+          <th>{% trans "Profissional" %}</th>
+          <th>{% trans "Município" %}</th>
+          <th>{% trans "Status" %}</th>
+          <th>{% trans "Risco" %}</th>
+          <th>{% trans "Atualizado" %}</th>
+          <th class="text-right">{% trans "Ações" %}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for evaluation in page_obj %}
+          <tr>
+            <td class="font-semibold">{{ evaluation.get_child_reference }}</td>
+            <td>{{ evaluation.professional.get_full_name }}</td>
+            <td>{{ evaluation.municipality }}</td>
+            <td>
+              <c-assessments.status_badge :status="evaluation.status" />
+            </td>
+            <td>
+              <c-assessments.risk_badge :risk_level="evaluation.risk_level" />
+            </td>
+            <td>{{ evaluation.modified|date:"d/m/Y H:i" }}</td>
+            <td class="text-right">
+              <a href="{% url 'assessments:evaluation_detail' evaluation.id %}"
+                 class="btn btn-xs btn-ghost">{% trans "Abrir" %}</a>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="7" class="py-8 text-base-content/60 text-center">
+              {% trans "Nenhum resultado para os filtros selecionados." %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% if page_obj.paginator.num_pages > 1 %}
+    <div class="flex items-center justify-between p-4 text-sm border-base-300 border-t">
+      <p class="text-base-content/70">
+        {% blocktrans with current=page_obj.number total=page_obj.paginator.num_pages trimmed %}
+          Pagina {{ current }} de {{ total }}
+        {% endblocktrans %}
+      </p>
+      <div class="join">
+        {% if page_obj.has_previous %}
+          <a class="btn btn-sm join-item"
+             href="{% url 'assessments:evaluations' %}{% querystring page=page_obj.previous_page_number %}"
+             hx-get="{% url 'assessments:evaluations_table_partial' %}{% querystring page=page_obj.previous_page_number %}"
+             hx-target="#evaluations-table-container">{% trans "Anterior" %}</a>
+        {% endif %}
+        {% if page_obj.has_next %}
+          <a class="btn btn-sm join-item"
+             href="{% url 'assessments:evaluations' %}{% querystring page=page_obj.next_page_number %}"
+             hx-get="{% url 'assessments:evaluations_table_partial' %}{% querystring page=page_obj.next_page_number %}"
+             hx-target="#evaluations-table-container">{% trans "Próxima" %}</a>
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+</section>

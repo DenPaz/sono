@@ -1,0 +1,30 @@
+{% load i18n %}
+
+<c-vars :field="None" :item_index="0" />
+<article class="card bg-base-100 border border-base-300 shadow-sm">
+  <div class="card-body gap-4 p-4 md:p-5">
+    <div class="space-y-1">
+      <p class="font-semibold text-xs text-base-content/50 tracking-wider uppercase">{% trans "Item" %} {{ item_index }}</p>
+      <h3 class="font-semibold text-sm text-base-content leading-relaxed md:text-base">{{ field.label }}</h3>
+    </div>
+    <div class="space-y-2">
+      {% for value, label in field.field.choices %}
+        <label class="flex items-center gap-3 p-2 bg-base-200/40 rounded-box border border-base-300 transition cursor-pointer hover:bg-primary/5 hover:border-primary/40 has-checked:bg-primary/10 has-checked:border-primary">
+          <input type="radio"
+                 id="{{ field.auto_id }}_{{ forloop.counter0 }}"
+                 name="{{ field.html_name }}"
+                 value="{{ value }}"
+                 class="radio radio-sm radio-primary peer"
+                 {% if field.value|stringformat:'s' == value|stringformat:'s' %}checked{% endif %} />
+          <span class="badge badge-outline peer-checked:badge-primary">{{ value }}</span>
+          <span class="text-xs text-base-content/80 md:text-sm">{{ label }}</span>
+        </label>
+      {% endfor %}
+    </div>
+    {% if field.errors %}
+      <ul class="space-y-1 text-sm text-error">
+        {% for error in field.errors %}<li>{{ error }}</li>{% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+</article>

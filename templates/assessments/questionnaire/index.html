@@ -1,0 +1,23 @@
+{% extends "assessments/_base.html" %}
+
+{% load i18n %}
+
+{% block assessments_description %}
+  <p class="text-sm text-base-content/70 md:text-base">
+    {% trans "Fluxo multi-etapas do questionário EDSC com persistência incremental no servidor." %}
+  </p>
+{% endblock assessments_description %}
+{% block assessments_actions %}
+  <a href="{% url 'assessments:evaluations' %}"
+     class="btn btn-sm btn-ghost">
+    <span class="iconify lucide--arrow-left size-4" aria-hidden="true"></span>
+    <span>{% trans "Voltar" %}</span>
+  </a>
+{% endblock assessments_actions %}
+{% block assessments_content %}
+  <section x-data="assessmentsWizard({ initialStep: {{ current_step }} })"
+           x-on:beforeunload.window="warnOnUnsaved($event)"
+           class="space-y-4">
+    {% include step_template %}
+  </section>
+{% endblock assessments_content %}

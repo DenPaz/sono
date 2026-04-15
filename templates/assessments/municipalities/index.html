@@ -1,0 +1,28 @@
+{% extends "assessments/_base.html" %}
+
+{% load i18n %}
+{% load widget_tweaks %}
+
+{% block assessments_description %}
+  <p class="text-sm text-base-content/70 md:text-base">
+    {% trans "Comparativos de desempenho por município e tendência temporal." %}
+  </p>
+{% endblock assessments_description %}
+{% block assessments_content %}
+  <section class="space-y-4">
+    <c-assessments.filter_bar form_id="municipality-filters" action="{% url 'assessments:municipalities' %}" hx_get="{% url 'assessments:municipalities_ranking_partial' %}" hx_target="#municipality-ranking-container" submit_label="{% trans 'Atualizar' %}">
+      <div class="grid gap-3 md:grid-cols-2">
+        <label class="form-control gap-1.5">
+          <span class="label-text">{{ filter_form.municipality.label }}</span>
+          {% render_field filter_form.municipality class="w-full select" %}
+        </label>
+        <label class="form-control gap-1.5">
+          <span class="label-text">{{ filter_form.period.label }}</span>
+          {% render_field filter_form.period class="w-full select" %}
+        </label>
+      </div>
+    </c-assessments.filter_bar>
+    <div id="municipality-ranking-container">{% include "assessments/municipalities/partials/ranking.html" %}</div>
+    {% include "assessments/municipalities/partials/trend_table.html" %}
+  </section>
+{% endblock assessments_content %}

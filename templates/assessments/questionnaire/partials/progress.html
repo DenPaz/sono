@@ -1,0 +1,30 @@
+{% load i18n %}
+
+<div class="card bg-base-100 border border-base-300 shadow-sm">
+  <div class="card-body gap-3 p-4 md:p-5">
+    <div class="flex items-center justify-between font-semibold text-xs text-base-content/60 tracking-wider uppercase">
+      <span>{% trans "Progresso" %}</span>
+      <span>{{ progress_percent }}%</span>
+    </div>
+    <progress class="progress progress-primary w-full"
+              value="{{ progress_percent }}"
+              max="100"></progress>
+    <ol class="grid gap-2 text-xs md:grid-cols-5 md:text-sm">
+      <li class="rounded-box px-2 py-1 {% if current_step >= 0 %}bg-primary/15 text-primary{% else %}bg-base-200 text-base-content/70{% endif %}">
+        {% trans "Identificação" %}
+      </li>
+      <li class="rounded-box px-2 py-1 {% if current_step >= 1 %}bg-primary/15 text-primary{% else %}bg-base-200 text-base-content/70{% endif %}">
+        {% trans "Bloco 1" %}
+      </li>
+      <li class="rounded-box px-2 py-1 {% if current_step >= 2 %}bg-primary/15 text-primary{% else %}bg-base-200 text-base-content/70{% endif %}">
+        {% trans "Bloco 2" %}
+      </li>
+      <li class="rounded-box px-2 py-1 {% if current_step >= 3 %}bg-primary/15 text-primary{% else %}bg-base-200 text-base-content/70{% endif %}">
+        {% trans "Bloco 3" %}
+      </li>
+      <li class="rounded-box px-2 py-1 {% if current_step >= 4 %}bg-primary/15 text-primary{% else %}bg-base-200 text-base-content/70{% endif %}">
+        {% trans "Revisão" %}
+      </li>
+    </ol>
+  </div>
+</div>
