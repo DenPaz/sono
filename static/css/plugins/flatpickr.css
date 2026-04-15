@@ -4,7 +4,7 @@
 }
 
 .flatpickr-calendar {
-  @apply bg-base-100! shadow!;
+  @apply shadow! bg-base-100!;
 
   &.open {
     @apply z-1!;
@@ -17,7 +17,7 @@
 
   .flatpickr-prev-month,
   .flatpickr-next-month {
-    @apply top-2.5! h-fit! rounded-box p-2! hover:bg-base-200/50;
+    @apply top-2.5! h-fit! p-2! rounded-box hover:bg-base-200/50;
     svg {
       @apply size-3! fill-base-content/60!;
     }
@@ -35,7 +35,7 @@
 
   .flatpickr-month,
   .flatpickr-months {
-    @apply items-center fill-base-content! text-base-content!;
+    @apply items-center text-base-content! fill-base-content!;
   }
 
   .flatpickr-current-month {
@@ -43,11 +43,11 @@
 
     .flatpickr-monthDropdown-months,
     .flatpickr-monthDropdown-month {
-      @apply border-base-300! bg-base-100 p-0 outline-none!;
+      @apply p-0 bg-base-100 border-base-300! outline-none!;
     }
 
     .flatpickr-monthDropdown-months {
-      @apply appearance-none rounded-box ps-2.5 font-medium hover:bg-base-200/50;
+      @apply ps-2.5 font-medium rounded-box appearance-none hover:bg-base-200/50;
     }
 
     .numInputWrapper {
@@ -63,7 +63,7 @@
   }
 
   .flatpickr-weeks {
-    @apply border-e border-base-300 shadow-none!;
+    @apply border-base-300 border-e shadow-none!;
 
     .flatpickr-day {
       @apply font-medium text-base-content/60! hover:bg-transparent!;
@@ -78,7 +78,7 @@
       @apply relative border-transparent;
 
       &::after {
-        @apply absolute inset-e-1 top-1 rounded-full bg-primary;
+        @apply absolute inset-e-1 top-1 bg-primary rounded-full;
         content: '';
         width: 5px;
         height: 5px;
@@ -90,23 +90,23 @@
     }
 
     &:hover {
-      @apply border-base-300! bg-base-200!;
+      @apply bg-base-200! border-base-300!;
     }
 
     &.flatpickr-disabled {
       @apply text-base-content/30!;
 
       &:hover {
-        @apply border-transparent! bg-transparent!;
+        @apply bg-transparent! border-transparent!;
       }
     }
 
     &.inRange {
-      @apply border-base-300! bg-base-200! shadow-none!;
+      @apply bg-base-200! border-base-300! shadow-none!;
     }
 
     &.selected {
-      @apply border-primary! bg-primary! text-primary-content!;
+      @apply text-primary-content! bg-primary! border-primary!;
 
       &.week {
         @apply shadow-none!;
@@ -123,7 +123,7 @@
 
     input,
     .flatpickr-am-pm {
-      @apply bg-transparent! text-base-content/80;
+      @apply text-base-content/80 bg-transparent!;
     }
 
     .flatpickr-time-separator {
@@ -141,10 +141,10 @@
   }
 
   .flatpickr-monthSelect-months .flatpickr-monthSelect-month {
-    @apply text-base-content/80! hover:border-base-300! hover:bg-base-200!;
+    @apply text-base-content/80! hover:bg-base-200! hover:border-base-300!;
 
     &.selected {
-      @apply border-primary! bg-primary! text-primary-content!;
+      @apply text-primary-content! bg-primary! border-primary!;
     }
   }
 }

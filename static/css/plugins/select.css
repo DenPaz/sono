@@ -2,11 +2,11 @@
 .choices {
   &.is-disabled {
     .choices__inner {
-      @apply border-base-200! bg-base-200!;
+      @apply bg-base-200! border-base-200!;
     }
   }
   .choices__inner {
-    @apply border-base-300! bg-base-100;
+    @apply bg-base-100 border-base-300!;
   }
 
   .choices__input {
@@ -15,20 +15,20 @@
 
   .choices__list.choices__list--multiple {
     .choices__item {
-      @apply border-0 bg-primary text-primary-content;
+      @apply text-primary-content bg-primary border-0;
 
       .choices__button {
-        @apply border-primary-content/50 pe-1.5;
+        @apply pe-1.5 border-primary-content/50;
         border-left: 1px solid inherit;
       }
     }
   }
 
   .choices__list.choices__list--dropdown {
-    @apply border-base-300! bg-base-100;
+    @apply bg-base-100 border-base-300!;
 
     .choices__input {
-      @apply border-base-300 bg-base-100!;
+      @apply bg-base-100! border-base-300;
     }
 
     .choices__item {

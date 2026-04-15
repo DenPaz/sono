@@ -54,7 +54,7 @@
 
 .fieldset {
   .fieldset-legend {
-    @apply text-sm font-normal text-base-content/80;
+    @apply font-normal text-sm text-base-content/80;
   }
   .fieldset-label,
   .label {
@@ -72,7 +72,7 @@
 }
 
 .label {
-  @apply cursor-pointer text-base-content/80;
+  @apply text-base-content/80 cursor-pointer;
 }
 
 input:-webkit-autofill,
