@@ -51,7 +51,18 @@ repos:
       - id: djlint-reformat-django
       - id: djlint-django
 
+  - repo: local
+    hooks:
+      - id: tailwhip
+        name: tailwhip
+        entry: uv run tailwhip
+        args: ['--write']
+        language: system
+        pass_filenames: true
+        types_or: [html, css]
+        files: '^(templates/|static/css/)'
+
 ci:
   autoupdate_schedule: weekly
-  skip: []
+  skip: [tailwhip]
   submodules: false
