@@ -13,11 +13,11 @@
   .ql-formats {
     .ql-header,
     .ql-header .ql-picker-label {
-      @apply border-0 text-base-content!;
+      @apply text-base-content! border-0;
     }
 
     .ql-header .ql-picker-options {
-      @apply rounded-box border-base-300! bg-base-100 shadow-none;
+      @apply bg-base-100 rounded-box border-base-300! shadow-none;
     }
 
     button {
@@ -37,13 +37,13 @@
     }
 
     .ql-active .ql-stroke {
-      @apply stroke-primary! opacity-100;
+      @apply opacity-100 stroke-primary!;
     }
   }
 }
 
 .ql-bubble .ql-tooltip {
-  @apply rounded-full bg-base-100! shadow-sm transition-all hover:shadow-lg;
+  @apply bg-base-100! rounded-full shadow-sm transition-all hover:shadow-lg;
 }
 
 .ql-bubble .ql-formats .ql-header .ql-picker-options .ql-picker-item {
@@ -51,5 +51,5 @@
 }
 
 .ql-container {
-  @apply rounded-b-sm bg-base-100!;
+  @apply bg-base-100! rounded-b-sm;
 }

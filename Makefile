@@ -143,14 +143,14 @@ djlint-lint: ## Lint Django templates with djLint
 	@uv run djlint templates/ --lint
 
 prettier-format: ## Format JS/CSS/JSON with Prettier
-	@echo "  🎨 Formatting JS/CSS/JSON/YAML..."
-	@npx prettier --write .
+	@echo "  🎨 Formatting JS/JSON/YAML..."
+	@npx prettier --write "**/*.{js,mjs,json,jsonc,yaml,yml}"
 
 tailwhip: ## Sort Tailwind CSS classes in templates and CSS files
 	@echo "  🌀 Sorting Tailwind classes..."
 	@uv run tailwhip "templates/**/*.html" "static/css/**/*.css" --write
 
-format: tailwhip djlint-format ruff-format prettier-format ## Format everything (Tailwind, templates, Python, JS/CSS/JSON/YAML)
+format: tailwhip djlint-format ruff-format prettier-format ## Format everything (Tailwind, templates, Python, JS/JSON/YAML)
 	@echo "  ✅ Code formatted."
 
 lint: ruff-lint djlint-lint ## Lint everything (Python and templates)

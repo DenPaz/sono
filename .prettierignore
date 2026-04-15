@@ -4,3 +4,6 @@
 
 # Django templates (formatted by djlint)
 templates/
+
+# CSS files (sorted by tailwhip, not Prettier)
+static/css/
