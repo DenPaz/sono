@@ -77,13 +77,9 @@ EDSC_QUESTIONS = {
     3: _("A criança não quer ir para a cama para dormir"),
     4: _("A criança tem dificuldade para adormecer"),
     5: _("Antes de adormecer a criança está agitada, nervosa ou sente medo"),
-    6: _(
-        'A criança apresenta "movimentos bruscos", repuxões ou tremores ao adormecer'
-    ),
+    6: _('A criança apresenta "movimentos bruscos", repuxões ou tremores ao adormecer'),
     7: _("Durante a noite a criança faz movimentos rítmicos com a cabeça e corpo"),
-    8: _(
-        'A criança diz que está vendo "coisas estranhas" um pouco antes de adormecer'
-    ),
+    8: _('A criança diz que está vendo "coisas estranhas" um pouco antes de adormecer'),
     9: _("A criança transpira muito ao adormecer"),
     10: _("A criança acorda mais de duas vezes durante a noite"),
     11: _("A criança acorda durante a noite e tem dificuldade em adormecer novamente"),

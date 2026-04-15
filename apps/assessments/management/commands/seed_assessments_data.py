@@ -95,9 +95,7 @@ class Command(BaseCommand):
             rows.append(municipality)
         return rows
 
-    def _assign_roles_and_profiles(
-        self, *, municipalities: list[Municipality]
-    ) -> list:
+    def _assign_roles_and_profiles(self, *, municipalities: list[Municipality]) -> list:
         professional_group = Group.objects.get(name=constants.ROLE_PROFESSIONAL)
         admin_group = Group.objects.get(name=constants.ROLE_CHIEF_ADMIN)
 
@@ -260,6 +258,8 @@ class Command(BaseCommand):
     def _build_unique_child_name(*, evaluation_index: int) -> str:
         # Keep deterministic and unique child references in seeded data.
         first_name = CHILD_NAMES[evaluation_index % len(CHILD_NAMES)]
-        second_name = CHILD_NAMES[(evaluation_index // len(CHILD_NAMES)) % len(CHILD_NAMES)]
+        second_name = CHILD_NAMES[
+            (evaluation_index // len(CHILD_NAMES)) % len(CHILD_NAMES)
+        ]
         suffix = f"{evaluation_index + 1:03d}"
         return f"{first_name} {second_name} {suffix}"

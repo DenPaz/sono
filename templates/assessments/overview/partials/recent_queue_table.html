@@ -22,7 +22,7 @@
         <tbody>
           {% for row in recent_queue %}
             <tr>
-                <td class="font-semibold">{{ row.get_child_reference }}</td>
+              <td class="font-semibold">{{ row.get_child_reference }}</td>
               <td>{{ row.municipality }}</td>
               <td>
                 <c-assessments.status_badge :status="row.status" />

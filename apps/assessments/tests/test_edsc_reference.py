@@ -4,7 +4,9 @@ from apps.assessments import constants
 from apps.assessments.services.edsc_scoring import calculate_edsc_scores
 
 
-def _choices_as_text(choices: tuple[tuple[int, str], ...]) -> tuple[tuple[int, str], ...]:
+def _choices_as_text(
+    choices: tuple[tuple[int, str], ...],
+) -> tuple[tuple[int, str], ...]:
     return tuple((value, str(label)) for value, label in choices)
 
 
@@ -74,7 +76,10 @@ def test_edsc_questions_match_official_reference():
 
     assert constants.EDSC_ITEMS_COUNT == 26
     assert tuple(constants.EDSC_QUESTIONS.keys()) == tuple(range(1, 27))
-    assert {item_index: str(question) for item_index, question in constants.EDSC_QUESTIONS.items()} == official_questions
+    assert {
+        item_index: str(question)
+        for item_index, question in constants.EDSC_QUESTIONS.items()
+    } == official_questions
 
 
 def test_edsc_item_1_and_2_choices_match_official_reference():
@@ -97,15 +102,18 @@ def test_edsc_item_1_and_2_choices_match_official_reference():
 
 def test_standard_frequency_scale_applies_to_items_3_to_26():
     expected_standard_choices = _choices_as_text(constants.EDSC_STANDARD_SCALE_CHOICES)
-    assert _choices_as_text(constants.get_item_scale_choices(item_index=1)) == _choices_as_text(
-        constants.EDSC_ITEM_1_SCALE_CHOICES
-    )
-    assert _choices_as_text(constants.get_item_scale_choices(item_index=2)) == _choices_as_text(
-        constants.EDSC_ITEM_2_SCALE_CHOICES
-    )
+    assert _choices_as_text(
+        constants.get_item_scale_choices(item_index=1)
+    ) == _choices_as_text(constants.EDSC_ITEM_1_SCALE_CHOICES)
+    assert _choices_as_text(
+        constants.get_item_scale_choices(item_index=2)
+    ) == _choices_as_text(constants.EDSC_ITEM_2_SCALE_CHOICES)
 
     for item_index in range(3, 27):
-        assert _choices_as_text(constants.get_item_scale_choices(item_index=item_index)) == expected_standard_choices
+        assert (
+            _choices_as_text(constants.get_item_scale_choices(item_index=item_index))
+            == expected_standard_choices
+        )
 
 
 def test_subscale_groups_and_limits_match_official_reference():
@@ -171,7 +179,9 @@ def test_subscale_alert_logic_uses_strictly_greater_than_acceptable_max():
 
         answers_above_limit = dict(answers_at_limit)
         editable_item_index = next(
-            index for index in item_indexes if answers_above_limit[index] < constants.EDSC_MAX_ITEM_VALUE
+            index
+            for index in item_indexes
+            if answers_above_limit[index] < constants.EDSC_MAX_ITEM_VALUE
         )
         answers_above_limit[editable_item_index] += 1
 

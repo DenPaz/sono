@@ -9,7 +9,7 @@
     </div>
     <div class="space-y-2">
       {% for value, label in field.field.choices %}
-        <label class="flex items-center gap-3 p-2 bg-base-200/40 rounded-box border border-base-300 transition cursor-pointer hover:bg-primary/5 hover:border-primary/40 has-checked:bg-primary/10 has-checked:border-primary">
+        <label class="flex gap-3 items-center p-2 bg-base-200/40 rounded-box border border-base-300 transition cursor-pointer hover:bg-primary/5 hover:border-primary/40 has-checked:bg-primary/10 has-checked:border-primary">
           <input type="radio"
                  id="{{ field.auto_id }}_{{ forloop.counter0 }}"
                  name="{{ field.html_name }}"

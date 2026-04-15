@@ -23,8 +23,7 @@ DEFAULT_PROFESSIONAL_MUNICIPALITY_STATE_CODE = "SP"
 
 class Command(BaseCommand):
     help = (
-        "Create or update the default non-manager "
-        "professional user for local testing."
+        "Create or update the default non-manager professional user for local testing."
     )
 
     @transaction.atomic
