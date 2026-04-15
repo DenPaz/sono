@@ -148,7 +148,7 @@ prettier-format: ## Format JS/CSS/JSON with Prettier
 
 tailwhip: ## Sort Tailwind CSS classes in templates and CSS files
 	@echo "  🌀 Sorting Tailwind classes..."
-	@uv run tailwhip "templates/**/*.html" "static/css/**/*.css" --write
+	@uv run tailwhip "templates/**/*.html" --write
 
 format: tailwhip djlint-format ruff-format prettier-format ## Format everything (Tailwind, templates, Python, JS/JSON/YAML)
 	@echo "  ✅ Code formatted."
