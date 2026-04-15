@@ -6,35 +6,56 @@
        type="checkbox"
        class="hidden"
        aria-hidden="true" />
-<input id="layout-sidebar-hover-trigger"
-       type="checkbox"
-       class="hidden"
-       aria-hidden="true" />
-<div id="layout-sidebar-hover"
-     class="w-1 h-screen bg-base-300"
-     aria-hidden="true"></div>
 <aside id="layout-sidebar"
        class="sidebar-menu py-3"
        aria-label="{% trans 'Main navigation' %}">
   <div class="flex gap-3 items-center justify-between min-h-10 px-5">
-    <a href="{% url 'dashboard:index' %}"
-       class="font-black text-3xl text-transparent bg-clip-text bg-linear-to-r from-primary to-accent">Sono</a>
-    <label for="layout-sidebar-hover-trigger"
-           title="{% trans 'Toggle sidebar hover' %}"
+    <a href="{% url 'assessments:overview' %}"
+       class="sidebar-brand inline-flex items-center font-black text-3xl text-transparent bg-clip-text bg-linear-to-r from-primary to-accent">
+      <span class="sidebar-brand-full">Sono</span>
+      <span class="sidebar-brand-mini">S</span>
+    </a>
+    <label for="layout-sidebar-toggle-trigger"
+           title="{% trans 'Toggle sidebar' %}"
            class="btn btn-sm btn-circle btn-ghost relative text-base-content/50 max-lg:hidden">
-      <span class="iconify lucide--panel-left-close absolute size-4.5 opacity-100 transition-all duration-300 group-has-[[id=layout-sidebar-hover-trigger]:checked]/html:opacity-0"
+      <span class="iconify lucide--panel-left-close absolute size-4.5 opacity-100 transition-all duration-300 group-has-[[id=layout-sidebar-toggle-trigger]:checked]/html:opacity-0"
             aria-hidden="true"></span>
-      <span class="iconify lucide--panel-left-dashed absolute size-4.5 opacity-0 transition-all duration-300 group-has-[[id=layout-sidebar-hover-trigger]:checked]/html:opacity-100"
+      <span class="iconify lucide--panel-right-close absolute size-4.5 opacity-0 transition-all duration-300 group-has-[[id=layout-sidebar-toggle-trigger]:checked]/html:opacity-100"
             aria-hidden="true"></span>
     </label>
   </div>
   <nav class="custom-scrollbar overflow-auto grow"
        aria-label="{% trans 'Sidebar navigation' %}">
     <div class="space-y-0.5 mt-5 px-2.5">
-      <a href="{% url 'dashboard:index' %}"
-         class="menu-item {% active_class 'dashboard:index' %}">
-        <span class="iconify lucide--monitor-dot size-4" aria-hidden="true"></span>
-        <span>{% trans "Dashboard" %}</span>
+      <a href="{% url 'assessments:overview' %}"
+         class="menu-item {% active_class 'assessments:overview' %}">
+        <span class="iconify lucide--layout-dashboard size-4" aria-hidden="true"></span>
+        <span>{% trans "Visão Geral" %}</span>
+      </a>
+      <a href="{% url 'assessments:evaluations' %}"
+         class="menu-item {% active_class 'assessments:evaluations' 'assessments:evaluation_new' 'assessments:evaluation_detail' %}">
+        <span class="iconify lucide--clipboard-list size-4" aria-hidden="true"></span>
+        <span>{% trans "Avaliações" %}</span>
+      </a>
+      <a href="{% url 'assessments:professionals' %}"
+         class="menu-item {% active_class 'assessments:professionals' %}">
+        <span class="iconify lucide--users size-4" aria-hidden="true"></span>
+        <span>{% trans "Profissionais" %}</span>
+      </a>
+      <a href="{% url 'assessments:municipalities' %}"
+         class="menu-item {% active_class 'assessments:municipalities' %}">
+        <span class="iconify lucide--map-pinned size-4" aria-hidden="true"></span>
+        <span>{% trans "Municípios" %}</span>
+      </a>
+      <a href="{% url 'assessments:reports' %}"
+         class="menu-item {% active_class 'assessments:reports' %}">
+        <span class="iconify lucide--chart-column-big size-4" aria-hidden="true"></span>
+        <span>{% trans "Relatórios" %}</span>
+      </a>
+      <a href="{% url 'assessments:settings' %}"
+         class="menu-item {% active_class 'assessments:settings' 'assessments:settings_access' 'assessments:settings_account' 'assessments:settings_professionals' %}">
+        <span class="iconify lucide--settings-2 size-4" aria-hidden="true"></span>
+        <span>{% trans "Configurações" %}</span>
       </a>
     </div>
   </nav>

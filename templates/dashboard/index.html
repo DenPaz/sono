@@ -1,4 +1,122 @@
 {% extends "dashboard/_base.html" %}
 
+{% load i18n %}
+
 {% block content %}
+  <section class="space-y-6 p-4 md:space-y-7 md:p-6 lg:p-8">
+    <header class="flex flex-col gap-4 p-4 bg-base-100 rounded-box border border-base-300 shadow-sm md:p-5">
+      <div class="space-y-1">
+        <h1 class="font-black text-2xl tracking-tight md:text-3xl">{% trans "Dashboard Operacional" %}</h1>
+        <p class="text-sm text-base-content/70 md:text-base">
+          {% trans "Visão consolidada das avaliações, risco clínico e produtividade da equipe." %}
+        </p>
+      </div>
+    </header>
+    <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <c-assessments.kpi_card title="{% trans 'Total de avaliações' %}" value="{{ dashboard_kpis.total }}" hint="{% trans 'Registros visíveis para seu perfil' %}" icon="lucide--notebook-tabs" tone="primary" />
+      <c-assessments.kpi_card title="{% trans 'Concluídas' %}" value="{{ dashboard_kpis.concluded_total }}" hint="{% trans 'Questionários finalizados' %}" icon="lucide--check-check" tone="success" />
+      <c-assessments.kpi_card title="{% trans 'Rascunhos' %}" value="{{ dashboard_kpis.draft_total }}" hint="{% trans 'Avaliações em andamento' %}" icon="lucide--file-pen-line" tone="warning" />
+      <c-assessments.kpi_card title="{% trans 'Alto risco' %}" value="{{ dashboard_kpis.high_risk_total }}" hint="{% trans 'Casos com alerta prioritário' %}" icon="lucide--triangle-alert" tone="error" />
+    </div>
+    <section class="grid gap-4 xl:grid-cols-[2fr,1fr]">
+      <article class="card bg-base-100 border border-base-300 shadow-sm">
+        <div class="card-body p-0">
+          <div class="flex items-center justify-between p-4 pb-0 md:p-5 md:pb-0">
+            <h2 class="font-bold text-lg">{% trans "Municípios em Destaque" %}</h2>
+            <a href="{% url 'assessments:municipalities' %}"
+               class="btn btn-sm btn-ghost">{% trans "Ver ranking" %}</a>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>{% trans "Município" %}</th>
+                  <th>{% trans "Avaliações" %}</th>
+                  <th>{% trans "Alto risco" %}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in top_municipalities %}
+                  <tr>
+                    <td class="font-semibold">{{ row.municipality__name }}/{{ row.municipality__state_code }}</td>
+                    <td>{{ row.total }}</td>
+                    <td>{{ row.high_risk }}</td>
+                  </tr>
+                {% empty %}
+                  <tr>
+                    <td colspan="3" class="py-8 text-base-content/60 text-center">{% trans "Sem dados suficientes para o ranking." %}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </article>
+      <article class="card bg-base-100 border border-base-300 shadow-sm">
+        <div class="card-body gap-3 p-4 md:p-5">
+          <h2 class="font-bold text-lg">{% trans "Equipe e Operação" %}</h2>
+          <ul class="space-y-2 text-sm">
+            <li class="flex items-center justify-between px-3 py-2 bg-base-200/40 rounded-box border border-base-300">
+              <span>{% trans "Profissionais ativos" %}</span>
+              <span class="font-semibold">{{ team_snapshot.professionals_total }}</span>
+            </li>
+            <li class="flex items-center justify-between px-3 py-2 bg-base-200/40 rounded-box border border-base-300">
+              <span>{% trans "Municípios ativos" %}</span>
+              <span class="font-semibold">{{ team_snapshot.municipalities_total }}</span>
+            </li>
+            <li class="flex items-center justify-between px-3 py-2 bg-base-200/40 rounded-box border border-base-300">
+              <span>{% trans "Convites pendentes" %}</span>
+              <span class="font-semibold">{{ team_snapshot.pending_invites_total }}</span>
+            </li>
+          </ul>
+        </div>
+      </article>
+    </section>
+    <section class="card bg-base-100 border border-base-300 shadow-sm">
+      <div class="card-body gap-4 p-0">
+        <div class="flex items-center justify-between p-4 pb-0 md:p-5 md:pb-0">
+          <h2 class="font-bold text-lg">{% trans "Fila Recente" %}</h2>
+          <a href="{% url 'assessments:evaluations' %}"
+             class="btn btn-sm btn-ghost">{% trans "Ver todas" %}</a>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>{% trans "Criança (ID)" %}</th>
+                <th>{% trans "Município" %}</th>
+                <th>{% trans "Status" %}</th>
+                <th>{% trans "Risco" %}</th>
+                <th>{% trans "Atualizado" %}</th>
+                <th class="text-right">{% trans "Ações" %}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in recent_queue %}
+                <tr>
+                    <td class="font-semibold">{{ row.get_child_reference }}</td>
+                  <td>{{ row.municipality }}</td>
+                  <td>
+                    <c-assessments.status_badge :status="row.status" />
+                  </td>
+                  <td>
+                    <c-assessments.risk_badge :risk_level="row.risk_level" />
+                  </td>
+                  <td>{{ row.modified|date:"d/m/Y H:i" }}</td>
+                  <td class="text-right">
+                    <a href="{% url 'assessments:evaluation_detail' row.id %}"
+                       class="btn btn-xs btn-ghost">{% trans "Abrir" %}</a>
+                  </td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="6" class="py-8 text-base-content/60 text-center">{% trans "Nenhuma avaliação encontrada." %}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </section>
 {% endblock content %}

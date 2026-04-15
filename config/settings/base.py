@@ -28,7 +28,6 @@ DEBUG = env.bool("DJANGO_DEBUG", False)
 TIME_ZONE = "America/Sao_Paulo"
 LANGUAGE_CODE = "pt-br"
 LANGUAGES = [
-    ("en", _("English")),
     ("pt-br", _("Portuguese")),
 ]
 SITE_ID = 1
@@ -74,7 +73,6 @@ THIRD_PARTY_APPS = [
     "crispy_tailwind",
     "allauth",
     "allauth.account",
-    "allauth.mfa",
     "django_celery_beat",
     "django_vite",
     "django_filters",
@@ -88,6 +86,7 @@ THIRD_PARTY_APPS = [
     "django_cotton",
 ]
 LOCAL_APPS = [
+    "apps.assessments.config.AssessmentsConfig",
     "apps.core.config.CoreConfig",
     "apps.dashboard.config.DashboardConfig",
     "apps.users.config.UsersConfig",
@@ -107,7 +106,7 @@ AUTHENTICATION_BACKENDS = [
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
 AUTH_USER_MODEL = "users.User"
-LOGIN_REDIRECT_URL = "dashboard:index"
+LOGIN_REDIRECT_URL = "assessments:overview"
 LOGOUT_REDIRECT_URL = "account_login"
 LOGIN_URL = "account_login"
 
@@ -281,11 +280,25 @@ ACCOUNT_ADAPTER = "apps.users.adapters.AccountAdapter"
 ACCOUNT_FORMS = {
     "signup": "apps.users.forms_allauth.UserSignupForm",
 }
-ACCOUNT_LOGIN_BY_CODE_ENABLED = True
 ACCOUNT_EMAIL_UNKNOWN_ACCOUNTS = False
 ACCOUNT_EMAIL_NOTIFICATIONS = True
 ACCOUNT_CHANGE_EMAIL = True
-ACCOUNT_LOGIN_BY_CODE_SUPPORTS_RESEND = True
+
+# -----------------------------------------------------------------------------
+# assessments security
+# -----------------------------------------------------------------------------
+_DEFAULT_CHILD_IDENTITY_KEY = env(
+    "DJANGO_SECRET_KEY",
+    default="insecure-child-identity-key",
+)
+ASSESSMENTS_CHILD_NAME_ENCRYPTION_KEY = env(
+    "ASSESSMENTS_CHILD_NAME_ENCRYPTION_KEY",
+    default=_DEFAULT_CHILD_IDENTITY_KEY,
+)
+ASSESSMENTS_CHILD_NAME_BLIND_INDEX_KEY = env(
+    "ASSESSMENTS_CHILD_NAME_BLIND_INDEX_KEY",
+    default=_DEFAULT_CHILD_IDENTITY_KEY,
+)
 
 # -----------------------------------------------------------------------------
 # django-vite

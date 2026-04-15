@@ -1,6 +1,7 @@
 """Django settings for tests."""
 
 from .base import *  # noqa: F403
+from .base import DJANGO_VITE
 from .base import TEMPLATES
 from .base import env
 
@@ -29,3 +30,13 @@ TEMPLATES[0]["OPTIONS"]["debug"] = True
 # MEDIA
 # -----------------------------------------------------------------------------
 MEDIA_URL = "http://media.testserver/"
+
+# -----------------------------------------------------------------------------
+# django-vite
+# -----------------------------------------------------------------------------
+DJANGO_VITE = {
+    "default": {
+        **DJANGO_VITE["default"],
+        "dev_mode": True,
+    },
+}

@@ -1,5 +1,7 @@
-from django.views.generic import TemplateView
+from django.views.generic import RedirectView
 
 
-class IndexView(TemplateView):
-    template_name = "dashboard/index.html"
+class IndexView(RedirectView):
+    pattern_name = "assessments:overview"
+    permanent = False
+    query_string = True

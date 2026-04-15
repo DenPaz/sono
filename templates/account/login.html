@@ -36,12 +36,4 @@
       {% trans "Sign in" %}
     </button>
   </form>
-  {% if LOGIN_BY_CODE_ENABLED %}
-    <div class="divider my-6">{% trans "or" %}</div>
-    <a href="{% url 'account_request_login_code' %}"
-       class="btn btn-outline gap-2 w-full">
-      <span class="iconify lucide--mail size-5" aria-hidden="true"></span>
-      {% trans "Send me a sign-in code" %}
-    </a>
-  {% endif %}
 {% endblock content_body %}

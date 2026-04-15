@@ -1,9 +1,14 @@
 :root {
   --layout-sidebar-width: 256px;
+  --layout-sidebar-collapsed-width: 76px;
 }
 
 /* == Layout: Sidebar == */
 .sidebar-menu {
+  .sidebar-brand-mini {
+    @apply hidden;
+  }
+
   .menu-label {
     @apply font-medium text-sm text-base-content/70;
   }
@@ -61,7 +66,7 @@
   background: var(--layout-sidebar-background);
   max-height: 100vh;
 
-  @apply relative top-0 bottom-0 z-10 flex flex-col transition-[margin,top,max-height,border-radius] duration-300;
+  @apply relative top-0 bottom-0 z-10 flex flex-col transition-[margin,top,max-height,border-radius,width,min-width] duration-300;
 
   &.hide {
     margin-inline-start: calc(var(--layout-sidebar-width) * -1);
@@ -71,7 +76,7 @@
 /* == Layout: Topbar == */
 #layout-topbar {
   background: var(--layout-topbar-background);
-  @apply sticky top-0 z-10 min-h-16 max-h-16 transition-[top,margin,border-radius] duration-300;
+  @apply relative z-10 min-h-16 max-h-16 transition-[margin,border-radius] duration-300;
 }
 
 /* == Layout: Content == */
@@ -79,27 +84,41 @@
   @apply grow p-6 transition-all;
 }
 
-/* == Sidebar: Toggle == */
-#layout-sidebar-toggle-trigger:checked ~ #layout-sidebar {
-  margin-inline-start: calc(var(--layout-sidebar-width) * -1);
-}
+/* == Sidebar: Desktop minimize == */
+@media (min-width: theme(--breakpoint-lg)) {
+  #layout-sidebar-toggle-trigger:checked ~ #layout-sidebar {
+    width: var(--layout-sidebar-collapsed-width);
+    min-width: var(--layout-sidebar-collapsed-width);
+    margin-inline-start: 0;
+  }
 
-#layout-sidebar-hover {
-  @apply hidden fixed top-0 bottom-0 left-0 z-11;
-}
+  #layout-sidebar .sidebar-brand-mini {
+    @apply hidden;
+  }
 
-#layout-sidebar-hover-trigger:checked ~ #layout-sidebar {
-  @apply fixed z-12;
-  margin-inline-start: calc(var(--layout-sidebar-width) * -1);
-}
+  #layout-sidebar-toggle-trigger:checked ~ #layout-sidebar .sidebar-brand {
+    @apply justify-center w-full;
+  }
 
-#layout-sidebar-hover-trigger:checked ~ #layout-sidebar-hover {
-  @apply block;
-}
+  #layout-sidebar-toggle-trigger:checked ~ #layout-sidebar .sidebar-brand-full {
+    @apply hidden;
+  }
 
-#layout-sidebar-hover:hover ~ #layout-sidebar,
-#layout-sidebar-hover-trigger:checked ~ #layout-sidebar:hover {
-  @apply z-12 lg:ms-0!;
+  #layout-sidebar-toggle-trigger:checked ~ #layout-sidebar .sidebar-brand-mini {
+    @apply inline;
+  }
+
+  #layout-sidebar-toggle-trigger:checked ~ #layout-sidebar .menu-item {
+    @apply justify-center px-2;
+  }
+
+  #layout-sidebar-toggle-trigger:checked ~ #layout-sidebar .menu-item > span:last-child {
+    @apply hidden;
+  }
+
+  #layout-sidebar-toggle-trigger:checked ~ #layout-sidebar .custom-scrollbar {
+    @apply overflow-x-hidden;
+  }
 }
 
 /* == Layout: Monochrome Layer == */
@@ -148,6 +167,6 @@ html[data-theme='material-dark'] {
   }
 
   #layout-topbar {
-    @apply sticky top-4 mx-5 mt-4 rounded-box;
+    @apply relative mx-5 mt-4 rounded-box;
   }
 }
