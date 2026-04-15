@@ -106,7 +106,7 @@ make test-fresh              # Run tests with a fresh database (use after new mi
 #### Code Quality
 
 ```bash
-make format           # Format everything: Tailwind classes, templates, and Python
+make format           # Format everything: Tailwind, templates, Python, JS/JSON/YAML
 make lint             # Lint everything: Python and templates
 
 make ruff-format      # Format Python code with Ruff

@@ -34,6 +34,8 @@ Sono App.
 | 🔍  | [Ruff](https://docs.astral.sh/ruff/)                                              | Python linter and formatter |
 | 🧪  | [pytest](https://pytest.org/) + [factory-boy](https://factoryboy.readthedocs.io/) | Testing                     |
 | 🧹  | [djLint](https://www.djlint.com/)                                                 | HTML/template linter        |
+| ✨  | [Prettier](https://prettier.io/)                                                  | JS/JSON/YAML formatter      |
+| 🌀  | [tailwhip](https://github.com/joshuadavidthomas/tailwhip)                         | Tailwind class sorter       |
 
 ---
 
@@ -84,28 +86,28 @@ make dev
 
 ## ⚙️ Common Commands
 
-| Command                    | Description                                       |
-| -------------------------- | ------------------------------------------------- |
-| `make dev`                 | 🖥️ Start Django + Vite dev servers                |
-| `make dev-fresh`           | 🔄 Full DB reset + seed, then start dev           |
-| `make django`              | 🐍 Start Django server only                       |
-| `make migrate`             | 🗄️ Apply pending database migrations              |
-| `make migrations`          | 📝 Create new migrations                          |
-| `make fresh`               | 🔄 Drop DB, re-migrate, and re-seed               |
-| `make seed`                | 🌱 Populate DB with test data                     |
-| `make test`                | 🧪 Run the test suite                             |
-| `make test-fresh`          | 🧪 Run tests with a fresh database                |
-| `make format`              | 🎨 Format Tailwind classes, templates, and Python |
-| `make lint`                | 🔍 Lint Python and templates                      |
-| `make translations`        | 🌐 Extract and compile i18n strings               |
-| `make shell`               | 🐚 Open the Django shell                          |
-| `make manage ARGS='...'`   | ⚙️ Run any `manage.py` command                    |
-| `make clean`               | 🧹 Remove `.pyc` files and Django caches          |
-| `make npm-build`           | 📦 Production JS/CSS build                        |
-| `make npm-dev`             | ⚡ Start Vite dev server only                     |
-| `make npm-install <pkg>`   | ➕ Install an npm package                         |
-| `make npm-uninstall <pkg>` | ➖ Remove an npm package                          |
-| `make uv <cmd>`            | 🐍 Run any `uv` command                           |
+| Command                    | Description                                                 |
+| -------------------------- | ----------------------------------------------------------- |
+| `make dev`                 | 🖥️ Start Django + Vite dev servers                          |
+| `make dev-fresh`           | 🔄 Full DB reset + seed, then start dev                     |
+| `make django`              | 🐍 Start Django server only                                 |
+| `make migrate`             | 🗄️ Apply pending database migrations                        |
+| `make migrations`          | 📝 Create new migrations                                    |
+| `make fresh`               | 🔄 Drop DB, re-migrate, and re-seed                         |
+| `make seed`                | 🌱 Populate DB with test data                               |
+| `make test`                | 🧪 Run the test suite                                       |
+| `make test-fresh`          | 🧪 Run tests with a fresh database                          |
+| `make format`              | 🎨 Format Tailwind classes, templates, Python, JS/JSON/YAML |
+| `make lint`                | 🔍 Lint Python and templates                                |
+| `make translations`        | 🌐 Extract and compile i18n strings                         |
+| `make shell`               | 🐚 Open the Django shell                                    |
+| `make manage ARGS='...'`   | ⚙️ Run any `manage.py` command                              |
+| `make clean`               | 🧹 Remove `.pyc` files and Django caches                    |
+| `make npm-build`           | 📦 Production JS/CSS build                                  |
+| `make npm-dev`             | ⚡ Start Vite dev server only                               |
+| `make npm-install <pkg>`   | ➕ Install an npm package                                   |
+| `make npm-uninstall <pkg>` | ➖ Remove an npm package                                    |
+| `make uv <cmd>`            | 🐍 Run any `uv` command                                     |
 
 > Run `make help` to see all available commands.
 
