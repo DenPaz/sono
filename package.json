@@ -3,8 +3,7 @@
   "version": "0.1.0",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "build": "vite build"
   },
   "devDependencies": {
     "@iconify-json/hugeicons": "^1.2.26",
@@ -20,8 +19,7 @@
     "tailwindcss-motion": "^1.1.1",
     "vite": "^8.0.8"
   },
-  "dependencies": {},
   "engines": {
-    "node": ">=24.0.0"
+    "node": ">=24.14"
   }
 }
