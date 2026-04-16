@@ -12,16 +12,15 @@
     "@iconify-json/ri": "^1.2.10",
     "@iconify/tailwind4": "^1.2.3",
     "@tailwindcss/vite": "^4.2.2",
-    "prettier": "^3.8.3",
-    "vite": "^8.0.8"
-  },
-  "dependencies": {
     "alpinejs": "^3.15.11",
     "daisyui": "^5.5.19",
     "htmx.org": "^2.0.8",
+    "prettier": "^3.8.3",
     "tailwindcss": "^4.2.2",
-    "tailwindcss-motion": "^1.1.1"
+    "tailwindcss-motion": "^1.1.1",
+    "vite": "^8.0.8"
   },
+  "dependencies": {},
   "engines": {
     "node": ">=24.0.0"
   }
