@@ -14,7 +14,8 @@
       {% for message in messages %}<li>{{ message }}</li>{% endfor %}
     </ul>
     {% if dismissable %}
-      <button class="btn btn-xs btn-circle btn-ghost self-start ms-auto hover:text-{{ severity }} hover:bg-transparent hover:border-{{ severity }}"
+      <button type="button"
+              class="btn btn-xs btn-circle btn-ghost self-start ms-auto shadow-lg hover:text-{{ severity }} hover:bg-transparent hover:border-{{ severity }}"
               @click="show = false"
               aria-label="{% trans 'Dismiss' %}">
         <span class="iconify lucide--x size-3"></span>
