@@ -35,7 +35,7 @@
               class="btn btn-sm btn-circle btn-ghost"
               tabindex="0"
               aria-label="{% trans 'Select language' %}">
-        <img src="https://flagcdn.com/{% if current_language == 'pt-br' %}br{% else %}us{% endif %}.svg"
+        <img src="{% static 'images/locale/'|add:current_language|add:'.svg' %}"
              class="size-5.5 rounded-box object-cover"
              alt="{{ current_language|upper }}" />
       </button>
@@ -52,7 +52,7 @@
                 <input type="hidden" name="language" value="{{ language.code }}" />
                 <input type="hidden" name="next" value="{{ request.get_full_path }}" />
                 <button type="submit" class="flex gap-2 items-center w-25 cursor-pointer">
-                  <img src="https://flagcdn.com/{% if language.code == 'pt-br' %}br{% else %}us{% endif %}.svg"
+                  <img src="{% static 'images/locale/'|add:language.code|add:'.svg' %}"
                        class="size-4.5 rounded-box object-cover"
                        alt="{{ language.name_local }}" />
                   <span>{{ language.code|upper }}</span>
