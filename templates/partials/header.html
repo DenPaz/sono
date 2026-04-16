@@ -1,6 +1,9 @@
 {% load i18n %}
 {% load static %}
 
+{% get_current_language as current_language %}
+{% get_available_languages as available_languages %}
+{% get_language_info_list for available_languages as languages %}
 <header id="layout-topbar"
         aria-label="{% trans 'Top bar' %}"
         class="flex items-center justify-between px-4"
@@ -28,9 +31,6 @@
   <div class="inline-flex gap-3 items-center">
     <c-brand.theme_toggle class="btn-sm btn-ghost" />
     <div class="dropdown dropdown-bottom dropdown-end">
-      {% get_current_language as current_language %}
-      {% get_available_languages as available_languages %}
-      {% get_language_info_list for available_languages as languages %}
       <button type="button"
               class="btn btn-sm btn-circle btn-ghost"
               tabindex="0"
