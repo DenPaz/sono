@@ -1,17 +1,23 @@
-.PHONY: help uv-sync npm-install-deps init \
-        migrate migrations reset-db seed fresh \
-        dev dev-fresh django shell manage clean \
-        test test-fresh translations \
-        npm-install npm-uninstall npm-build npm-dev \
-        ruff-format djlint-format prettier-format tailwhip format \
-        ruff-lint djlint-lint lint \
-        uv
+.PHONY: \
+	help \
+	init uv-sync npm-install-deps pre-commit-install \
+	migrate migrations reset-db seed fresh \
+	dev dev-fresh django shell manage clean \
+	test test-fresh \
+	translations \
+	npm-build npm-dev npm-install npm-uninstall \
+	format ruff-format djlint-format prettier-format tailwhip \
+	lint ruff-lint djlint-lint \
+	uv
 
 .DEFAULT_GOAL := help
 
+# ============================================================
+#  Help
+# ============================================================
 help:
 	@echo ""
-	@echo "  🎵 Sono — Development Makefile"
+	@echo "  🛌 Sono — Development Makefile"
 	@echo ""
 	@grep -hE '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "     \033[36m%-20s\033[0m %s\n", $$1, $$2}'
 	@echo ""
@@ -25,13 +31,13 @@ uv-sync: ## Install Python dependencies
 
 npm-install-deps: ## Install all npm dependencies
 	@echo "  📦 Installing npm dependencies..."
-	@npm install
+	@npm ci
 
 pre-commit-install: ## Install pre-commit hooks
 	@echo "  🪝 Installing pre-commit hooks..."
 	@uv run pre-commit install
 
-init: uv-sync npm-install-deps npm-build migrate seed pre-commit-install ## Full first-time setup
+init: uv-sync npm-install-deps migrate seed npm-build pre-commit-install ## Full first-time setup
 	@echo ""
 	@echo "  ✅ Project is ready — run 'make dev' to start."
 	@echo ""
@@ -43,7 +49,7 @@ migrations: ## Create new migrations
 	@echo "  🗄️  Creating migrations..."
 	@uv run manage.py makemigrations
 
-migrate: ## Run pending migrations
+migrate: ## Apply pending migrations
 	@echo "  🗄️  Running migrations..."
 	@uv run manage.py migrate
 
@@ -93,7 +99,7 @@ test: ## Run test suite. E.g. make test ARGS='-x'
 	@echo "  🧪 Running tests..."
 	@uv run pytest ${ARGS}
 
-test-fresh: ## Run test suite with fresh database
+test-fresh: ## Run test suite with a fresh database
 	@echo "  🧪 Running tests with fresh database..."
 	@uv run pytest --create-db ${ARGS}
 
@@ -117,8 +123,8 @@ npm-build: ## Production JS/CSS build
 npm-dev: ## Start Vite dev server only
 	@npm run dev
 
-npm-install: ## Install an npm package. E.g. make npm-install htmx.org
-	@npm install $(filter-out $@,$(MAKECMDGOALS))
+npm-install: ## Install an npm package (saved to devDependencies). E.g. make npm-install htmx.org
+	@npm install --save-dev $(filter-out $@,$(MAKECMDGOALS))
 
 npm-uninstall: ## Remove an npm package. E.g. make npm-uninstall htmx.org
 	@npm uninstall $(filter-out $@,$(MAKECMDGOALS))
@@ -126,32 +132,35 @@ npm-uninstall: ## Remove an npm package. E.g. make npm-uninstall htmx.org
 # ============================================================
 #  Formatting
 # ============================================================
-ruff-format: ## Format Python code with Ruff
-	@echo "  🐍 Formatting Python code..."
-	@uv run ruff format .
-
-ruff-lint: ## Lint Python code with Ruff
-	@echo "  🐍 Linting Python code..."
-	@uv run ruff check --fix .
+tailwhip: ## Sort Tailwind CSS classes in templates and CSS files
+	@echo "  🌀 Sorting Tailwind classes..."
+	@uv run tailwhip . --write
 
 djlint-format: ## Format Django templates with djLint
 	@echo "  🎨 Formatting templates..."
 	@uv run djlint templates/ --reformat
 
-djlint-lint: ## Lint Django templates with djLint
-	@echo "  🎨 Linting templates..."
-	@uv run djlint templates/ --lint
+ruff-format: ## Format Python code with Ruff
+	@echo "  🐍 Formatting Python code..."
+	@uv run ruff format .
 
 prettier-format: ## Format JS/JSON/YAML with Prettier
-	@echo "  🎨 Formatting JS/JSON/YAML..."
+	@echo "  ✨ Formatting JS/JSON/YAML..."
 	@npx prettier --write "**/*.{js,mjs,json,jsonc,yaml,yml}"
-
-tailwhip: ## Sort Tailwind CSS classes in templates and CSS files
-	@echo "  🌀 Sorting Tailwind classes..."
-	@uv run tailwhip . --write
 
 format: tailwhip djlint-format ruff-format prettier-format ## Format everything (Tailwind, templates, Python, JS/JSON/YAML)
 	@echo "  ✅ Code formatted."
+
+# ============================================================
+#  Linting
+# ============================================================
+ruff-lint: ## Lint and auto-fix Python code with Ruff
+	@echo "  🐍 Linting Python code..."
+	@uv run ruff check --fix .
+
+djlint-lint: ## Lint Django templates with djLint
+	@echo "  🎨 Linting templates..."
+	@uv run djlint templates/ --lint
 
 lint: ruff-lint djlint-lint ## Lint everything (Python and templates)
 	@echo "  ✅ Code linted."
