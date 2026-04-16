@@ -144,11 +144,11 @@ ruff-format: ## Format Python code with Ruff
 	@echo "  🐍 Formatting Python code..."
 	@uv run ruff format .
 
-prettier-format: ## Format JS/JSON/YAML with Prettier
-	@echo "  ✨ Formatting JS/JSON/YAML..."
-	@npx prettier --write "**/*.{js,mjs,json,jsonc,yaml,yml}"
+prettier-format: ## Format CSS/JS/JSON/YAML/Markdown with Prettier
+	@echo "  ✨ Formatting CSS/JS/JSON/YAML/Markdown..."
+	@npx prettier --write "**/*.{css,js,mjs,json,jsonc,yaml,yml,md,markdown}" --ignore-path .gitignore
 
-format: tailwhip djlint-format ruff-format prettier-format ## Format everything (Tailwind, templates, Python, JS/JSON/YAML)
+format: prettier-format djlint-format ruff-format tailwhip ## Format everything
 	@echo "  ✅ Code formatted."
 
 # ============================================================
