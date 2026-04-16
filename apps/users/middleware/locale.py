@@ -5,6 +5,8 @@ from django.utils import translation
 
 
 class UserLocaleMiddleware:
+    """Middleware to set the user's preferred language."""
+
     def __init__(self, get_response):
         self.get_response = get_response
 
@@ -18,6 +20,8 @@ class UserLocaleMiddleware:
 
 
 class UserTimezoneMiddleware:
+    """Middleware to set the user's preferred timezone."""
+
     def __init__(self, get_response):
         self.get_response = get_response
 
