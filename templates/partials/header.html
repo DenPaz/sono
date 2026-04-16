@@ -1,9 +1,6 @@
 {% load i18n %}
 {% load static %}
 
-{% get_current_language as current_language %}
-{% get_available_languages as languages %}
-{% get_language_info_list for languages as language_info_list %}
 <header id="layout-topbar"
         aria-label="{% trans 'Top bar' %}"
         class="flex items-center justify-between px-4"
@@ -31,6 +28,9 @@
   <div class="inline-flex gap-3 items-center">
     <c-brand.theme_toggle class="btn-sm btn-ghost" />
     <div class="dropdown dropdown-bottom dropdown-end">
+      {% get_current_language as current_language %}
+      {% get_available_languages as available_languages %}
+      {% get_language_info_list for available_languages as languages %}
       <button type="button"
               class="btn btn-sm btn-circle btn-ghost"
               tabindex="0"
@@ -44,7 +44,7 @@
         <ul class="menu w-full p-2"
             role="listbox"
             aria-label="{% trans 'Available languages' %}">
-          {% for language in language_info_list %}
+          {% for language in languages %}
             <li role="option"
                 aria-selected="{% if language.code == current_language %}true{% else %}false{% endif %}">
               <form method="post" action="{% url 'set_language' %}">
