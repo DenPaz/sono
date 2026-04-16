@@ -1,0 +1,436 @@
+# SONO - A Django-based admin dashboard template.
+# Copyright (C) 2026
+# This file is distributed under the same license as the SONO package.
+# Dennis Paz <dppazlopez@gmail.com>, 2026.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: SONO 0.1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-04-16 15:20-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: pt-BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: apps/core/config.py:7
+msgid "Core"
+msgstr "Core"
+
+#: apps/core/validators.py:8
+#, python-format
+msgid "File size must not exceed %(max_size)s %(unit)s."
+msgstr "O tamanho do arquivo não pode exceder %(max_size)s %(unit)s."
+
+#: apps/core/validators.py:16
+#, python-format
+msgid "Invalid unit '%(unit)s'. Expected one of: %(expected)s."
+msgstr "Unidade inválida '%(unit)s'. Esperado um dos seguintes: %(expected)s."
+
+#: apps/dashboard/config.py:7 templates/partials/sidebar.html:37
+msgid "Dashboard"
+msgstr "Dashboard"
+
+#: apps/users/admin.py:35 apps/users/admin.py:64
+msgid "Account information"
+msgstr "Informações da conta"
+
+#: apps/users/admin.py:50
+msgid "Permissions"
+msgstr "Permissões"
+
+#: apps/users/config.py:7 apps/users/models.py:38
+msgid "Users"
+msgstr "Usuários"
+
+#: apps/users/forms_admin.py:24
+msgid "This email has already been taken."
+msgstr "Este e-mail já está em uso."
+
+#: apps/users/forms_allauth.py:10 apps/users/forms_allauth.py:13
+#: apps/users/models.py:18
+msgid "First name"
+msgstr "Nome"
+
+#: apps/users/forms_allauth.py:16 apps/users/forms_allauth.py:19
+#: apps/users/models.py:22
+msgid "Last name"
+msgstr "Sobrenome"
+
+#: apps/users/models.py:26
+msgid "Email address"
+msgstr "Endereço de e-mail"
+
+#: apps/users/models.py:37 apps/users/models.py:48
+msgid "User"
+msgstr "Usuário"
+
+#: apps/users/models.py:53
+msgid "Avatar"
+msgstr "Avatar"
+
+#: apps/users/models.py:60
+msgid "Maximum size: 5MB. Allowed formats: .jpg, .jpeg, .png"
+msgstr "Tamanho máximo: 5MB. Formatos permitidos: .jpg, .jpeg, .png"
+
+#: apps/users/models.py:63
+msgid "Language"
+msgstr "Idioma"
+
+#: apps/users/models.py:69
+msgid "Timezone"
+msgstr "Fuso horário"
+
+#: apps/users/models.py:77
+msgid "Profile"
+msgstr "Perfil"
+
+#: apps/users/models.py:78
+msgid "Profiles"
+msgstr "Perfis"
+
+#: apps/users/password_validation.py:16
+msgid "This password does not contain an uppercase letter."
+msgstr "Esta senha não contém uma letra maiúscula."
+
+#: apps/users/password_validation.py:19
+msgid "Your password must contain at least one uppercase letter."
+msgstr "Sua senha deve conter pelo menos uma letra maiúscula."
+
+#: apps/users/password_validation.py:33
+msgid "This password does not contain a lowercase letter."
+msgstr "Esta senha não contém uma letra minúscula."
+
+#: apps/users/password_validation.py:36
+msgid "Your password must contain at least one lowercase letter."
+msgstr "Sua senha deve conter pelo menos uma letra minúscula."
+
+#: apps/users/password_validation.py:50
+msgid "This password does not contain a symbol."
+msgstr "Esta senha não contém um símbolo."
+
+#: apps/users/password_validation.py:53
+msgid "Your password must contain at least one symbol."
+msgstr "Sua senha deve conter pelo menos um símbolo."
+
+#: config/settings/base.py:31
+msgid "English"
+msgstr "Inglês"
+
+#: config/settings/base.py:32
+msgid "Portuguese"
+msgstr "Português"
+
+#: templates/account/confirm_login_code.html:8 templates/account/login.html:6
+#: templates/account/login.html:9 templates/account/login.html:36
+#: templates/account/password_reset_from_key_done.html:20
+#: templates/account/request_login_code.html:6
+msgid "Sign in"
+msgstr "Entrar"
+
+#: templates/account/confirm_login_code.html:11
+msgid "Enter sign-in code"
+msgstr "Digite o código de acesso"
+
+#: templates/account/confirm_login_code.html:15
+#, python-format
+msgid ""
+"We've sent a code to %(email)s. The code expires shortly, so please enter it "
+"soon."
+msgstr ""
+"Enviamos um código para %(email)s. O código expira em breve, por favor "
+"insira-o logo."
+
+#: templates/account/confirm_login_code.html:19
+#, python-format
+msgid ""
+"We've sent a code to %(phone)s. The code expires shortly, so please enter it "
+"soon."
+msgstr ""
+"Enviamos um código para %(phone)s. O código expira em breve, por favor "
+"insira-o logo."
+
+#: templates/account/confirm_login_code.html:23
+msgid ""
+"We've sent you a code. The code expires shortly, so please enter it soon."
+msgstr ""
+"Enviamos um código para você. O código expira em breve, por favor insira-o "
+"logo."
+
+#: templates/account/confirm_login_code.html:40
+#: templates/partials/sidebar.html:57
+msgid "Confirm"
+msgstr "Confirmar"
+
+#: templates/account/confirm_login_code.html:52
+msgid "Request new code"
+msgstr "Solicitar novo código"
+
+#: templates/account/confirm_login_code.html:60
+#: templates/partials/sidebar.html:60
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: templates/account/confirm_login_code.html:70
+#: templates/account/password_reset.html:34
+#: templates/account/password_reset_done.html:20
+#: templates/account/password_reset_from_key.html:51
+#: templates/account/request_login_code.html:34
+#: templates/account/signup_closed.html:20
+msgid "Back to sign in"
+msgstr "Voltar para o login"
+
+#: templates/account/login.html:12
+#, python-format
+msgid ""
+"Don't have an account? <a href=\"%(signup_url)s\" class=\"text-primary "
+"hover:underline\">Sign up</a>"
+msgstr ""
+"Não tem uma conta? <a href=\"%(signup_url)s\" class=\"text-primary "
+"hover:underline\">Cadastre-se</a>"
+
+#: templates/account/login.html:32
+msgid "Forgot password?"
+msgstr "Esqueceu a senha?"
+
+#: templates/account/login.html:40
+msgid "or"
+msgstr "ou"
+
+#: templates/account/login.html:44 templates/account/request_login_code.html:9
+msgid "Send me a sign-in code"
+msgstr "Enviar um código de acesso"
+
+#: templates/account/password_reset.html:6
+#: templates/account/password_reset_done.html:6
+msgid "Password reset"
+msgstr "Redefinição de senha"
+
+#: templates/account/password_reset.html:9
+msgid "Forgot your password?"
+msgstr "Esqueceu sua senha?"
+
+#: templates/account/password_reset.html:12
+msgid ""
+"Enter your email address and we'll send you a link to reset your password."
+msgstr ""
+"Insira seu endereço de e-mail e enviaremos um link para redefinir sua senha."
+
+#: templates/account/password_reset.html:28
+msgid "Reset my password"
+msgstr "Redefinir minha senha"
+
+#: templates/account/password_reset_done.html:9
+msgid "Check your inbox"
+msgstr "Verifique sua caixa de entrada"
+
+#: templates/account/password_reset_done.html:12
+msgid ""
+"If an account exists for that email address, you'll receive a password reset "
+"link shortly. Be sure to check your spam folder."
+msgstr ""
+"Se houver uma conta associada a esse e-mail, você receberá um link de "
+"redefinição de senha em breve. Verifique também sua pasta de spam."
+
+#: templates/account/password_reset_from_key.html:6
+#: templates/account/password_reset_from_key_done.html:6
+msgid "Change password"
+msgstr "Alterar senha"
+
+#: templates/account/password_reset_from_key.html:10
+msgid "Invalid reset link"
+msgstr "Link de redefinição inválido"
+
+#: templates/account/password_reset_from_key.html:12
+msgid "Set a new password"
+msgstr "Definir uma nova senha"
+
+#: templates/account/password_reset_from_key.html:17
+msgid ""
+"This link is invalid or has already been used. Please request a new one."
+msgstr "Este link é inválido ou já foi utilizado. Por favor, solicite um novo."
+
+#: templates/account/password_reset_from_key.html:21
+msgid ""
+"Please enter a new password for your account. After setting the new "
+"password, you can use it to log in to your account."
+msgstr ""
+"Por favor, insira uma nova senha para sua conta. Após definir a nova senha, "
+"você poderá usá-la para acessar sua conta."
+
+#: templates/account/password_reset_from_key.html:31
+msgid "Request a new link"
+msgstr "Solicitar um novo link"
+
+#: templates/account/password_reset_from_key.html:44
+msgid "Set new password"
+msgstr "Definir nova senha"
+
+#: templates/account/password_reset_from_key_done.html:9
+msgid "Password updated!"
+msgstr "Senha atualizada!"
+
+#: templates/account/password_reset_from_key_done.html:12
+msgid ""
+"Your password has been changed successfully. You can now sign in with your "
+"new password."
+msgstr ""
+"Sua senha foi alterada com sucesso. Agora você pode entrar com sua nova "
+"senha."
+
+#: templates/account/request_login_code.html:12
+msgid "You will receive a special code for a password-free sign-in."
+msgstr "Você receberá um código especial para entrar sem senha."
+
+#: templates/account/request_login_code.html:28
+msgid "Request code"
+msgstr "Solicitar código"
+
+#: templates/account/signup.html:6 templates/account/signup.html:9
+#: templates/account/signup.html:34
+msgid "Sign up"
+msgstr "Cadastrar-se"
+
+#: templates/account/signup.html:12
+#, python-format
+msgid ""
+"Already have an account? <a href=\"%(login_url)s\" class=\"text-primary "
+"hover:underline\">Sign in</a>"
+msgstr ""
+"Já tem uma conta? <a href=\"%(login_url)s\" class=\"text-primary "
+"hover:underline\">Entrar</a>"
+
+#: templates/account/signup_closed.html:6
+msgid "Sign up closed"
+msgstr "Cadastro encerrado"
+
+#: templates/account/signup_closed.html:9
+msgid "Sign up is closed"
+msgstr "O cadastro está encerrado"
+
+#: templates/account/signup_closed.html:12
+msgid ""
+"We are not accepting new registrations at this time. Please check back later."
+msgstr ""
+"Não estamos aceitando novos cadastros no momento. Por favor, tente novamente "
+"mais tarde."
+
+#: templates/base.html:13
+msgid "Welcome"
+msgstr "Bem-vindo"
+
+#: templates/components/alert.html:20 templates/partials/toasts.html:12
+msgid "Dismiss"
+msgstr "Fechar"
+
+#: templates/components/brand/theme_toggle.html:4
+msgid "Toggle theme"
+msgstr "Alternar tema"
+
+#: templates/components/forms/password.html:28
+msgid "Show password"
+msgstr "Mostrar senha"
+
+#: templates/components/forms/password.html:59
+msgid "At least 8 characters"
+msgstr "Pelo menos 8 caracteres"
+
+#: templates/components/forms/password.html:63
+msgid "Not entirely numeric"
+msgstr "Não pode ser totalmente numérica"
+
+#: templates/components/forms/password.html:67
+msgid "At least one uppercase letter"
+msgstr "Pelo menos uma letra maiúscula"
+
+#: templates/components/forms/password.html:71
+msgid "At least one lowercase letter"
+msgstr "Pelo menos uma letra minúscula"
+
+#: templates/components/forms/password.html:75
+msgid "At least one symbol"
+msgstr "Pelo menos um símbolo"
+
+#: templates/partials/footer.html:5
+msgid "All rights reserved."
+msgstr "Todos os direitos reservados."
+
+#: templates/partials/footer.html:9
+msgid "Developed by"
+msgstr "Desenvolvido por"
+
+#: templates/partials/header.html:8
+msgid "Top bar"
+msgstr "Barra superior"
+
+#: templates/partials/header.html:10
+msgid "Good morning"
+msgstr "Bom dia"
+
+#: templates/partials/header.html:11
+msgid "Good afternoon"
+msgstr "Boa tarde"
+
+#: templates/partials/header.html:12
+msgid "Good evening"
+msgstr "Boa noite"
+
+#: templates/partials/header.html:17
+msgid "Toggle sidebar"
+msgstr "Alternar barra lateral"
+
+#: templates/partials/header.html:22
+msgid "Toggle sidebar hover mode"
+msgstr "Alternar modo hover da barra lateral"
+
+#: templates/partials/header.html:37
+msgid "Select language"
+msgstr "Selecionar idioma"
+
+#: templates/partials/header.html:46
+msgid "Available languages"
+msgstr "Idiomas disponíveis"
+
+#: templates/partials/header.html:75
+msgid "User menu"
+msgstr "Menu do usuário"
+
+#: templates/partials/header.html:88
+msgid "Admin"
+msgstr "Administração"
+
+#: templates/partials/header.html:95
+msgid "Settings"
+msgstr "Configurações"
+
+#: templates/partials/header.html:106 templates/partials/sidebar.html:46
+msgid "Sign out"
+msgstr "Sair"
+
+#: templates/partials/sidebar.html:18
+msgid "Main navigation"
+msgstr "Navegação principal"
+
+#: templates/partials/sidebar.html:23
+msgid "Toggle sidebar hover"
+msgstr "Alternar hover da barra lateral"
+
+#: templates/partials/sidebar.html:32
+msgid "Sidebar navigation"
+msgstr "Navegação da barra lateral"
+
+#: templates/partials/sidebar.html:54
+msgid "Confirm sign out"
+msgstr "Confirmar saída"
+
+#: templates/partials/sidebar.html:55
+msgid "Are you sure you want to sign out?"
+msgstr "Tem certeza que deseja sair?"
+
+#~ msgid "Spanish"
+#~ msgstr "Espanhol"
