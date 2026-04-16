@@ -7,7 +7,7 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "@iconify-json/hugeicons": "^1.2.25",
+    "@iconify-json/hugeicons": "^1.2.26",
     "@iconify-json/lucide": "^1.2.102",
     "@iconify-json/ri": "^1.2.10",
     "@iconify/tailwind4": "^1.2.3",
