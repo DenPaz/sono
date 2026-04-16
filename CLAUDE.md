@@ -16,6 +16,8 @@
 - `django-cotton` is used for reusable template components (in the `templates/components/` directory).
 - `django-htmx` provides HTMX middleware and utilities; `HtmxTemplateMixin` in `apps/core/viewmixins.py` handles partial template rendering for HTMX requests.
 
+---
+
 ## Project Structure
 
 ```
@@ -46,7 +48,9 @@ sono/
 └── pyproject.toml
 ```
 
-## Commands You Can Run
+---
+
+## Commands
 
 A `Makefile` is provided to centralize commands:
 
@@ -58,7 +62,7 @@ make help   # Same as above
 ### First-time Setup
 
 ```bash
-make init   # Install Python + npm deps, build assets, run migrations, seed data
+make init   # Install Python + npm deps, run migrations, seed data, build assets, install pre-commit hooks
 ```
 
 ### Starting the Application
@@ -69,11 +73,7 @@ make dev    # Start Django + Vite dev servers concurrently
 
 Access the app at http://localhost:8000 and Vite at http://localhost:5173.
 
----
-
-### Common Commands
-
-#### Development
+### Development
 
 ```bash
 make dev                        # Start Django + Vite dev servers
@@ -84,7 +84,7 @@ make manage ARGS='<command>'    # Run any Django management command
 make clean                      # Remove .pyc files, __pycache__, and Django caches
 ```
 
-#### Database
+### Database
 
 ```bash
 make migrations     # Create new migrations (makemigrations)
@@ -94,7 +94,7 @@ make seed           # Populate the database with test data
 make fresh          # reset-db + migrate + seed
 ```
 
-#### Testing
+### Testing
 
 ```bash
 make test                    # Run the full test suite
@@ -103,45 +103,47 @@ make test ARGS='apps/users'  # Run tests for a specific app
 make test-fresh              # Run tests with a fresh database (use after new migrations)
 ```
 
-#### Code Quality
+### Code Quality
 
 ```bash
 make format           # Format everything: Tailwind, templates, Python, JS/JSON/YAML
 make lint             # Lint everything: Python and templates
 
-make ruff-format      # Format Python code with Ruff
-make ruff-lint        # Lint and auto-fix Python code with Ruff
+make tailwhip         # Sort Tailwind CSS classes in templates and CSS files
 make djlint-format    # Format Django templates with djLint
 make djlint-lint      # Lint Django templates with djLint
-make tailwhip         # Sort Tailwind CSS classes in templates and CSS files
+make ruff-format      # Format Python code with Ruff
+make ruff-lint        # Lint and auto-fix Python code with Ruff
 make prettier-format  # Format JS/JSON/YAML with Prettier
 ```
 
-#### Python / uv
+### Frontend
 
 ```bash
-make uv add '<package>'             # Add a new Python package
-make uv remove '<package>'          # Remove a Python package
-make uv-sync                        # Install/sync all Python dependencies
-```
-
-#### Frontend
-
-```bash
-make npm-install-deps               # Install all npm packages
-make npm-install <package-name>     # Install a specific npm package
+make npm-install-deps               # Install all npm packages (uses lockfile)
+make npm-install <package-name>     # Install a specific npm package (saved to devDependencies)
 make npm-uninstall <package-name>   # Uninstall a specific npm package
 make npm-dev                        # Start the Vite dev server only
 make npm-build                      # Build frontend assets for production
 ```
 
-Note: Vite runs automatically with hot-reload when using `make dev`.
+> Vite runs automatically with hot-reload when using `make dev`.
 
-#### Translations
+### Python / uv
+
+```bash
+make uv add '<package>'     # Add a new Python package
+make uv remove '<package>'  # Remove a Python package
+make uv-sync                # Install/sync all Python dependencies
+```
+
+### Translations
 
 ```bash
 make translations   # Extract and compile i18n translation strings
 ```
+
+---
 
 ## Test Credentials
 
@@ -216,7 +218,7 @@ After running `make seed`, the following accounts are available:
 - Theme-aware styles should use CSS variables defined in `static/css/base/daisyui.css`.
 - Do not use `tailwind.config.js` — it is deprecated in Tailwind v4.
 - To override DaisyUI styles, append `!` to the Tailwind utility class (e.g. `bg-red-500!`), not `!important`.
-- There is no need to add `dark:` variants when using daisyUI color names — they update automatically with the theme.
+- There is no need to add `dark:` variants when using DaisyUI color names — they update automatically with the theme.
 
 ---
 
@@ -242,5 +244,6 @@ After running `make seed`, the following accounts are available:
 
 - Code is bundled with **Vite** and served via `django-vite`.
 - Entry points are `static/js/main.js` (JavaScript) and `static/css/styles.css` (CSS), defined in `vite.config.mjs`.
+- All npm packages are `devDependencies` — this is a Vite-bundled project with no Node.js runtime.
 - Output goes to `static/dist/`.
 - The `LayoutCustomizer` class in `static/js/partials/layout.js` manages theme persistence via `localStorage` under the key `__SONO_CONFIG__`.
