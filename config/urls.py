@@ -5,9 +5,12 @@ from django.urls import include
 from django.urls import path
 from django.views import defaults as default_views
 
+from apps.users.views import SetLanguageView
+
 urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),
     path("i18n/", include("django.conf.urls.i18n")),
+    path("i18n/set-language/", SetLanguageView.as_view(), name="set_language"),
     path("accounts/", include("allauth.urls")),
     path("", include("apps.dashboard.urls", namespace="dashboard")),
     path("users/", include("apps.users.urls", namespace="users")),
