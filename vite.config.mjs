@@ -4,12 +4,12 @@ import path from 'path';
 
 export default defineConfig({
   plugins: [tailwindcss()],
+  base: '/static/',
   resolve: {
     alias: { '@': path.resolve(__dirname, './static/js') },
   },
-  base: '/static/',
   build: {
-    minify: process.env.DJANGO_VITE_BUILD_MINIFY || true,
+    minify: process.env.DJANGO_VITE_BUILD_MINIFY !== 'false',
     manifest: true,
     outDir: path.resolve(__dirname, './static/dist'),
     emptyOutDir: true,
@@ -34,7 +34,7 @@ export default defineConfig({
     },
   },
   server: {
-    port: parseInt(process.env.DJANGO_VITE_SERVER_PORT || '5173'),
+    port: parseInt(process.env.DJANGO_VITE_SERVER_PORT || '5173', 10),
     strictPort: true,
     hmr: {
       host: process.env.DJANGO_VITE_SERVER_HOST || 'localhost',
