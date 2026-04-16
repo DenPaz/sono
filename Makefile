@@ -31,7 +31,7 @@ uv-sync: ## Install Python dependencies
 
 npm-install-deps: ## Install all npm dependencies
 	@echo "  📦 Installing npm dependencies..."
-	@npm ci
+	@npm install
 
 pre-commit-install: ## Install pre-commit hooks
 	@echo "  🪝 Installing pre-commit hooks..."
