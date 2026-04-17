@@ -41,30 +41,33 @@
       </button>
       <div class="dropdown-content mt-2 bg-base-100 rounded-box shadow-sm"
            tabindex="0">
-        <ul class="menu w-full p-2"
-            role="listbox"
-            aria-label="{% trans 'Available languages' %}">
-          {% for language in languages %}
-            <li role="option"
-                aria-selected="{% if language.code == current_language %}true{% else %}false{% endif %}">
-              <form method="post" action="{% url 'set_language' %}">
-                {% csrf_token %}
-                <input type="hidden" name="language" value="{{ language.code }}" />
-                <input type="hidden" name="next" value="{{ request.get_full_path }}" />
-                <button type="submit" class="flex gap-2 items-center w-25 cursor-pointer">
+        <form id="language-form" method="post" action="{% url 'set_language' %}">
+          {% csrf_token %}
+          <input id="language-input"
+                 type="hidden"
+                 name="language"
+                 value="{{ current_language }}" />
+          <input type="hidden" name="next" value="{{ request.get_full_path }}" />
+          <ul class="menu w-full p-2"
+              aria-label="{% trans 'Available languages' %}">
+            {% for language in languages %}
+              <li aria-selected="{% if language.code == current_language %}true{% else %}false{% endif %}">
+                <button type="submit"
+                        class="flex gap-2 items-center w-full"
+                        onclick="document.getElementById('language-input').value='{{ language.code }}'">
                   <img src="{% static 'images/locale/'|add:language.code|add:'.svg' %}"
-                       class="size-4.5 rounded-box object-cover"
+                       class="shrink-0 size-4.5 rounded-box object-cover"
                        alt="{{ language.name_local }}" />
-                  <span>{{ language.code|upper }}</span>
+                  <span class="flex-1 text-left">{{ language.name_local }}</span>
                   {% if language.code == current_language %}
-                    <span class="iconify lucide--check size-4 ms-auto text-success"
+                    <span class="iconify lucide--check shrink-0 size-4 text-success"
                           aria-hidden="true"></span>
                   {% endif %}
                 </button>
-              </form>
-            </li>
-          {% endfor %}
-        </ul>
+              </li>
+            {% endfor %}
+          </ul>
+        </form>
       </div>
     </div>
     <div class="h-7 border-base-300 border-e" aria-hidden="true"></div>
