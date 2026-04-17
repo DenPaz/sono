@@ -1,5 +1,6 @@
 import zoneinfo
 
+from django.conf import settings
 from django.utils import timezone
 from django.utils import translation
 
@@ -14,9 +15,21 @@ class UserLocaleMiddleware:
         user = getattr(request, "user", None)
         if user and user.is_authenticated:
             profile = getattr(user, "profile", None)
-            if profile and profile.language != translation.get_language():
+            if (
+                profile
+                and profile.language
+                and profile.language != translation.get_language()
+            ):
                 translation.activate(profile.language)
-        return self.get_response(request)
+
+        response = self.get_response(request)
+
+        language_cookie = request.COOKIES.get(settings.LANGUAGE_COOKIE_NAME)
+        if not language_cookie or language_cookie != translation.get_language():
+            response.set_cookie(
+                settings.LANGUAGE_COOKIE_NAME, translation.get_language()
+            )
+        return response
 
 
 class UserTimezoneMiddleware:
