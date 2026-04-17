@@ -13,7 +13,7 @@ Sono App.
 | 🐍  | [Django 6.0](https://www.djangoproject.com/)                     | Web framework                   |
 | 🐘  | [PostgreSQL](https://www.postgresql.org/)                        | Primary database                |
 | 🌿  | [Celery](https://docs.celeryq.dev/) + [Redis](https://redis.io/) | Async task queue and cache      |
-| 🔐  | [django-allauth](https://allauth.readthedocs.io/)                | Authentication with MFA support |
+| 🔐  | [django-allauth](https://docs.allauth.org/en/latest/)            | Authentication with MFA support |
 | 🦄  | [Gunicorn](https://gunicorn.org/)                                | WSGI server for production      |
 
 ### Frontend
@@ -35,7 +35,7 @@ Sono App.
 | 🧪  | [pytest](https://pytest.org/) + [factory-boy](https://factoryboy.readthedocs.io/) | Testing                              |
 | 🧹  | [djLint](https://www.djlint.com/)                                                 | Django template formatter and linter |
 | ✨  | [Prettier](https://prettier.io/)                                                  | CSS/JS/JSON/YAML/Markdown formatter  |
-| 🌀  | [tailwhip](https://github.com/joshuadavidthomas/tailwhip)                         | Tailwind class sorter                |
+| 🌀  | [tailwhip](https://github.com/bartTC/tailwhip)                                    | Tailwind class sorter                |
 | ⬆️  | [django-upgrade](https://github.com/adamchainz/django-upgrade)                    | Automated Django upgrade codemods    |
 | 🔧  | [pyproject-fmt](https://github.com/tox-dev/pyproject-fmt)                         | `pyproject.toml` formatter           |
 
