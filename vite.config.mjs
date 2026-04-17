@@ -15,8 +15,8 @@ export default defineConfig({
     emptyOutDir: true,
     rollupOptions: {
       input: {
-        scripts: path.resolve(__dirname, './static/js/scripts.js'),
         styles: path.resolve(__dirname, './static/css/styles.css'),
+        scripts: path.resolve(__dirname, './static/js/scripts.js'),
       },
       output: {
         entryFileNames: `js/[name]-[hash].js`,
