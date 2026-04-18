@@ -39,13 +39,15 @@ function saveConfig(config) {
 }
 
 // DOM Updates
-function applyThemeDOM(config) {
+function applyTheme(config) {
   document.documentElement.setAttribute('data-theme', config.theme);
   document.documentElement.setAttribute('data-mode', config.mode);
+  saveConfig(config);
 }
 
-function applyFontDOM(config) {
+function applyFont(config) {
   const url = FONT_URLS[config.fontFamily] ?? FONT_URLS.default;
+
   document.documentElement.setAttribute('data-font-family', config.fontFamily);
 
   const linkId = 'google-font';
@@ -61,16 +63,7 @@ function applyFontDOM(config) {
   if (link.href !== url) {
     link.href = url;
   }
-}
 
-// Apply Configurations
-function applyTheme(config) {
-  applyThemeDOM(config);
-  saveConfig(config);
-}
-
-function applyFont(config) {
-  applyFontDOM(config);
   saveConfig(config);
 }
 
@@ -112,8 +105,8 @@ function initCrossTabSync(config) {
       config.theme = THEMES[config.mode];
       config.fontFamily = parsed?.fontFamily ?? DEFAULT_FONT;
 
-      applyThemeDOM(config);
-      applyFontDOM(config);
+      applyTheme(config);
+      applyFont(config);
     } catch (error) {
       console.error(error);
     }
@@ -123,9 +116,11 @@ function initCrossTabSync(config) {
 // Initialization
 const config = loadConfig();
 
-applyThemeDOM(config);
-applyFontDOM(config);
+applyTheme(config);
+applyFont(config);
 
-initThemeControls(config);
-initFontControls(config);
-initCrossTabSync(config);
+window.addEventListener('DOMContentLoaded', () => {
+  initThemeControls(config);
+  initFontControls(config);
+  initCrossTabSync(config);
+});
