@@ -18,7 +18,7 @@ const FONT_URLS = {
     'https://fonts.googleapis.com/css2?family=AR+One+Sans:wght@400;500;600;700;800;1000&display=swap',
 };
 
-// State
+// State Management
 function loadConfig() {
   try {
     const cached = localStorage.getItem(STORAGE_KEY);
@@ -39,15 +39,13 @@ function saveConfig(config) {
 }
 
 // DOM Updates
-function applyTheme(config) {
+function applyThemeDOM(config) {
   document.documentElement.setAttribute('data-theme', config.theme);
   document.documentElement.setAttribute('data-mode', config.mode);
-  saveConfig(config);
 }
 
-function applyFont(config) {
+function applyFontDOM(config) {
   const url = FONT_URLS[config.fontFamily] ?? FONT_URLS.default;
-
   document.documentElement.setAttribute('data-font-family', config.fontFamily);
 
   const linkId = 'google-font';
@@ -63,7 +61,16 @@ function applyFont(config) {
   if (link.href !== url) {
     link.href = url;
   }
+}
 
+// Apply Configurations
+function applyTheme(config) {
+  applyThemeDOM(config);
+  saveConfig(config);
+}
+
+function applyFont(config) {
+  applyFontDOM(config);
   saveConfig(config);
 }
 
@@ -72,11 +79,13 @@ function initThemeControls(config) {
   document.querySelectorAll('[data-theme-control]').forEach((control) => {
     control.addEventListener('click', () => {
       const value = control.getAttribute('data-theme-control');
+
       if (value === 'toggle') {
         config.mode = config.mode === 'dark' ? 'light' : 'dark';
       } else if (value === 'light' || value === 'dark') {
         config.mode = value;
       }
+
       config.theme = THEMES[config.mode];
       applyTheme(config);
     });
@@ -92,13 +101,39 @@ function initFontControls(config) {
   });
 }
 
+function initCrossTabSync(config) {
+  window.addEventListener('storage', (event) => {
+    if (event.key !== STORAGE_KEY || !event.newValue) return;
+
+    try {
+      const parsed = JSON.parse(event.newValue);
+
+      config.mode = parsed?.mode === 'dark' ? 'dark' : 'light';
+      config.theme = THEMES[config.mode];
+      config.fontFamily = parsed?.fontFamily ?? DEFAULT_FONT;
+
+      applyThemeDOM(config);
+      applyFontDOM(config);
+    } catch (error) {
+      console.error(error);
+    }
+  });
+}
+
 // Initialization
 const config = loadConfig();
 
-applyTheme(config);
-applyFont(config);
+applyThemeDOM(config);
+applyFontDOM(config);
 
-window.addEventListener('DOMContentLoaded', () => {
+function init() {
   initThemeControls(config);
   initFontControls(config);
-});
+  initCrossTabSync(config);
+}
+
+if (document.readyState === 'loading') {
+  window.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
