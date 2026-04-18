@@ -250,7 +250,7 @@ msgstr "ou"
 
 #: templates/account/login.html:44 templates/account/request_login_code.html:9
 msgid "Send me a sign-in code"
-msgstr "Me enviar um código de acesso"
+msgstr "Envie-me um código de acesso"
 
 #: templates/account/password_reset.html:6
 #: templates/account/password_reset_done.html:6
@@ -381,7 +381,7 @@ msgstr ""
 
 #: templates/base.html:13
 msgid "Welcome"
-msgstr "Bem-vindo"
+msgstr "Bem-vindo(a)"
 
 #: templates/components/alert.html:20 templates/partials/toasts.html:12
 msgid "Dismiss"
@@ -401,7 +401,7 @@ msgstr "Pelo menos 8 caracteres"
 
 #: templates/components/forms/password.html:63
 msgid "Not entirely numeric"
-msgstr "Não totalmente numérico"
+msgstr "Não apenas numérico"
 
 #: templates/components/forms/password.html:67
 msgid "At least one uppercase letter"
