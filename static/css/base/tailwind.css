@@ -3,18 +3,10 @@
 
 /* Dark theme variant */
 @variant dark {
-  &:where(
-    [data-theme='dark'] *,
-    [data-theme='dim'] *,
-    [data-theme='material-dark'] *
-  ) {
+  &:where([data-mode='dark'] *) {
     @slot;
   }
-  &:not(
-    [data-theme='light'] *,
-    [data-theme='contrast'] *,
-    [data-theme='material'] *
-  ) {
+  &:not([data-mode='light'] *) {
     @media (prefers-color-scheme: dark) {
       @slot;
     }

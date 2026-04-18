@@ -4,8 +4,14 @@
   try {
     const config = localStorage.getItem("__SONO_CONFIG__");
     if (config) {
-      const theme = JSON.parse(config).theme;
-      document.documentElement.setAttribute("data-theme", theme);
+      const {
+        theme,
+        mode,
+        fontFamily
+      } = JSON.parse(config);
+      if (theme) document.documentElement.setAttribute("data-theme", theme);
+      if (mode) document.documentElement.setAttribute("data-mode", mode);
+      if (fontFamily) document.documentElement.setAttribute("data-font-family", fontFamily);
     }
   } catch (error) {
     console.error(error);
