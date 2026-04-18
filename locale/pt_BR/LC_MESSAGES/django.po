@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SONO 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-16 15:20-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2026-04-18 16:23-0300\n"
+"PO-Revision-Date: 2026-04-18 16:23-0300\n"
+"Last-Translator: Dennis Paz <dppazlopez@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: pt-BR\n"
 "MIME-Version: 1.0\n"
@@ -126,6 +126,31 @@ msgstr "Inglês"
 msgid "Portuguese"
 msgstr "Português"
 
+#: templates/account/account_inactive.html:6
+#: templates/account/account_inactive.html:9
+msgid "Account inactive"
+msgstr "Conta inativa"
+
+#: templates/account/account_inactive.html:12
+msgid ""
+"This account is inactive. Please contact support if you believe this is a "
+"mistake."
+msgstr ""
+"Esta conta está inativa. Por favor, entre em contato com o suporte se "
+"acreditar que isso é um erro."
+
+#: templates/account/account_inactive.html:20
+#: templates/account/confirm_login_code.html:70
+#: templates/account/email_confirm.html:47
+#: templates/account/password_reset.html:34
+#: templates/account/password_reset_done.html:20
+#: templates/account/password_reset_from_key.html:51
+#: templates/account/request_login_code.html:34
+#: templates/account/signup_closed.html:20
+#: templates/account/verification_sent.html:20
+msgid "Back to sign in"
+msgstr "Voltar ao login"
+
 #: templates/account/confirm_login_code.html:8 templates/account/login.html:6
 #: templates/account/login.html:9 templates/account/login.html:36
 #: templates/account/password_reset_from_key_done.html:20
@@ -156,11 +181,10 @@ msgstr ""
 #: templates/account/confirm_login_code.html:23
 msgid ""
 "We've sent you a code. The code expires shortly, so please enter it soon."
-msgstr ""
-"Enviamos um código para você. O código expira em breve, insira-o logo."
+msgstr "Enviamos um código para você. O código expira em breve, insira-o logo."
 
 #: templates/account/confirm_login_code.html:40
-#: templates/partials/sidebar.html:57
+#: templates/account/email_confirm.html:40 templates/partials/sidebar.html:57
 msgid "Confirm"
 msgstr "Confirmar"
 
@@ -173,14 +197,39 @@ msgstr "Solicitar novo código"
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: templates/account/confirm_login_code.html:70
-#: templates/account/password_reset.html:34
-#: templates/account/password_reset_done.html:20
-#: templates/account/password_reset_from_key.html:51
-#: templates/account/request_login_code.html:34
-#: templates/account/signup_closed.html:20
-msgid "Back to sign in"
-msgstr "Voltar ao login"
+#: templates/account/email_confirm.html:7
+msgid "Confirm email"
+msgstr "Confirmar e-mail"
+
+#: templates/account/email_confirm.html:10
+msgid "Confirm email address"
+msgstr "Confirmar endereço de e-mail"
+
+#: templates/account/email_confirm.html:16
+#, python-format
+msgid ""
+"Please confirm that <strong>%(email)s</strong> is an email address for user "
+"%(user_display)s."
+msgstr ""
+"Por favor, confirme que <strong>%(email)s</strong> é um endereço de e-mail "
+"do usuário %(user_display)s."
+
+#: templates/account/email_confirm.html:20
+#, python-format
+msgid ""
+"Unable to confirm %(email)s because it is already confirmed by a different "
+"account."
+msgstr ""
+"Não é possível confirmar %(email)s porque ele já foi confirmado por uma "
+"conta diferente."
+
+#: templates/account/email_confirm.html:25
+msgid ""
+"This email confirmation link has expired or is invalid. Please sign in to "
+"request a new one."
+msgstr ""
+"Este link de confirmação de e-mail expirou ou é inválido. Por favor, entre "
+"para solicitar um novo."
 
 #: templates/account/login.html:12
 #, python-format
@@ -201,7 +250,7 @@ msgstr "ou"
 
 #: templates/account/login.html:44 templates/account/request_login_code.html:9
 msgid "Send me a sign-in code"
-msgstr "Enviar-me um código de acesso"
+msgstr "Me enviar um código de acesso"
 
 #: templates/account/password_reset.html:6
 #: templates/account/password_reset_done.html:6
@@ -223,6 +272,7 @@ msgid "Reset my password"
 msgstr "Redefinir minha senha"
 
 #: templates/account/password_reset_done.html:9
+#: templates/account/verification_sent.html:9
 msgid "Check your inbox"
 msgstr "Verifique sua caixa de entrada"
 
@@ -250,8 +300,7 @@ msgstr "Definir nova senha"
 #: templates/account/password_reset_from_key.html:17
 msgid ""
 "This link is invalid or has already been used. Please request a new one."
-msgstr ""
-"Este link é inválido ou já foi utilizado. Por favor, solicite um novo."
+msgstr "Este link é inválido ou já foi utilizado. Por favor, solicite um novo."
 
 #: templates/account/password_reset_from_key.html:21
 msgid ""
@@ -278,7 +327,8 @@ msgid ""
 "Your password has been changed successfully. You can now sign in with your "
 "new password."
 msgstr ""
-"Sua senha foi alterada com sucesso. Agora você pode entrar com sua nova senha."
+"Sua senha foi alterada com sucesso. Agora você pode entrar com sua nova "
+"senha."
 
 #: templates/account/request_login_code.html:12
 msgid "You will receive a special code for a password-free sign-in."
@@ -291,7 +341,7 @@ msgstr "Solicitar código"
 #: templates/account/signup.html:6 templates/account/signup.html:9
 #: templates/account/signup.html:34
 msgid "Sign up"
-msgstr "Cadastrar-se"
+msgstr "Cadastre-se"
 
 #: templates/account/signup.html:12
 #, python-format
@@ -314,7 +364,20 @@ msgstr "O cadastro está encerrado"
 msgid ""
 "We are not accepting new registrations at this time. Please check back later."
 msgstr ""
-"Não estamos aceitando novos cadastros no momento. Por favor, volte mais tarde."
+"Não estamos aceitando novos cadastros no momento. Por favor, volte mais "
+"tarde."
+
+#: templates/account/verification_sent.html:6
+msgid "Verify your email"
+msgstr "Verifique seu e-mail"
+
+#: templates/account/verification_sent.html:12
+msgid ""
+"We've sent a verification link to your email address. Please click the link "
+"to confirm your account. Be sure to check your spam folder."
+msgstr ""
+"Enviamos um link de verificação para o seu endereço de e-mail. Por favor, "
+"clique no link para confirmar sua conta. Verifique também sua pasta de spam."
 
 #: templates/base.html:13
 msgid "Welcome"
@@ -382,29 +445,29 @@ msgstr "Alternar barra lateral"
 
 #: templates/partials/header.html:22
 msgid "Toggle sidebar hover mode"
-msgstr "Alternar modo de foco da barra lateral"
+msgstr "Alternar modo hover da barra lateral"
 
 #: templates/partials/header.html:37
 msgid "Select language"
 msgstr "Selecionar idioma"
 
-#: templates/partials/header.html:46
+#: templates/partials/header.html:52
 msgid "Available languages"
 msgstr "Idiomas disponíveis"
 
-#: templates/partials/header.html:75
+#: templates/partials/header.html:78
 msgid "User menu"
 msgstr "Menu do usuário"
 
-#: templates/partials/header.html:88
+#: templates/partials/header.html:91
 msgid "Admin"
 msgstr "Admin"
 
-#: templates/partials/header.html:95
+#: templates/partials/header.html:98
 msgid "Settings"
 msgstr "Configurações"
 
-#: templates/partials/header.html:106 templates/partials/sidebar.html:46
+#: templates/partials/header.html:109 templates/partials/sidebar.html:46
 msgid "Sign out"
 msgstr "Sair"
 
@@ -414,7 +477,7 @@ msgstr "Navegação principal"
 
 #: templates/partials/sidebar.html:23
 msgid "Toggle sidebar hover"
-msgstr "Alternar foco da barra lateral"
+msgstr "Alternar hover da barra lateral"
 
 #: templates/partials/sidebar.html:32
 msgid "Sidebar navigation"
