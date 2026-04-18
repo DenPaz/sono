@@ -1,0 +1,22 @@
+{% extends "account/_base.html" %}
+
+{% load i18n %}
+
+{% block title %}
+  {% trans "Account inactive" %}
+{% endblock title %}
+{% block head_title %}
+  {% trans "Account inactive" %}
+{% endblock head_title %}
+{% block head_body %}
+  {% blocktranslate trimmed %}
+    This account is inactive. Please contact support if you believe this is a mistake.
+  {% endblocktranslate %}
+{% endblock head_body %}
+{% block content_body %}
+  <a href="{% url 'account_login' %}"
+     class="btn btn-ghost gap-2 w-full border-base-300">
+    <span class="iconify lucide--log-in size-4" aria-hidden="true"></span>
+    {% trans "Back to sign in" %}
+  </a>
+{% endblock content_body %}

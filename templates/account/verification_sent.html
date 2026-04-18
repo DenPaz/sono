@@ -1,0 +1,22 @@
+{% extends "account/_base.html" %}
+
+{% load i18n %}
+
+{% block title %}
+  {% trans "Verify your email" %}
+{% endblock title %}
+{% block head_title %}
+  {% trans "Check your inbox" %}
+{% endblock head_title %}
+{% block head_body %}
+  {% blocktranslate trimmed %}
+    We've sent a verification link to your email address. Please click the link to confirm your account. Be sure to check your spam folder.
+  {% endblocktranslate %}
+{% endblock head_body %}
+{% block content_body %}
+  <a href="{% url 'account_login' %}"
+     class="btn btn-ghost gap-2 w-full border-base-300">
+    <span class="iconify lucide--log-in size-4" aria-hidden="true"></span>
+    {% trans "Back to sign in" %}
+  </a>
+{% endblock content_body %}
