@@ -126,14 +126,6 @@ const config = loadConfig();
 applyThemeDOM(config);
 applyFontDOM(config);
 
-function init() {
-  initThemeControls(config);
-  initFontControls(config);
-  initCrossTabSync(config);
-}
-
-if (document.readyState === 'loading') {
-  window.addEventListener('DOMContentLoaded', init);
-} else {
-  init();
-}
+initThemeControls(config);
+initFontControls(config);
+initCrossTabSync(config);

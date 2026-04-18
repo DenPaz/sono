@@ -47,6 +47,7 @@ class PasswordMeter {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const input = document.querySelector('[data-password-meter]');
-  if (input) new PasswordMeter(input);
+  document.querySelectorAll('[data-password-meter]').forEach((input) => {
+    new PasswordMeter(input);
+  });
 });
