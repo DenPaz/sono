@@ -13,11 +13,11 @@
     "@tailwindcss/vite": "^4.2.2",
     "alpinejs": "^3.15.11",
     "daisyui": "^5.5.19",
-    "htmx.org": "^2.0.8",
+    "htmx.org": "^2.0.9",
     "prettier": "^3.8.3",
     "tailwindcss": "^4.2.2",
     "tailwindcss-motion": "^1.1.1",
-    "vite": "^8.0.8"
+    "vite": "^8.0.9"
   },
   "engines": {
     "node": ">=24.14"
