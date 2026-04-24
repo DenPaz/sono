@@ -7,17 +7,17 @@
   },
   "devDependencies": {
     "@iconify-json/hugeicons": "^1.2.26",
-    "@iconify-json/lucide": "^1.2.102",
+    "@iconify-json/lucide": "^1.2.103",
     "@iconify-json/ri": "^1.2.10",
     "@iconify/tailwind4": "^1.2.3",
-    "@tailwindcss/vite": "^4.2.2",
+    "@tailwindcss/vite": "^4.2.4",
     "alpinejs": "^3.15.11",
     "daisyui": "^5.5.19",
-    "htmx.org": "^2.0.9",
+    "htmx.org": "^2.0.10",
     "prettier": "^3.8.3",
-    "tailwindcss": "^4.2.2",
+    "tailwindcss": "^4.2.4",
     "tailwindcss-motion": "^1.1.1",
-    "vite": "^8.0.9"
+    "vite": "^8.0.10"
   },
   "engines": {
     "node": ">=24.14"
