@@ -2,5 +2,5 @@
 /static/dist/
 /staticfiles/
 
-# Django templates (formatted by djlint)
+# Django templates
 templates/

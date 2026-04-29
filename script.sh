@@ -1,14 +1,14 @@
 #!/bin/bash
 set -e
 
-# Load environment variables from .env
+# Load environment variables
 if [ -f .env ]; then
     set -a
     source .env
     set +a
 fi
 
-# Function to clean up background processes
+# Clean up background processes
 cleanup() {
     echo ""
     echo "Stopping servers..."
@@ -27,7 +27,7 @@ cleanup() {
 }
 trap cleanup INT TERM
 
-# Default ports (can be overridden by .env)
+# Default ports
 DJANGO_PORT=${DJANGO_PORT:-8000}
 DJANGO_VITE_SERVER_PORT=${DJANGO_VITE_SERVER_PORT:-5173}
 
