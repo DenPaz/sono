@@ -9,6 +9,8 @@ help:
 	@grep -hE '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2}'
 	@echo ""
 
+all: setup db dev ## Set up the development environment, initialize the database, and start development servers
+
 uv-sync: ## Install Python dependencies
 	@echo ""
 	@echo "Installing Python dependencies..."
@@ -73,7 +75,7 @@ clean: ## Clear cache and compiled Python files
 	@find . -not -path './.venv/*' -name '*.pyc' -delete
 	@find . -not -path './.venv/*' -name '__pycache__' -type d -exec rm -rf {} + 2>/dev/null || true
 
-dev: clean ## Start development servers
+dev: ## Start development servers
 	@./script.sh
 
 dev-fresh: db-fresh dev ## Start development servers with a fresh database
