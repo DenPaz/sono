@@ -1,26 +1,47 @@
 ---
 name: translate-po
-description: Auto-discover all non-English languages from config/settings/base.py and translate every untranslated string in their .po files using the Claude API, then compile the messages.
+description: Auto-discover all non-English languages from config/settings/base.py and translate every untranslated string in their .po files, then compile the messages.
 allowed-tools:
   [
     Read,
     Write,
-    Bash(make translations *),
+    Glob,
     Bash(uv run manage.py compilemessages *),
+    Bash(make translations *),
   ]
 ---
 
 ## Your task
 
-Automatically discover all languages configured in the project, then translate every
-untranslated `msgstr ""` entry in their `.po` files using the Claude API, and finally
-compile the messages so the translations take effect.
+Auto-discover the project's non-English languages, fill in any untranslated `msgstr` entries
+in their `.po` files, and compile the messages.
+
+**You are the translator.** Read each empty entry, write a translation following the rules in
+Step 3, and save the file. There is no external API to call and no parsing pipeline to build.
+
+---
+
+## Hard rule: no scripts. None.
+
+Do **not** write or run scripts to read, count, parse, validate, verify, or double-check
+anything in the `.po` files. That includes — and is not limited to — `python3 -c '...'`,
+`python3 << EOF`, `awk`, `sed`, `grep -c`, `wc -l`, and shell pipelines that touch these
+files. The only Bash command in this skill is `compilemessages` (or `make translations`)
+at the very end.
+
+This rule applies **especially after you've already finished the work** and feel the urge
+to "verify" your reading. If you read the file with the `Read` tool and concluded there
+are no untranslated entries, that conclusion is final. Do not run a script to confirm it.
+Trust your reading and move on.
+
+If you genuinely cannot tell whether a particular entry is translated, re-read the
+specific lines with `Read` and a `view_range` — never with a script.
 
 ---
 
 ### Step 1: Discover the configured languages
 
-Read `config/settings/base.py` and parse the `LANGUAGES` list, for example:
+Read `config/settings/base.py` and parse the `LANGUAGES` list, e.g.:
 
 ```python
 LANGUAGES = [
@@ -29,106 +50,143 @@ LANGUAGES = [
 ]
 ```
 
-**Always skip `"en"`** — English is the source language of the codebase (all `msgid` strings
-are written in English) so it never needs a translation file.
-
-Collect all remaining language codes. For the example above the result would be: `["pt-br"]`.
+Skip `"en"` — English is the source language and never needs a translation file.
 
 If only English is configured, report that there is nothing to translate and stop.
 
 ---
 
-### Step 2: Find the .po files for each language
+### Step 2: Locate the .po files
 
-Django maps language codes to locale directory names by replacing `-` with `_` and
-uppercasing the region suffix, e.g. `pt-br` → `pt_BR`, `fr` → `fr`, `es-ar` → `es_AR`.
+Django maps language codes to locale directory names with `to_locale()`:
 
-For each non-English language code, look for these files under `locale/`:
+- Two-letter region codes uppercase the region: `pt-br` → `pt_BR`, `es-ar` → `es_AR`.
+- Bare language codes are unchanged: `fr` → `fr`, `de` → `de`.
+- Script-tagged codes title-case the script subtag: `zh-hant` → `zh_Hant`.
 
-```
-locale/<locale_name>/LC_MESSAGES/django.po
-locale/<locale_name>/LC_MESSAGES/djangojs.po
-```
-
-Only process files that actually exist. For each file found, count the number of entries
-with an empty `msgstr ""` and report the summary to the user before proceeding:
-
-```
-Found 2 file(s) to translate:
-  • locale/pt_BR/LC_MESSAGES/django.po    — 42 untranslated strings
-  • locale/pt_BR/LC_MESSAGES/djangojs.po  —  3 untranslated strings
-```
-
-If all strings in all files are already translated, report that and stop.
+Use `Glob` on `locale/*/LC_MESSAGES/*.po` to enumerate the directories that exist on disk.
+For each non-English language, look for `django.po` and `djangojs.po`. Process only files
+that exist.
 
 ---
 
-### Step 3: Translate each file
+### Step 3: Read each file and find empty entries
 
-Process each file with untranslated entries one at a time.
+Use the `Read` tool on each `.po` file in full. Then scan the content for entries where
+`msgstr` is empty.
 
-Use the Anthropic API to translate the untranslated strings, with a prompt like:
+**Two `.po` patterns look similar but mean opposite things — read carefully:**
 
-```
-You are a professional software translator specialising in web application UI strings.
+- An **untranslated** entry — the work for this skill:
 
-Translate the following Django .po file entries from English into <TARGET_LANGUAGE_FULL_NAME>.
+  ```
+  #: templates/foo.html:5
+  msgid "Hello world"
+  msgstr ""
 
-Rules:
-- Preserve ALL .po formatting exactly: comments (#), flags (#,), blank lines, and
-  multiline strings split with line breaks inside the msgstr.
-- Do NOT alter msgid lines — only fill in the empty msgstr values.
-- Preserve Python format placeholders exactly: %(name)s, %s, %d, etc.
-- Preserve HTML tags and attributes exactly — only translate visible text content.
-- Keep translations natural and consistent with a modern web application.
-- For entries that are identical in both languages (brand names, technical terms such as
-  "Dashboard", "Admin") copy the English value unchanged.
-- Return ONLY the translated .po entry blocks, with no preamble or explanation.
+  #: templates/bar.html:7
+  ```
 
-Entries to translate:
-<untranslated blocks only>
-```
+  `msgstr ""` is followed by a blank line (or directly by the next `#:` comment).
 
-If a file has more than 30 untranslated entries, split them into batches of 30, translate
-each batch separately, and merge the results before writing.
+- A **translated multiline** entry — already done, leave it alone:
+
+  ```
+  #: templates/foo.html:12
+  msgid ""
+  "This account is inactive. Please contact support if you believe this is a "
+  "mistake."
+  msgstr ""
+  "Esta conta está inativa. Entre em contato com o suporte se acreditar que "
+  "isso é um erro."
+  ```
+
+  `msgstr ""` is followed by lines starting with `"…"` — those continuation lines _are_
+  the translation. The same logic applies to `msgid ""` on its own line: that just means
+  the source string is multiline.
+
+**Skip the file's metadata header** (the very first block, with `Project-Id-Version`,
+`Content-Type`, `Plural-Forms`, etc.). It is not a translatable string.
+
+**Report what you found before doing anything else.** Two cases:
+
+- **Nothing to translate** — say so plainly and proceed to Step 5 (compile only). Example:
+
+  > `locale/pt_BR/LC_MESSAGES/django.po` is fully translated. Nothing to do here.
+
+  Do not invent verification work. Do not "double-check." Do not run a script. Move on.
+
+- **Some entries are untranslated** — list them by `msgid` (and source location if it
+  helps disambiguate), e.g.:
+
+  > `locale/pt_BR/LC_MESSAGES/django.po` — 3 untranslated entries:
+  > • "Sign up" (templates/account/signup.html:6)
+  > • "Forgot password?" (templates/account/login.html:32)
+  > • "Welcome, %(name)s" (templates/dashboard/index.html:4)
+
+  Approximate counts are fine. Don't agonize over precision — if you list the entries
+  themselves, the count is self-evident.
+
+If every file across every language is fully translated, report that and skip to Step 6.
 
 ---
 
-### Step 4: Write the translated files
+### Step 4: Translate each untranslated entry
 
-For each file, write the complete content back to disk:
+For every entry where `msgstr` is genuinely empty, write a translation following these rules:
 
-- Fill in all previously empty `msgstr ""` values with the translations.
-- Leave all metadata headers, existing translations, and comments untouched.
+- Preserve `.po` formatting: comments (`#`), flags (`#,`), blank lines, and multiline
+  string layout.
+- Do not alter `msgid` lines — only fill `msgstr`.
+- Preserve format placeholders exactly: `%(name)s`, `%s`, `%d`, etc.
+- Preserve HTML tags and attributes exactly — translate only visible text content.
+- Match the tone of existing translations in the same file. Read a handful first to
+  calibrate.
+- For terms the existing file keeps in English by convention (brand names like "Sono",
+  technical terms like "Dashboard" or "Admin" if untranslated elsewhere in the file),
+  copy the English value unchanged.
+- For pluralized entries (`msgid_plural` with `msgstr[0]`, `msgstr[1]`, …), translate
+  every plural form following the arity declared in the file's `Plural-Forms` header.
+
+If a file has more than ~30 untranslated entries, work through them in batches to keep
+the work reviewable, but write the whole file back to disk in one `Write` call per file.
 
 ---
 
-### Step 5: Compile the messages
+### Step 5: Write and compile
 
-Once all files have been written, run:
+Use `Write` to save each updated file. Preserve everything else exactly — line breaks,
+indentation, comment positions, the metadata header.
 
-```bash
-make translations
-```
-
-This re-extracts strings AND compiles. If extraction is not desired (e.g. you only want to
-compile), run:
+Then compile:
 
 ```bash
 uv run manage.py compilemessages --ignore venv --ignore .venv
 ```
 
-Report whether compilation succeeded or if there were any errors.
+Use `compilemessages` directly rather than `make translations`. `make translations`
+re-runs `makemessages` first, which can shift line-number references in freshly-edited
+files and produce a noisy diff. Compile-only keeps the diff clean.
+
+(If the user explicitly asked to also re-extract — e.g. because templates changed between
+discovery and now — run `make translations` instead.)
+
+Report whether compilation succeeded.
 
 ---
 
-### Step 6: Summarise
+### Step 6: Summarise and offer to commit
 
 Report:
 
-- Which languages were processed
-- How many strings were translated per file
-- Whether compilation succeeded
-- Any strings that may need manual review (e.g. very technical or ambiguous context)
+- Languages processed.
+- For each file: how many entries were translated. Zero is a valid answer — say so
+  plainly without hedging.
+- Whether compilation succeeded.
+- Anything that may need manual review (very technical, ambiguous, or under-contextualised
+  strings).
 
-Ask the user if they'd like to commit the changes. If yes, use the `/commit` skill.
+If translations were actually written, ask whether to commit. If yes, hand off to the
+`commit` skill — suggest a subject like `i18n(<lang>): translate <N> new strings`.
+
+If nothing was translated, do **not** offer to commit. There is nothing to commit. Just stop.
