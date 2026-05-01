@@ -30,7 +30,7 @@ A full-stack Django application with a modern frontend using Vite, Tailwind CSS 
 ### 1. Clone and set up the environment
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/DenPaz/sono.git
 cd sono
 cp .env.example .env  # then edit with your local values
 ```
