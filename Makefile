@@ -50,8 +50,8 @@ populate-db: ## Populate the database with test data
 	@echo "Populating the database with test data..."
 	@uv run manage.py update_site
 	@uv run manage.py create_test_admins
-	@uv run manage.py create_test_specialists
-	@uv run manage.py create_test_parents
+	@uv run manage.py create_test_specialists --reset
+	@uv run manage.py create_test_parents --reset
 
 reset-db: ## Drop and recreate the database
 	@echo ""
