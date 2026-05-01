@@ -1,21 +1,27 @@
 import pytest
-from django.contrib.auth import get_user_model
 from django.db import IntegrityError
 
+from apps.users.enums import UserRole
+from apps.users.tests.factories import AdminFactory
+from apps.users.tests.factories import AdminProfileFactory
+from apps.users.tests.factories import ParentFactory
+from apps.users.tests.factories import ParentProfileFactory
+from apps.users.tests.factories import SpecialistFactory
+from apps.users.tests.factories import SpecialistProfileFactory
+from apps.users.tests.factories import UserFactory
 from apps.users.utils import get_default_avatar_url
 
-from .factories import UserFactory
-
-User = get_user_model()
+pytestmark = pytest.mark.django_db
 
 
-@pytest.mark.django_db
 class TestUserModel:
+    def test_email_field_is_unique(self):
+        email = "john.doe@example.com"
+        UserFactory(email=email)
+        with pytest.raises(IntegrityError):
+            UserFactory(email=email)
+
     def test_str_method_returns_full_name_and_email(self):
-        """
-        Test the __str__ method returns the full name and email in the format
-        "First Last <email>"
-        """
         user = UserFactory(
             first_name="John",
             last_name="Doe",
@@ -24,36 +30,84 @@ class TestUserModel:
         expected_str = "John Doe <john.doe@example.com>"
         assert str(user) == expected_str
 
-    def test_email_field_is_unique(self):
-        """
-        Test that the email field is unique and raises an IntegrityError when
-        trying to create a user with an email that already exists.
-        """
-        UserFactory(email="test@example.com")
-        with pytest.raises(IntegrityError):
-            UserFactory(email="test@example.com")
+    def test_profile_property_returns_none_if_role_is_not_set(self):
+        user = UserFactory(role="")
+        assert user.profile is None
 
 
-@pytest.mark.django_db
-class TestUserProfileModel:
+class TestAdminModel:
+    def test_role_is_set_to_admin_by_default(self):
+        admin = AdminFactory()
+        assert admin.role == UserRole.ADMIN
+
+    def test_is_staff_and_is_superuser_are_true_for_admin(self):
+        admin = AdminFactory()
+        assert admin.is_staff is True
+        assert admin.is_superuser is True
+
+    def test_profile_property_returns_admin_profile(self):
+        admin = AdminFactory()
+        assert admin.profile == admin.admin_profile
+
+
+class TestSpecialistModel:
+    def test_role_is_set_to_specialist_by_default(self):
+        specialist = SpecialistFactory()
+        assert specialist.role == UserRole.SPECIALIST
+
+    def test_is_staff_and_is_superuser_are_false_for_specialist(self):
+        specialist = SpecialistFactory()
+        assert specialist.is_staff is False
+        assert specialist.is_superuser is False
+
+    def test_profile_property_returns_specialist_profile(self):
+        specialist = SpecialistFactory()
+        assert specialist.profile == specialist.specialist_profile
+
+
+class TestParentModel:
+    def test_role_is_set_to_parent_by_default(self):
+        parent = ParentFactory()
+        assert parent.role == UserRole.PARENT
+
+    def test_is_staff_and_is_superuser_are_false_for_parent(self):
+        parent = ParentFactory()
+        assert parent.is_staff is False
+        assert parent.is_superuser is False
+
+    def test_profile_property_returns_parent_profile(self):
+        parent = ParentFactory()
+        assert parent.profile == parent.parent_profile
+
+
+class TestAdminProfileModel:
     def test_str_method_returns_user_str(self):
-        """
-        Test the __str__ method of UserProfile returns the string representation of
-        the associated User, which includes the full name and email.
-        """
-        user = UserFactory(
-            first_name="Jane",
-            last_name="Smith",
-            email="jane.smith@example.com",
-        )
-        expected_str = "Jane Smith <jane.smith@example.com>"
-        assert str(user.profile) == expected_str
+        admin_profile = AdminProfileFactory()
+        expected_str = str(admin_profile.user)
+        assert str(admin_profile) == expected_str
 
-    def test_get_avatar_url_method_returns_default_avatar_url_when_no_avatar(self):
-        """
-        Test that the get_avatar_url method of UserProfile returns the default avatar
-        URL when the user does not have an avatar set.
-        """
-        profile = UserFactory().profile
-        expected_url = get_default_avatar_url()
-        assert profile.get_avatar_url() == expected_url
+    def test_get_avatar_url_method_returns_default_avatar_url_if_no_avatar(self):
+        admin_profile = AdminProfileFactory()
+        assert admin_profile.get_avatar_url() == get_default_avatar_url()
+
+
+class TestSpecialistProfileModel:
+    def test_str_method_returns_user_str(self):
+        specialist_profile = SpecialistProfileFactory()
+        expected_str = str(specialist_profile.user)
+        assert str(specialist_profile) == expected_str
+
+    def test_get_avatar_url_method_returns_default_avatar_url_if_no_avatar(self):
+        specialist_profile = SpecialistProfileFactory()
+        assert specialist_profile.get_avatar_url() == get_default_avatar_url()
+
+
+class TestParentProfileModel:
+    def test_str_method_returns_user_str(self):
+        parent_profile = ParentProfileFactory()
+        expected_str = str(parent_profile.user)
+        assert str(parent_profile) == expected_str
+
+    def test_get_avatar_url_method_returns_default_avatar_url_if_no_avatar(self):
+        parent_profile = ParentProfileFactory()
+        assert parent_profile.get_avatar_url() == get_default_avatar_url()

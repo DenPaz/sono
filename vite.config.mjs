@@ -5,12 +5,10 @@ import path from 'path';
 export default defineConfig({
   plugins: [tailwindcss()],
   base: '/static/',
-  resolve: {
-    alias: { '@': path.resolve(__dirname, './static/js') },
-  },
+  resolve: { alias: { '@': path.resolve(__dirname, './static/js') } },
   build: {
-    minify: process.env.DJANGO_VITE_BUILD_MINIFY !== 'false',
     manifest: true,
+    minify: process.env.DJANGO_VITE_BUILD_MINIFY !== 'false',
     outDir: path.resolve(__dirname, './static/dist'),
     emptyOutDir: true,
     rollupOptions: {

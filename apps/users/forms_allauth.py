@@ -4,17 +4,15 @@ from django.utils.translation import gettext_lazy as _
 
 
 class UserSignupForm(SignupForm):
-    """Form for user registration in the public interface."""
-
     first_name = forms.CharField(
         label=_("First name"),
-        max_length=150,
+        max_length=100,
         required=True,
         widget=forms.TextInput(attrs={"placeholder": _("First name")}),
     )
     last_name = forms.CharField(
         label=_("Last name"),
-        max_length=150,
+        max_length=100,
         required=True,
         widget=forms.TextInput(attrs={"placeholder": _("Last name")}),
     )

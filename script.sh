@@ -1,14 +1,12 @@
 #!/bin/bash
 set -e
 
-# Load environment variables
 if [ -f .env ]; then
     set -a
     source .env
     set +a
 fi
 
-# Clean up background processes
 cleanup() {
     echo ""
     echo "Stopping servers..."
@@ -27,11 +25,10 @@ cleanup() {
 }
 trap cleanup INT TERM
 
-# Default ports
 DJANGO_PORT=${DJANGO_PORT:-8000}
 DJANGO_VITE_SERVER_PORT=${DJANGO_VITE_SERVER_PORT:-5173}
 
-# Start servers
+echo ""
 echo "🚀 Starting development environment..."
 echo "   Django → http://localhost:$DJANGO_PORT"
 echo "   Vite   → http://localhost:$DJANGO_VITE_SERVER_PORT"

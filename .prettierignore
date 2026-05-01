@@ -1,4 +1,5 @@
-# Build output
+# Build artifacts
+/node_modules/
 /static/dist/
 /staticfiles/
 

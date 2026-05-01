@@ -1,9 +1,9 @@
 from allauth.account.models import EmailAddress
 from django.core.management.base import BaseCommand
 
-from apps.users.models import User
+from apps.users.models import Admin
 
-superusers = [
+users = [
     {
         "first_name": "Dennis",
         "last_name": "Paz",
@@ -19,17 +19,15 @@ password = "12345"  # noqa: S105
 
 
 class Command(BaseCommand):
-    help = "Create or update test superusers with predefined credentials."
+    help = "Create or update test admin users."
 
-    def handle(self, *args, **kwargs):
-        for superuser in superusers:
-            user, created = User.objects.update_or_create(
-                email=superuser["email"],
+    def handle(self, *args, **options):
+        for user_data in users:
+            user, created = Admin.objects.update_or_create(
+                email=user_data["email"],
                 defaults={
-                    "first_name": superuser["first_name"],
-                    "last_name": superuser["last_name"],
-                    "is_staff": True,
-                    "is_superuser": True,
+                    "first_name": user_data["first_name"],
+                    "last_name": user_data["last_name"],
                 },
             )
             user.set_password(password)
@@ -43,4 +41,4 @@ class Command(BaseCommand):
 
             action = "Created" if created else "Updated"
             style = self.style.SUCCESS if created else self.style.WARNING
-            self.stdout.write(style(f"{action} superuser: {user}"))
+            self.stdout.write(style(f"{action} admin user: {user}"))
