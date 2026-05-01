@@ -116,6 +116,12 @@ make setup
 This installs Python deps (`uv sync`), npm deps, builds frontend assets, and installs
 pre-commit hooks. After it finishes, run `make db` to initialize the database.
 
+To do everything in one shot (setup + database + dev servers):
+
+```bash
+make all
+```
+
 ### Database
 
 ```bash
@@ -137,9 +143,9 @@ make dev         # Start Django (runserver) + Vite dev server with hot-reload
 make dev-fresh   # Same as `make dev` but starts from a fresh database
 ```
 
-Both processes run in the foreground; press Ctrl-C and the wrapper script
-(`script.sh`) will shut them down cleanly. Defaults: Django on port 8000,
-Vite on port 5173. Override with `DJANGO_PORT` and `DJANGO_VITE_SERVER_PORT`.
+Both processes run in the foreground via `script.sh`; press Ctrl-C to shut them down
+cleanly. Defaults: Django on port 8000, Vite on port 5173. Override with `DJANGO_PORT`
+and `DJANGO_VITE_SERVER_PORT`.
 
 Access the app at http://localhost:8000.
 
@@ -161,8 +167,8 @@ Custom commands live in `apps/*/management/commands/` and are invoked with
 
 - `update_site` — sync the `django.contrib.sites` `Site` row from `SITE_NAME` / `SITE_DOMAIN` settings
 - `create_test_admins` — create the two admin users (`dppazlopez@gmail.com`, `alissonpef@gmail.com`)
-- `create_test_specialists` — bulk-create test specialists (defaults to 1000; supports `--count` and `--reset`)
-- `create_test_parents` — bulk-create test parents (defaults to 1000; supports `--count` and `--reset`)
+- `create_test_specialists` — bulk-create test specialists (defaults to 1000; supports `--count`; always passes `--reset` when called via `make populate-db`)
+- `create_test_parents` — bulk-create test parents (defaults to 1000; supports `--count`; always passes `--reset` when called via `make populate-db`)
 - `clear_cache` — clear the Django cache (Redis)
 - `reset_db` — drop and recreate the database (from `django-extensions`)
 
