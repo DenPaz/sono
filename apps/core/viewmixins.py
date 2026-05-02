@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.core.exceptions import ImproperlyConfigured
 
 
@@ -42,3 +43,36 @@ class HtmxTemplateMixin:
         if self.htmx_template_name.startswith("#"):
             return [template_names[0] + self.htmx_template_name]
         return [self.htmx_template_name]
+
+
+class AllowedRolesMixin(UserPassesTestMixin):
+    """Restrict view access to users with specific roles.
+
+    Views using this mixin must define `allowed_roles` as a list of role values
+    from `UserRole`. Unauthenticated users are redirected to the login page.
+    Authenticated users whose role is not in `allowed_roles` are handled by
+    `handle_no_permission()` (403 by default, or redirect to login if
+    `raise_exception` is False).
+
+    Attributes:
+        allowed_roles: A list of role values (e.g. [UserRole.ADMIN]).
+
+    Raises:
+        ImproperlyConfigured: If `allowed_roles` is None (not configured).
+
+    Example:
+        class UserListView(AllowedRolesMixin, FilterView):
+            allowed_roles = [UserRole.ADMIN]
+    """
+
+    allowed_roles: list | None = None
+
+    def test_func(self):
+        if self.allowed_roles is None:
+            msg = (
+                f"{self.__class__.__name__} is missing `allowed_roles`. "
+                "Define it or remove AllowedRolesMixin from the view."
+            )
+            raise ImproperlyConfigured(msg)
+        user = self.request.user
+        return user.is_authenticated and user.role in self.allowed_roles
