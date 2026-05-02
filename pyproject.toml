@@ -66,10 +66,7 @@ dev = [
 ]
 
 [tool.ruff]
-extend-exclude = [
-  "*/migrations/*.py",
-  "staticfiles/*",
-]
+extend-exclude = [ "*/migrations/*.py", "staticfiles/*" ]
 lint.select = [
   "A",
   "ASYNC",
