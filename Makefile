@@ -98,9 +98,9 @@ shell: ## Open Django shell
 translations: ## Extract and compile translation strings
 	@echo ""
 	@echo "Extracting and compiling translation strings..."
-	@uv run manage.py makemessages --all --ignore node_modules --ignore venv --ignore .venv
-	@uv run manage.py makemessages -d djangojs --all --ignore node_modules --ignore venv --ignore .venv
-	@uv run manage.py compilemessages --ignore venv --ignore .venv
+	@uv run manage.py makemessages --all --ignore node_modules --ignore .venv
+	@uv run manage.py makemessages -d djangojs --all --ignore node_modules --ignore .venv
+	@uv run manage.py compilemessages --ignore .venv
 
 tailwhip: ## Sort Tailwind CSS classes with Tailwhip
 	@echo ""
