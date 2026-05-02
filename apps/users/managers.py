@@ -8,7 +8,12 @@ from .enums import UserRole
 
 
 class UserQuerySet(ActiveQuerySet):
-    pass
+    def with_profile(self):
+        return self.select_related(
+            "admin_profile",
+            "specialist_profile",
+            "parent_profile",
+        )
 
 
 class UserManager(DjangoUserManager.from_queryset(UserQuerySet)):
