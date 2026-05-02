@@ -1,4 +1,4 @@
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.i18n import set_language
 from django_filters.views import FilterView
