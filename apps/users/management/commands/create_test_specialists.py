@@ -8,6 +8,7 @@ from apps.users.enums import UserRole
 from apps.users.models import Specialist
 from apps.users.models import SpecialistProfile
 from apps.users.tests.factories import SpecialistFactory
+from apps.users.tests.factories import SpecialistProfileFactory
 
 SHARED_PASSWORD = make_password("12345")
 
@@ -43,7 +44,7 @@ class Command(BaseCommand):
         created = Specialist.objects.bulk_create(specialists)
 
         SpecialistProfile.objects.bulk_create(
-            [SpecialistProfile(user=specialist) for specialist in created]
+            [SpecialistProfileFactory.build(user=specialist) for specialist in created]
         )
 
         group = Group.objects.get(name=UserRole.SPECIALIST)

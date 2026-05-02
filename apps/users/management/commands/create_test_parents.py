@@ -8,6 +8,7 @@ from apps.users.enums import UserRole
 from apps.users.models import Parent
 from apps.users.models import ParentProfile
 from apps.users.tests.factories import ParentFactory
+from apps.users.tests.factories import ParentProfileFactory
 
 SHARED_PASSWORD = make_password("12345")
 
@@ -43,7 +44,7 @@ class Command(BaseCommand):
         created = Parent.objects.bulk_create(parents)
 
         ParentProfile.objects.bulk_create(
-            [ParentProfile(user=parent) for parent in created]
+            [ParentProfileFactory.build(user=parent) for parent in created]
         )
 
         group = Group.objects.get(name=UserRole.PARENT)
