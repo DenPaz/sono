@@ -1,10 +1,12 @@
 from factory import Faker
 from factory import LazyAttributeSequence
+from factory import LazyFunction
 from factory import SubFactory
 from factory import Trait
 from factory import post_generation
 from factory.django import DjangoModelFactory
 from factory.django import ImageField
+from faker import Faker as FakerLib
 
 from apps.users.models import Admin
 from apps.users.models import AdminProfile
@@ -13,6 +15,8 @@ from apps.users.models import ParentProfile
 from apps.users.models import Specialist
 from apps.users.models import SpecialistProfile
 from apps.users.models import User
+
+faker_pt_br = FakerLib("pt_BR")
 
 
 class UserFactory(DjangoModelFactory):
@@ -84,6 +88,19 @@ class SpecialistProfileFactory(DjangoModelFactory):
 
 class ParentProfileFactory(DjangoModelFactory):
     user = SubFactory(ParentFactory)
+    phone = LazyFunction(faker_pt_br.cellphone_number)
+    birth_date = Faker("date_of_birth", minimum_age=18, maximum_age=60)
+    address = LazyFunction(
+        lambda: {
+            "postal_code": faker_pt_br.postcode(),
+            "street": faker_pt_br.street_name(),
+            "number": faker_pt_br.building_number(),
+            "complement": "",
+            "neighborhood": faker_pt_br.bairro(),
+            "city": faker_pt_br.city(),
+            "state": faker_pt_br.estado_sigla(),
+        }
+    )
 
     class Meta:
         model = ParentProfile

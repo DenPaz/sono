@@ -3,8 +3,11 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django_jsonform.models.fields import JSONField
+from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.core.models import BaseModel
+from apps.core.schemas import ADDRESS_SCHEMA
 from apps.core.validators import FileSizeValidator
 
 from .enums import UserRole
@@ -180,6 +183,21 @@ class ParentProfile(UserProfile):
         verbose_name=_("Parent"),
         related_name="parent_profile",
         on_delete=models.CASCADE,
+    )
+    phone = PhoneNumberField(
+        verbose_name=_("Phone number"),
+        blank=True,
+    )
+    birth_date = models.DateField(
+        verbose_name=_("Birth date"),
+        blank=True,
+        null=True,
+    )
+    address = JSONField(
+        verbose_name=_("Address"),
+        schema=ADDRESS_SCHEMA,
+        default=dict,
+        blank=True,
     )
 
     objects = ParentProfileManager()

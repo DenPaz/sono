@@ -1,0 +1,72 @@
+from django.utils.translation import gettext_lazy as _
+
+ADDRESS_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "postal_code": {
+            "type": "string",
+            "title": _("Postal code"),
+            "maxLength": 9,
+            "minLength": 8,
+        },
+        "street": {
+            "type": "string",
+            "title": _("Street"),
+            "maxLength": 100,
+        },
+        "number": {
+            "type": "string",
+            "title": _("Number"),
+            "maxLength": 20,
+        },
+        "complement": {
+            "type": "string",
+            "title": _("Complement"),
+            "maxLength": 100,
+        },
+        "neighborhood": {
+            "type": "string",
+            "title": _("Neighborhood"),
+            "maxLength": 100,
+        },
+        "city": {
+            "type": "string",
+            "title": _("City"),
+            "maxLength": 100,
+        },
+        "state": {
+            "type": "string",
+            "title": _("State"),
+            "maxLength": 2,
+            "choices": [
+                {"title": _("Acre"), "value": "AC"},
+                {"title": _("Alagoas"), "value": "AL"},
+                {"title": _("Amapá"), "value": "AP"},
+                {"title": _("Amazonas"), "value": "AM"},
+                {"title": _("Bahia"), "value": "BA"},
+                {"title": _("Ceará"), "value": "CE"},
+                {"title": _("Distrito Federal"), "value": "DF"},
+                {"title": _("Espírito Santo"), "value": "ES"},
+                {"title": _("Goiás"), "value": "GO"},
+                {"title": _("Maranhão"), "value": "MA"},
+                {"title": _("Mato Grosso"), "value": "MT"},
+                {"title": _("Mato Grosso do Sul"), "value": "MS"},
+                {"title": _("Minas Gerais"), "value": "MG"},
+                {"title": _("Pará"), "value": "PA"},
+                {"title": _("Paraíba"), "value": "PB"},
+                {"title": _("Paraná"), "value": "PR"},
+                {"title": _("Pernambuco"), "value": "PE"},
+                {"title": _("Piauí"), "value": "PI"},
+                {"title": _("Rio de Janeiro"), "value": "RJ"},
+                {"title": _("Rio Grande do Norte"), "value": "RN"},
+                {"title": _("Rio Grande do Sul"), "value": "RS"},
+                {"title": _("Rondônia"), "value": "RO"},
+                {"title": _("Roraima"), "value": "RR"},
+                {"title": _("Santa Catarina"), "value": "SC"},
+                {"title": _("São Paulo"), "value": "SP"},
+                {"title": _("Sergipe"), "value": "SE"},
+                {"title": _("Tocantins"), "value": "TO"},
+            ],
+        },
+    },
+}
