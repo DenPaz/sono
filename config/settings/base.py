@@ -92,6 +92,7 @@ LOCAL_APPS = [
     "apps.core.config.CoreConfig",
     "apps.users.config.UsersConfig",
     "apps.dashboard.config.DashboardConfig",
+    "apps.patients.config.PatientsConfig",
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 

@@ -104,3 +104,8 @@ DJANGO_VITE = {
         "dev_mode": True,
     },
 }
+
+# -----------------------------------------------------------------------------
+# django-fernet-encrypted-fields
+# -----------------------------------------------------------------------------
+SALT_KEY = env("FIELD_ENCRYPTION_KEY", default="1ns3cure-s3cr3t-k3y")

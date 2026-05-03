@@ -14,6 +14,7 @@ urlpatterns = [
     path("accounts/", include("allauth.urls")),
     path("", include("apps.dashboard.urls", namespace="dashboard")),
     path("users/", include("apps.users.urls", namespace="users")),
+    path("patients/", include("apps.patients.urls", namespace="patients")),
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
 ]
 
