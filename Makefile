@@ -55,6 +55,7 @@ populate-db: ## Populate the database with test data
 	@uv run manage.py create_test_specialists --reset
 	@uv run manage.py create_test_parents --reset
 	@uv run manage.py create_test_patients --reset
+	@uv run manage.py create_test_questionnaire_responses --reset
 
 reset-db: ## Drop and recreate the database
 	@echo ""
