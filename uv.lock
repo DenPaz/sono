@@ -1660,7 +1660,7 @@ requires-dist = [
     { name = "django", specifier = "==6.0.4" },
     { name = "django-allauth", extras = ["mfa"], specifier = "==65.16.1" },
     { name = "django-anymail", extras = ["amazon-ses"], specifier = "==15.0" },
-    { name = "django-betterforms", specifier = ">=3.0.0" },
+    { name = "django-betterforms", specifier = "==3.0.0" },
     { name = "django-braces", specifier = "==1.17.0" },
     { name = "django-celery-beat", specifier = "==2.9.0" },
     { name = "django-cotton", specifier = "==2.6.2" },
