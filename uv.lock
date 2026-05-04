@@ -473,6 +473,18 @@ amazon-ses = [
 ]
 
 [[package]]
+name = "django-betterforms"
+version = "3.0.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "django" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/11/94/a99d1f6106850537a0a9aaed3d6294c9bbf0daad782cc3ba1c6f68c61c90/django_betterforms-3.0.0.tar.gz", hash = "sha256:c516135d2e93ef12defd56db898c9339b01a616ce57f606f0753fd2d38c0ebd9", size = 20792, upload-time = "2026-02-19T22:50:15.061Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/23/3a/290d7112eb3dbf4f15e936a547a0887276b787ab9c0b86da5fac4f4c878b/django_betterforms-3.0.0-py3-none-any.whl", hash = "sha256:1b2f4d50cffb2a1d99b1117c3e314d9e116f92a06287d77edd1d62ec59320e31", size = 20445, upload-time = "2026-02-19T22:50:12.872Z" },
+]
+
+[[package]]
 name = "django-braces"
 version = "1.17.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1593,6 +1605,7 @@ dependencies = [
     { name = "django" },
     { name = "django-allauth", extra = ["mfa"] },
     { name = "django-anymail", extra = ["amazon-ses"] },
+    { name = "django-betterforms" },
     { name = "django-braces" },
     { name = "django-celery-beat" },
     { name = "django-cotton" },
@@ -1647,6 +1660,7 @@ requires-dist = [
     { name = "django", specifier = "==6.0.4" },
     { name = "django-allauth", extras = ["mfa"], specifier = "==65.16.1" },
     { name = "django-anymail", extras = ["amazon-ses"], specifier = "==15.0" },
+    { name = "django-betterforms", specifier = ">=3.0.0" },
     { name = "django-braces", specifier = "==1.17.0" },
     { name = "django-celery-beat", specifier = "==2.9.0" },
     { name = "django-cotton", specifier = "==2.6.2" },

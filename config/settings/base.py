@@ -84,6 +84,7 @@ THIRD_PARTY_APPS = [
     "widget_tweaks",
     "django_cotton",
     "formtools",
+    "betterforms",
     "django_filters",
     "django_jsonform",
     "phonenumber_field",
