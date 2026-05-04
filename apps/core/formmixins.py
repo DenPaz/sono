@@ -188,7 +188,7 @@ class MultiModelForm(MultiFormMixin):
 
     def save(self, *, commit=True):
         objects = OrderedDict(
-            (key, form.save(commit)) for key, form in self.forms.items()
+            (key, form.save(commit=commit)) for key, form in self.forms.items()
         )
         if any(hasattr(form, "save_m2m") for form in self.forms.values()):
 
