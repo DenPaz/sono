@@ -17,6 +17,7 @@ from .forms import AdminMultiModelUpdateForm
 from .models import Admin
 from .models import Parent
 from .models import User
+from .viewmixins import SendInvitationEmailMixin
 
 
 # ---------------------------------------------------------------------------
@@ -51,7 +52,12 @@ class UserListView(AllowedRolesMixin, HtmxTemplateMixin, FilterView):
 # ---------------------------------------------------------------------------
 # Admin views
 # ---------------------------------------------------------------------------
-class AdminCreateView(AllowedRolesMixin, SuccessMessageMixin, CreateView):
+class AdminCreateView(
+    SendInvitationEmailMixin,
+    AllowedRolesMixin,
+    SuccessMessageMixin,
+    CreateView,
+):
     model = Admin
     form_class = AdminMultiModelCreateForm
     allowed_roles = [UserRole.ADMIN]

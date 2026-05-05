@@ -1,0 +1,10 @@
+{% load i18n %}
+{% blocktrans with first_name=user.first_name site_name=site_name %}Hi {{ first_name }},
+
+You've been invited to {{ site_name }}. Click the link below to set your password and access your account:{% endblocktrans %}
+
+{{ protocol }}://{{ domain }}{% url 'account_reset_password_from_key' uidb36=uid key=token %}
+
+{% blocktrans with site_name=site_name %}This link will expire shortly. If you didn't expect this invitation, you can safely ignore this email.
+
+The {{ site_name }} team{% endblocktrans %}
