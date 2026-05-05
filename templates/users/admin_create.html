@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load widget_tweaks %}
+
+{% block content %}
+  <div class="max-w-lg p-6">
+    <div class="flex gap-3 items-center mb-6">
+      <a href="{% url 'users:user_list' %}"
+         class="btn btn-sm btn-circle btn-ghost"
+         aria-label="{% trans "Back" %}">
+        <span class="iconify lucide--arrow-left size-4" aria-hidden="true"></span>
+      </a>
+      <h1 class="font-bold text-2xl">{% trans "Add admin" %}</h1>
+    </div>
+    <form method="post" enctype="multipart/form-data" class="space-y-4">
+      {% csrf_token %}
+      <c-forms.input :field="form.user.first_name" icon="lucide--user" />
+      <c-forms.input :field="form.user.last_name" icon="lucide--user" />
+      <c-forms.input :field="form.user.email" icon="lucide--mail" />
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend">{% trans "Avatar" %}</legend>
+        {{ form.profile.avatar }}
+        {% for error in form.profile.avatar.errors %}<p class="text-sm text-error">{{ error }}</p>{% endfor %}
+      </fieldset>
+      <div class="flex gap-3 pt-2">
+        <button type="submit" class="btn btn-primary">{% trans "Create admin" %}</button>
+        <a href="{% url 'users:user_list' %}" class="btn btn-ghost">{% trans "Cancel" %}</a>
+      </div>
+    </form>
+  </div>
+{% endblock content %}

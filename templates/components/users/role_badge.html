@@ -1,0 +1,10 @@
+<c-vars role="" display="" />
+{% if role == "ADMIN" %}
+  <span class="badge badge-sm inset-ring-orange-400/20 inset-ring text-orange-400 bg-orange-400/10">{{ display }}</span>
+{% elif role == "SPECIALIST" %}
+  <span class="badge badge-sm inset-ring-purple-400/20 inset-ring text-purple-400 bg-purple-400/10">{{ display }}</span>
+{% elif role == "PARENT" %}
+  <span class="badge badge-sm inset-ring-indigo-400/20 inset-ring text-indigo-400 bg-indigo-400/10">{{ display }}</span>
+{% else %}
+  <span class="badge badge-sm inset-ring-gray-400/20 inset-ring text-gray-400 bg-gray-400/10">{{ display }}</span>
+{% endif %}

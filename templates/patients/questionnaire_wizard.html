@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load widget_tweaks %}
+
+{% block title %}
+  {% trans "Sleep questionnaire" %} | Sono
+{% endblock title %}
+{% block content %}
+  <div class="max-w-2xl mx-auto px-4 py-8 md:py-12">
+    {# ------------------------------------------------------------------ #}
+    {# Header                                                              #}
+    {# ------------------------------------------------------------------ #}
+    <div class="mb-8">
+      <p class="mb-1 text-sm text-base-content/60">{{ patient.get_full_name }}</p>
+      <h1 class="font-bold text-2xl">{% trans "Sleep Disorder Scale" %}</h1>
+      <p class="mt-2 text-sm text-base-content/70">
+        {% blocktrans with step=wizard.steps.step1 total=wizard.steps.count %}
+          Step {{ step }} of {{ total }} — {{ current_step_title }}
+        {% endblocktrans %}
+      </p>
+    </div>
+    {# ------------------------------------------------------------------ #}
+    {# DaisyUI steps indicator                                             #}
+    {# ------------------------------------------------------------------ #}
+    <ul class="steps steps-horizontal w-full mb-10 text-xs">
+      {% for title in step_titles_list %}
+        <li class="step {% if forloop.counter <= wizard.steps.step1 %}step-primary{% endif %}">{{ title }}</li>
+      {% endfor %}
+    </ul>
+    {# ------------------------------------------------------------------ #}
+    {# Form card                                                           #}
+    {# ------------------------------------------------------------------ #}
+    <div class="card bg-base-100 border border-base-200 shadow-sm">
+      <div class="card-body gap-0 p-6 md:p-8">
+        <form method="post" novalidate>
+          {% csrf_token %}
+          {{ wizard.management_form }}
+          {# Non-field errors #}
+          {% if form.non_field_errors %}
+            <div class="alert alert-error mb-6" role="alert">
+              {% for error in form.non_field_errors %}<p>{{ error }}</p>{% endfor %}
+            </div>
+          {% endif %}
+          {# ------------------------------------------------------------ #}
+          {# Question fields                                               #}
+          {# ------------------------------------------------------------ #}
+          <div class="space-y-8">
+            {% for field in form %}
+              <fieldset class="{% if field.errors %}border border-error rounded-box p-4{% endif %}">
+                <legend class="mb-3 font-medium text-sm text-base-content leading-snug">{{ field.label }}</legend>
+                {# Radio buttons rendered as a horizontal pill group on md+, #}
+                {# stacked on mobile.                                         #}
+                <div class="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+                  {% for radio in field %}
+                    <label class="flex gap-2 items-center px-3 py-2 text-sm rounded-btn border border-base-300 transition-colors cursor-pointer hover:bg-base-200 has-checked:text-primary-content has-checked:bg-primary has-checked:border-primary">
+                      {{ radio.tag }}
+                      <span>{{ radio.choice_label }}</span>
+                    </label>
+                  {% endfor %}
+                </div>
+                {% if field.errors %}
+                  {% for error in field.errors %}<p class="mt-1 text-xs text-error">{{ error }}</p>{% endfor %}
+                {% endif %}
+              </fieldset>
+            {% endfor %}
+          </div>
+          {# ------------------------------------------------------------ #}
+          {# Navigation buttons                                            #}
+          {# ------------------------------------------------------------ #}
+          <div class="flex items-center justify-between mt-10 pt-6 border-base-200 border-t">
+            {# Back button — wizard provides a "prev" step via management form #}
+            {% if wizard.steps.prev %}
+              <button type="submit"
+                      name="wizard_goto_step"
+                      value="{{ wizard.steps.prev }}"
+                      class="btn btn-ghost gap-2">
+                <span class="iconify lucide--arrow-left size-4" aria-hidden="true"></span>
+                {% trans "Back" %}
+              </button>
+            {% else %}
+              <span>{# Placeholder to keep the Continue/Submit button aligned right when there's no Back button #}</span>
+            {% endif %}
+            {# Next / Submit #}
+            {% if wizard.steps.next %}
+              <button type="submit" class="btn btn-primary gap-2">
+                {% trans "Continue" %}
+                <span class="iconify lucide--arrow-right size-4" aria-hidden="true"></span>
+              </button>
+            {% else %}
+              <button type="submit" class="btn btn-success gap-2">
+                <span class="iconify lucide--check size-4" aria-hidden="true"></span>
+                {% trans "Submit" %}
+              </button>
+            {% endif %}
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
