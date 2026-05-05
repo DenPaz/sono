@@ -1,6 +1,7 @@
 {% load i18n %}
 {% load static %}
 {% load core_tags %}
+{% load users_tags %}
 
 <input id="layout-sidebar-toggle-trigger"
        type="checkbox"
@@ -30,15 +31,42 @@
   </div>
   <nav class="custom-scrollbar overflow-auto grow"
        aria-label="{% trans 'Sidebar navigation' %}">
-    <div class="space-y-0.5 mt-5 px-2.5">
+    <div class="space-y-1.5 mt-5 px-2.5">
       <a href="{% url 'dashboard:index' %}"
          class="menu-item {% active_class 'dashboard:index' %}">
         <span class="iconify lucide--monitor-dot size-4" aria-hidden="true"></span>
         <span>{% trans "Dashboard" %}</span>
       </a>
+      {% withrole "ADMIN" %}
+        <a href="{% url 'users:user_list' %}"
+           class="menu-item {% active_class 'users:user_list' %}">
+          <span class="iconify lucide--users size-4" aria-hidden="true"></span>
+          <span>{% trans "Users" %}</span>
+        </a>
+        <a href="#" class="menu-item">
+          <span class="iconify lucide--stethoscope size-4" aria-hidden="true"></span>
+          <span>{% trans "Patients" %}</span>
+        </a>
+      {% endwithrole %}
+      {% withrole "SPECIALIST" %}
+        <a href="#" class="menu-item">
+          <span class="iconify lucide--stethoscope size-4" aria-hidden="true"></span>
+          <span>{% trans "My patients" %}</span>
+        </a>
+        <a href="#" class="menu-item">
+          <span class="iconify lucide--heart-handshake size-4" aria-hidden="true"></span>
+          <span>{% trans "Parents" %}</span>
+        </a>
+      {% endwithrole %}
+      {% withrole "PARENT" %}
+        <a href="#" class="menu-item">
+          <span class="iconify lucide--baby size-4" aria-hidden="true"></span>
+          <span>{% trans "My children" %}</span>
+        </a>
+      {% endwithrole %}
     </div>
   </nav>
-  <div class="sidebar-menu space-y-0.5 mt-3 px-2.5 pt-2 border-base-200 border-t">
+  <div class="space-y-0.5 mt-3 px-2.5 pt-2 border-base-200 border-t">
     <button type="button"
             class="menu-item w-full cursor-pointer hover:bg-base-200"
             onclick="document.getElementById('logout-modal').showModal()">
