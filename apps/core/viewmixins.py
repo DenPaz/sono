@@ -1,5 +1,6 @@
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.core.exceptions import ImproperlyConfigured
+from django_htmx.http import HttpResponseClientRedirect
 
 
 class HtmxTemplateMixin:
@@ -43,6 +44,21 @@ class HtmxTemplateMixin:
         if self.htmx_template_name.startswith("#"):
             return [template_names[0] + self.htmx_template_name]
         return [self.htmx_template_name]
+
+
+class HtmxFormSuccessMixin:
+    """Return HX-Redirect instead of a plain 302 on successful form submission.
+
+    Without this, HTMX follows the 302 and swaps the full user-list page HTML
+    into the modal target div. HX-Redirect causes HTMX to perform a full browser
+    navigation instead, and any queued Django messages survive in the session.
+    """
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        if getattr(self.request, "htmx", False):
+            return HttpResponseClientRedirect(self.get_success_url())
+        return response
 
 
 class AllowedRolesMixin(UserPassesTestMixin):

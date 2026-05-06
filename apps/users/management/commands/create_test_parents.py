@@ -35,11 +35,13 @@ class Command(BaseCommand):
 
         parents = ParentFactory.build_batch(
             count,
-            password=SHARED_PASSWORD,
             role=UserRole.PARENT,
             is_staff=False,
             is_superuser=False,
         )
+
+        for parent in parents:
+            parent.password = SHARED_PASSWORD
 
         created = Parent.objects.bulk_create(parents)
 

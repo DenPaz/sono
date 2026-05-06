@@ -1,6 +1,11 @@
 from django.views.generic import TemplateView
 
+from apps.patients.models import Patient
+from apps.patients.models import QuestionnaireResponse
 from apps.users.enums import UserRole
+from apps.users.models import Admin
+from apps.users.models import Parent
+from apps.users.models import Specialist
 
 
 class IndexView(TemplateView):
@@ -30,10 +35,44 @@ class IndexView(TemplateView):
         return context
 
     def _admin_context(self):
-        return {}
+        recent_responses = QuestionnaireResponse.objects.select_related(
+            "patient"
+        ).order_by("-created")[:8]
+        return {
+            "stats": {
+                "admins": Admin.objects.count(),
+                "specialists": Specialist.objects.count(),
+                "parents": Parent.objects.count(),
+                "patients": Patient.objects.active().count(),
+            },
+            "recent_responses": recent_responses,
+        }
 
     def _specialist_context(self):
-        return {}
+        user = self.request.user
+        recent_responses = (
+            QuestionnaireResponse.objects.filter(patient__specialist=user)
+            .select_related("patient")
+            .order_by("-created")[:8]
+        )
+        return {
+            "patient_count": Patient.objects.filter(
+                specialist=user, is_active=True
+            ).count(),
+            "recent_responses": recent_responses,
+        }
 
     def _parent_context(self):
-        return {}
+        user = self.request.user
+        patients = Patient.objects.filter(parent=user, is_active=True).prefetch_related(
+            "questionnaire_responses"
+        )
+        recent_responses = (
+            QuestionnaireResponse.objects.filter(patient__parent=user)
+            .select_related("patient")
+            .order_by("-created")[:5]
+        )
+        return {
+            "patients": patients,
+            "recent_responses": recent_responses,
+        }

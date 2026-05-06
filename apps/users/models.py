@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import FileExtensionValidator
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django_jsonform.models.fields import JSONField
 from phonenumber_field.modelfields import PhoneNumberField
@@ -55,6 +56,17 @@ class User(BaseModel, AbstractUser):
     def __str__(self):
         return f"{self.get_full_name()} <{self.email}>"
 
+    def get_absolute_url(self):
+        url_names = {
+            UserRole.ADMIN: "users:admin_update",
+            UserRole.SPECIALIST: "users:specialist_update",
+            UserRole.PARENT: "users:parent_update",
+        }
+        url_name = url_names.get(self.role)
+        if url_name:
+            return reverse(url_name, kwargs={"pk": self.pk})
+        return None
+
     @property
     def profile(self):
         if not self.role:
@@ -70,6 +82,9 @@ class Admin(User):
         verbose_name = _("Admin")
         verbose_name_plural = _("Admins")
         ordering = ["first_name", "last_name"]
+
+    def get_absolute_url(self):
+        return reverse("users:admin_update", kwargs={"pk": self.pk})
 
     def save(self, *args, **kwargs):
         self.role = UserRole.ADMIN
@@ -87,6 +102,9 @@ class Specialist(User):
         verbose_name_plural = _("Specialists")
         ordering = ["first_name", "last_name"]
 
+    def get_absolute_url(self):
+        return reverse("users:specialist_update", kwargs={"pk": self.pk})
+
     def save(self, *args, **kwargs):
         self.role = UserRole.SPECIALIST
         self.is_staff = False
@@ -102,6 +120,9 @@ class Parent(User):
         verbose_name = _("Parent")
         verbose_name_plural = _("Parents")
         ordering = ["first_name", "last_name"]
+
+    def get_absolute_url(self):
+        return reverse("users:parent_update", kwargs={"pk": self.pk})
 
     def save(self, *args, **kwargs):
         self.role = UserRole.PARENT

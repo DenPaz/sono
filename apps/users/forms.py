@@ -30,6 +30,11 @@ class UserUpdateForm(forms.ModelForm):
         fields = ["first_name", "last_name", "email", "is_active"]
 
 
+class UserSelfUpdateForm(forms.ModelForm):
+    class Meta:
+        fields = ["first_name", "last_name", "email"]
+
+
 class UserProfileCreateForm(forms.ModelForm):
     class Meta:
         fields = ["avatar"]
@@ -207,5 +212,47 @@ class ParentMultiModelUpdateForm(UserMultiModelUpdateForm):
     profile_related_name = "parent_profile"
     form_classes = {
         "user": ParentUpdateForm,
+        "profile": ParentProfileUpdateForm,
+    }
+
+
+# ---------------------------------------------------------------------------
+# Self-update forms (no is_active — users cannot deactivate themselves)
+# ---------------------------------------------------------------------------
+class AdminSelfUpdateForm(UserSelfUpdateForm):
+    class Meta(UserSelfUpdateForm.Meta):
+        model = Admin
+
+
+class SpecialistSelfUpdateForm(UserSelfUpdateForm):
+    class Meta(UserSelfUpdateForm.Meta):
+        model = Specialist
+
+
+class ParentSelfUpdateForm(UserSelfUpdateForm):
+    class Meta(UserSelfUpdateForm.Meta):
+        model = Parent
+
+
+class AdminMultiModelSelfUpdateForm(UserMultiModelUpdateForm):
+    profile_related_name = "admin_profile"
+    form_classes = {
+        "user": AdminSelfUpdateForm,
+        "profile": AdminProfileUpdateForm,
+    }
+
+
+class SpecialistMultiModelSelfUpdateForm(UserMultiModelUpdateForm):
+    profile_related_name = "specialist_profile"
+    form_classes = {
+        "user": SpecialistSelfUpdateForm,
+        "profile": SpecialistProfileUpdateForm,
+    }
+
+
+class ParentMultiModelSelfUpdateForm(UserMultiModelUpdateForm):
+    profile_related_name = "parent_profile"
+    form_classes = {
+        "user": ParentSelfUpdateForm,
         "profile": ParentProfileUpdateForm,
     }

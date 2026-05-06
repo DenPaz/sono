@@ -1,0 +1,229 @@
+{% extends "patients/_base.html" %}
+
+{% load i18n %}
+{% load users_tags %}
+
+{% block title %}
+  {{ patient.get_full_name }}
+{% endblock title %}
+{% block content %}
+  <div class="space-y-6 p-6">
+    {# ── Page header ── #}
+    <div class="flex flex-wrap gap-4 items-center justify-between">
+      <div class="flex gap-3 items-center">
+        <a href="{% url 'patients:patient_list' %}"
+           class="btn btn-sm btn-circle btn-ghost"
+           aria-label="{% trans 'Back' %}">
+          <span class="iconify lucide--arrow-left size-4" aria-hidden="true"></span>
+        </a>
+        <div>
+          <h1 class="font-bold text-2xl">{{ patient.get_full_name }}</h1>
+          <p class="mt-0.5 text-sm text-base-content/60">
+            {% blocktrans with age=patient.age %}{{ age }} years old{% endblocktrans %}
+          </p>
+        </div>
+      </div>
+      {% withrole "ADMIN" "SPECIALIST" %}
+        <button type="button"
+                class="btn btn-sm btn-outline"
+                hx-get="{% url 'patients:patient_update' pk=patient.pk %}"
+                hx-target="#patient-update-modal-content"
+                hx-swap="innerHTML"
+                hx-on::after-request="document.getElementById('patient-update-modal').showModal()">
+          <span class="iconify lucide--pencil size-4" aria-hidden="true"></span>
+          {% trans "Edit patient" %}
+        </button>
+      {% endwithrole %}
+    </div>
+    {# ── Info cards ── #}
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {# Biological sex #}
+      <div class="card bg-base-100 border border-base-200 shadow-sm">
+        <div class="card-body p-4">
+          <p class="text-sm text-base-content/60">{% trans "Biological sex" %}</p>
+          <p class="mt-1 font-semibold">{{ patient.get_biological_sex_display }}</p>
+        </div>
+      </div>
+      {# Status #}
+      <div class="card bg-base-100 border border-base-200 shadow-sm">
+        <div class="card-body p-4">
+          <p class="text-sm text-base-content/60">{% trans "Status" %}</p>
+          <div class="mt-1">
+            {% if patient.is_active %}
+              <span class="badge badge-success badge-soft">{% trans "Active" %}</span>
+            {% else %}
+              <span class="badge badge-ghost">{% trans "Inactive" %}</span>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {# Questionnaire count #}
+      <div class="card bg-base-100 border border-base-200 shadow-sm">
+        <div class="card-body p-4">
+          <p class="text-sm text-base-content/60">{% trans "Questionnaire responses" %}</p>
+          <p class="mt-1 font-bold text-3xl">{{ patient.questionnaire_responses.count }}</p>
+        </div>
+      </div>
+      {# Parent #}
+      {% withrole "ADMIN" "SPECIALIST" %}
+        <div class="card bg-base-100 border border-base-200 shadow-sm">
+          <div class="card-body p-4">
+            <p class="text-sm text-base-content/60">{% trans "Parent" %}</p>
+            <p class="mt-1 font-semibold">
+              {% if patient.parent %}
+                {{ patient.parent.get_full_name }}
+              {% else %}
+                —
+              {% endif %}
+            </p>
+          </div>
+        </div>
+      {% endwithrole %}
+      {# Specialist #}
+      {% withrole "ADMIN" %}
+        <div class="card bg-base-100 border border-base-200 shadow-sm">
+          <div class="card-body p-4">
+            <p class="text-sm text-base-content/60">{% trans "Specialist" %}</p>
+            <p class="mt-1 font-semibold">
+              {% if patient.specialist %}
+                {{ patient.specialist.get_full_name }}
+              {% else %}
+                —
+              {% endif %}
+            </p>
+          </div>
+        </div>
+      {% endwithrole %}
+      {# Registered since #}
+      <div class="card bg-base-100 border border-base-200 shadow-sm">
+        <div class="card-body p-4">
+          <p class="text-sm text-base-content/60">{% trans "Registered since" %}</p>
+          <p class="mt-1 font-semibold">{{ patient.created|date:"M d, Y" }}</p>
+        </div>
+      </div>
+    </div>
+    {# ── Notes ── #}
+    {% if patient.notes %}
+      <div class="card bg-base-100 border border-base-200 shadow-sm">
+        <div class="card-body p-4">
+          <p class="mb-2 font-semibold text-sm">{% trans "Notes" %}</p>
+          <p class="text-sm text-base-content/80 whitespace-pre-wrap">{{ patient.notes }}</p>
+        </div>
+      </div>
+    {% endif %}
+    {# ── Questionnaire responses ── #}
+    <div class="card bg-base-100 border border-base-200 shadow-sm">
+      <div class="card-body p-0">
+        <div class="flex flex-wrap gap-3 items-center justify-between px-5 py-4 border-base-200 border-b">
+          <h2 class="font-semibold">{% trans "Questionnaire responses" %}</h2>
+          {% withrole "PARENT" %}
+            {% if patient.is_active %}
+              <a href="{% url 'patients:questionnaire' patient_pk=patient.pk %}"
+                 class="btn btn-sm btn-primary">
+                <span class="iconify lucide--clipboard-pen size-4" aria-hidden="true"></span>
+                {% trans "Fill questionnaire" %}
+              </a>
+            {% endif %}
+          {% endwithrole %}
+        </div>
+        {% if responses %}
+          <div class="overflow-x-auto">
+            <table class="table table-sm">
+              <thead>
+                <tr class="text-xs text-base-content/70 tracking-wider uppercase bg-base-200/60">
+                  <th>{% trans "Date" %}</th>
+                  <th class="w-20">{% trans "Total" %}</th>
+                  <th class="hidden sm:table-cell">{% trans "Sleep onset" %}</th>
+                  <th class="hidden sm:table-cell">{% trans "Respiratory" %}</th>
+                  <th class="hidden sm:table-cell">{% trans "Arousal" %}</th>
+                  <th class="hidden md:table-cell">{% trans "Wake transition" %}</th>
+                  <th class="hidden md:table-cell">{% trans "Daytime sleepiness" %}</th>
+                  <th class="hidden lg:table-cell">{% trans "Hyperhidrosis" %}</th>
+                  <th class="w-24">{% trans "Flags" %}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for response in responses %}
+                  <tr class="hover:bg-base-200/40">
+                    <td class="text-xs text-base-content/60">{{ response.created|date:"M d, Y" }}</td>
+                    <td>
+                      <span class="font-mono font-semibold">{{ response.total_score }}</span>
+                    </td>
+                    <td class="hidden sm:table-cell">
+                      <span class="font-mono text-sm">{{ response.sleep_onset_maintenance_score }}</span>
+                      {% if response.flags.sleep_onset_maintenance %}
+                        <span class="iconify lucide--flag size-3 ml-0.5 text-warning"
+                              aria-hidden="true"></span>
+                      {% endif %}
+                    </td>
+                    <td class="hidden sm:table-cell">
+                      <span class="font-mono text-sm">{{ response.respiratory_score }}</span>
+                      {% if response.flags.respiratory %}
+                        <span class="iconify lucide--flag size-3 ml-0.5 text-warning"
+                              aria-hidden="true"></span>
+                      {% endif %}
+                    </td>
+                    <td class="hidden sm:table-cell">
+                      <span class="font-mono text-sm">{{ response.arousal_score }}</span>
+                      {% if response.flags.arousal %}
+                        <span class="iconify lucide--flag size-3 ml-0.5 text-warning"
+                              aria-hidden="true"></span>
+                      {% endif %}
+                    </td>
+                    <td class="hidden md:table-cell">
+                      <span class="font-mono text-sm">{{ response.sleep_wake_transition_score }}</span>
+                      {% if response.flags.sleep_wake_transition %}
+                        <span class="iconify lucide--flag size-3 ml-0.5 text-warning"
+                              aria-hidden="true"></span>
+                      {% endif %}
+                    </td>
+                    <td class="hidden md:table-cell">
+                      <span class="font-mono text-sm">{{ response.excessive_daytime_sleepiness_score }}</span>
+                      {% if response.flags.excessive_daytime_sleepiness %}
+                        <span class="iconify lucide--flag size-3 ml-0.5 text-warning"
+                              aria-hidden="true"></span>
+                      {% endif %}
+                    </td>
+                    <td class="hidden lg:table-cell">
+                      <span class="font-mono text-sm">{{ response.hyperhidrosis_score }}</span>
+                      {% if response.flags.hyperhidrosis %}
+                        <span class="iconify lucide--flag size-3 ml-0.5 text-warning"
+                              aria-hidden="true"></span>
+                      {% endif %}
+                    </td>
+                    <td>
+                      {% if response.has_flags %}
+                        <span class="badge badge-sm badge-warning badge-soft">{% trans "Flagged" %}</span>
+                      {% else %}
+                        <span class="badge badge-sm badge-success badge-soft">{% trans "Clear" %}</span>
+                      {% endif %}
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <div class="flex flex-col gap-3 items-center justify-center py-12 text-base-content/40">
+            <span class="iconify lucide--clipboard-list size-10" aria-hidden="true"></span>
+            <p class="text-sm">{% trans "No questionnaire responses yet" %}</p>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+{% block modals %}
+  {% withrole "ADMIN" "SPECIALIST" %}
+    <dialog id="patient-update-modal"
+            class="modal"
+            aria-labelledby="patient-update-modal-title">
+      <div class="modal-box max-w-lg">
+        <div id="patient-update-modal-content">{# Populated by HTMX #}</div>
+      </div>
+      <form method="dialog" class="modal-backdrop">
+        <button>{% trans "Close" %}</button>
+      </form>
+    </dialog>
+  {% endwithrole %}
+{% endblock modals %}

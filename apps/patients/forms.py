@@ -4,6 +4,44 @@ from django.utils.translation import gettext_lazy as _
 from .enums import QuestionnaireFrequency
 from .enums import SleepDuration
 from .enums import SleepOnsetDelay
+from .models import Patient
+
+
+class PatientCreateForm(forms.ModelForm):
+    class Meta:
+        model = Patient
+        fields = [
+            "first_name",
+            "last_name",
+            "birth_date",
+            "biological_sex",
+            "notes",
+            "parent",
+            "specialist",
+        ]
+        widgets = {
+            "birth_date": forms.DateInput(attrs={"type": "date"}),
+            "notes": forms.Textarea(attrs={"rows": 3}),
+        }
+
+
+class PatientUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Patient
+        fields = [
+            "first_name",
+            "last_name",
+            "birth_date",
+            "biological_sex",
+            "notes",
+            "parent",
+            "specialist",
+            "is_active",
+        ]
+        widgets = {
+            "birth_date": forms.DateInput(attrs={"type": "date"}),
+            "notes": forms.Textarea(attrs={"rows": 3}),
+        }
 
 
 def frequency_field(label: str, **kwargs) -> forms.ChoiceField:

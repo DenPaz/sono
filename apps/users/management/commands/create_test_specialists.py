@@ -41,6 +41,9 @@ class Command(BaseCommand):
             is_superuser=False,
         )
 
+        for specialist in specialists:
+            specialist.password = SHARED_PASSWORD
+
         created = Specialist.objects.bulk_create(specialists)
 
         SpecialistProfile.objects.bulk_create(

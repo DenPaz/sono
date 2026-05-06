@@ -39,27 +39,31 @@
       </a>
       {% withrole "ADMIN" %}
         <a href="{% url 'users:user_list' %}"
-           class="menu-item {% active_class 'users:user_list' %}">
+           class="menu-item {% active_class 'users:user_list' 'users:admin_create' 'users:specialist_create' 'users:parent_create' %}">
           <span class="iconify lucide--users size-4" aria-hidden="true"></span>
           <span>{% trans "Users" %}</span>
         </a>
-        <a href="#" class="menu-item">
+        <a href="{% url 'patients:patient_list' %}"
+           class="menu-item {% active_class 'patients:patient_list' 'patients:patient_create' 'patients:patient_detail' 'patients:patient_update' %}">
           <span class="iconify lucide--stethoscope size-4" aria-hidden="true"></span>
           <span>{% trans "Patients" %}</span>
         </a>
       {% endwithrole %}
       {% withrole "SPECIALIST" %}
-        <a href="#" class="menu-item">
+        <a href="{% url 'patients:patient_list' %}"
+           class="menu-item {% active_class 'patients:patient_list' 'patients:patient_create' 'patients:patient_detail' 'patients:patient_update' %}">
           <span class="iconify lucide--stethoscope size-4" aria-hidden="true"></span>
           <span>{% trans "My patients" %}</span>
         </a>
-        <a href="#" class="menu-item">
+        <a href="{% url 'users:parent_list' %}"
+           class="menu-item {% active_class 'users:parent_list' %}">
           <span class="iconify lucide--heart-handshake size-4" aria-hidden="true"></span>
           <span>{% trans "Parents" %}</span>
         </a>
       {% endwithrole %}
       {% withrole "PARENT" %}
-        <a href="#" class="menu-item">
+        <a href="{% url 'patients:patient_list' %}"
+           class="menu-item {% active_class 'patients:patient_list' 'patients:patient_detail' %}">
           <span class="iconify lucide--baby size-4" aria-hidden="true"></span>
           <span>{% trans "My children" %}</span>
         </a>

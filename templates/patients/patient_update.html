@@ -1,0 +1,66 @@
+{% extends "patients/_base.html" %}
+
+{% load i18n %}
+{% load users_tags %}
+
+{% block title %}
+  {% trans "Edit patient" %}
+{% endblock title %}
+{% block content %}
+  <div class="max-w-lg p-6">
+    <div class="flex gap-3 items-center mb-4">
+      <a href="{{ object.get_absolute_url }}"
+         class="btn btn-sm btn-circle btn-ghost"
+         aria-label="{% trans 'Back' %}">
+        <span class="iconify lucide--arrow-left size-4" aria-hidden="true"></span>
+      </a>
+      <h1 class="font-bold text-2xl">{% trans "Edit patient" %}</h1>
+    </div>
+    {% partialdef update-form inline %}
+      <div id="update-form-container">
+        <h2 id="patient-update-modal-title" class="mb-4 font-semibold text-lg">{{ object.get_full_name }}</h2>
+        <form method="post"
+              action="{% url 'patients:patient_update' pk=object.pk %}"
+              hx-post="{% url 'patients:patient_update' pk=object.pk %}"
+              hx-target="#update-form-container"
+              hx-swap="outerHTML"
+              class="space-y-4">
+          {% csrf_token %}
+          <c-forms.input :field="form.first_name" icon="lucide--user" />
+          <c-forms.input :field="form.last_name" icon="lucide--user" />
+          <c-forms.input :field="form.birth_date" icon="lucide--calendar" />
+          <fieldset class="fieldset">
+            <legend class="fieldset-legend">{{ form.biological_sex.label }}</legend>
+            {{ form.biological_sex }}
+            {% for error in form.biological_sex.errors %}<p class="text-sm text-error">{{ error }}</p>{% endfor %}
+          </fieldset>
+          <fieldset class="fieldset">
+            <legend class="fieldset-legend">{{ form.parent.label }}</legend>
+            {{ form.parent }}
+            {% for error in form.parent.errors %}<p class="text-sm text-error">{{ error }}</p>{% endfor %}
+          </fieldset>
+          {% withrole "ADMIN" %}
+            <fieldset class="fieldset">
+              <legend class="fieldset-legend">{{ form.specialist.label }}</legend>
+              {{ form.specialist }}
+              {% for error in form.specialist.errors %}<p class="text-sm text-error">{{ error }}</p>{% endfor %}
+            </fieldset>
+          {% endwithrole %}
+          <fieldset class="fieldset">
+            <legend class="fieldset-legend">{{ form.notes.label }}</legend>
+            {{ form.notes }}
+            {% for error in form.notes.errors %}<p class="text-sm text-error">{{ error }}</p>{% endfor %}
+          </fieldset>
+          <fieldset class="fieldset">
+            <legend class="fieldset-legend">{% trans "Status" %}</legend>
+            <c-forms.checkbox :field="form.is_active" />
+          </fieldset>
+          <div class="flex gap-3 pt-2">
+            <button type="submit" class="btn btn-primary">{% trans "Save changes" %}</button>
+            <a href="{{ object.get_absolute_url }}" class="btn btn-ghost">{% trans "Cancel" %}</a>
+          </div>
+        </form>
+      </div>
+    {% endpartialdef %}
+  </div>
+{% endblock content %}

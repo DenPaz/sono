@@ -1,4 +1,85 @@
 {% extends "dashboard/_base.html" %}
 
+{% load i18n %}
+
+{% block title %}
+  {% trans "Dashboard" %}
+{% endblock title %}
 {% block content %}
+  <div class="space-y-6 p-6">
+    {# ── Page header ── #}
+    <div>
+      <h1 class="font-bold text-2xl">{% trans "Dashboard" %}</h1>
+      <p class="mt-0.5 text-sm text-base-content/60">
+        {% blocktrans with name=request.user.first_name %}Welcome back, {{ name }}{% endblocktrans %}
+      </p>
+    </div>
+    {# ── Stats ── #}
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div class="card bg-base-100 border border-base-200 shadow-sm">
+        <div class="card-body p-4">
+          <div class="flex items-center justify-between">
+            <p class="text-sm text-base-content/60">{% trans "My patients" %}</p>
+            <span class="iconify lucide--baby size-5 text-teal-400" aria-hidden="true"></span>
+          </div>
+          <p class="mt-1 font-bold text-3xl">{{ patient_count }}</p>
+        </div>
+      </div>
+      <div class="card bg-base-100 border border-base-200 shadow-sm">
+        <div class="card-body p-4">
+          <div class="flex items-center justify-between">
+            <p class="text-sm text-base-content/60">{% trans "Recent responses" %}</p>
+            <span class="iconify lucide--clipboard-list size-5 text-primary"
+                  aria-hidden="true"></span>
+          </div>
+          <p class="mt-1 font-bold text-3xl">{{ recent_responses|length }}</p>
+        </div>
+      </div>
+    </div>
+    {# ── Recent questionnaire responses ── #}
+    <div class="card bg-base-100 border border-base-200 shadow-sm">
+      <div class="card-body p-0">
+        <div class="px-5 py-4 border-base-200 border-b">
+          <h2 class="font-semibold">{% trans "Recent questionnaire responses" %}</h2>
+        </div>
+        {% if recent_responses %}
+          <div class="overflow-x-auto">
+            <table class="table table-sm">
+              <thead>
+                <tr class="text-xs text-base-content/70 tracking-wider uppercase bg-base-200/60">
+                  <th>{% trans "Patient" %}</th>
+                  <th class="hidden sm:table-cell">{% trans "Date" %}</th>
+                  <th class="w-20">{% trans "Score" %}</th>
+                  <th class="w-24">{% trans "Flags" %}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for response in recent_responses %}
+                  <tr class="hover:bg-base-200/40">
+                    <td class="font-medium">{{ response.patient.get_full_name }}</td>
+                    <td class="hidden text-xs text-base-content/60 sm:table-cell">{{ response.created|date:"M d, Y" }}</td>
+                    <td>
+                      <span class="font-mono font-semibold">{{ response.total_score }}</span>
+                    </td>
+                    <td>
+                      {% if response.has_flags %}
+                        <span class="badge badge-sm badge-warning badge-soft">{% trans "Flagged" %}</span>
+                      {% else %}
+                        <span class="badge badge-sm badge-success badge-soft">{% trans "Clear" %}</span>
+                      {% endif %}
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <div class="flex flex-col gap-3 items-center justify-center py-12 text-base-content/40">
+            <span class="iconify lucide--clipboard-list size-10" aria-hidden="true"></span>
+            <p class="text-sm">{% trans "No questionnaire responses from your patients yet" %}</p>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
 {% endblock content %}

@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from encrypted_fields.fields import EncryptedCharField
@@ -83,6 +84,9 @@ class Patient(BaseModel):
 
     def get_full_name(self) -> str:
         return f"{self.first_name} {self.last_name}"
+
+    def get_absolute_url(self) -> str:
+        return reverse("patients:patient_detail", kwargs={"pk": self.pk})
 
 
 class QuestionnaireResponse(BaseModel):

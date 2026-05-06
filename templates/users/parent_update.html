@@ -1,20 +1,22 @@
 {% extends "base.html" %}
 
 {% load i18n %}
-{% load widget_tweaks %}
 
 {% block title %}
-  {% trans "Edit admin" %}
+  {% trans "Edit parent" %}
 {% endblock title %}
+{% block extra_css %}
+  {{ form.media.css }}
+{% endblock extra_css %}
 {% block content %}
   <div class="max-w-lg p-6">
     <div class="flex gap-3 items-center mb-4">
-      <a href="{% url 'users:user_list' %}"
+      <a href="{% url 'users:parent_list' %}"
          class="btn btn-sm btn-circle btn-ghost"
          aria-label="{% trans "Back" %}">
         <span class="iconify lucide--arrow-left size-4" aria-hidden="true"></span>
       </a>
-      <h1 class="font-bold text-2xl">{% trans "Edit admin" %}</h1>
+      <h1 class="font-bold text-2xl">{% trans "Edit parent" %}</h1>
     </div>
     {% partialdef update-form inline %}
       <div id="update-form-container">
@@ -33,15 +35,17 @@
           <c-forms.input :field="form.user.first_name" icon="lucide--user" />
           <c-forms.input :field="form.user.last_name" icon="lucide--user" />
           <c-forms.input :field="form.user.email" icon="lucide--mail" />
+          <c-forms.input :field="form.profile.phone" icon="lucide--phone" />
+          <c-forms.input :field="form.profile.birth_date" icon="lucide--calendar" />
           <fieldset class="fieldset">
             <legend class="fieldset-legend">{% trans "Status" %}</legend>
             <c-forms.checkbox :field="form.user.is_active" />
           </fieldset>
           <fieldset class="fieldset">
             <legend class="fieldset-legend">{% trans "Avatar" %}</legend>
-            {% if object.admin_profile.avatar %}
+            {% if object.parent_profile.avatar %}
               <div class="mb-2">
-                <img src="{{ object.admin_profile.get_avatar_url }}"
+                <img src="{{ object.parent_profile.get_avatar_url }}"
                      alt="{{ object.get_full_name }}"
                      class="size-16 rounded-box object-cover" />
               </div>
@@ -54,12 +58,21 @@
             {{ form.profile.language }}
             {% for error in form.profile.language.errors %}<p class="text-sm text-error">{{ error }}</p>{% endfor %}
           </fieldset>
+          <fieldset class="fieldset">
+            <legend class="fieldset-legend">{% trans "Address" %}</legend>
+            {{ form.profile.address }}
+            {% for error in form.profile.address.errors %}<p class="text-sm text-error">{{ error }}</p>{% endfor %}
+          </fieldset>
           <div class="flex gap-3 pt-2">
             <button type="submit" class="btn btn-primary">{% trans "Save changes" %}</button>
-            <a href="{% url 'users:user_list' %}" class="btn btn-ghost">{% trans "Cancel" %}</a>
+            <a href="{% url 'users:parent_list' %}" class="btn btn-ghost">{% trans "Cancel" %}</a>
           </div>
         </form>
+        {% if request.htmx %}{{ form.media.js }}{% endif %}
       </div>
     {% endpartialdef %}
   </div>
 {% endblock content %}
+{% block extra_js %}
+  {% if not request.htmx %}{{ form.media.js }}{% endif %}
+{% endblock extra_js %}

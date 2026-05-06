@@ -1,10 +1,9 @@
 {% extends "base.html" %}
 
 {% load i18n %}
-{% load widget_tweaks %}
 
 {% block title %}
-  {% trans "Edit admin" %}
+  {% trans "Edit specialist" %}
 {% endblock title %}
 {% block content %}
   <div class="max-w-lg p-6">
@@ -14,7 +13,7 @@
          aria-label="{% trans "Back" %}">
         <span class="iconify lucide--arrow-left size-4" aria-hidden="true"></span>
       </a>
-      <h1 class="font-bold text-2xl">{% trans "Edit admin" %}</h1>
+      <h1 class="font-bold text-2xl">{% trans "Edit specialist" %}</h1>
     </div>
     {% partialdef update-form inline %}
       <div id="update-form-container">
@@ -39,9 +38,9 @@
           </fieldset>
           <fieldset class="fieldset">
             <legend class="fieldset-legend">{% trans "Avatar" %}</legend>
-            {% if object.admin_profile.avatar %}
+            {% if object.specialist_profile.avatar %}
               <div class="mb-2">
-                <img src="{{ object.admin_profile.get_avatar_url }}"
+                <img src="{{ object.specialist_profile.get_avatar_url }}"
                      alt="{{ object.get_full_name }}"
                      class="size-16 rounded-box object-cover" />
               </div>

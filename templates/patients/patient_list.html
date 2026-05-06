@@ -1,55 +1,40 @@
-{% extends "users/_base.html" %}
+{% extends "patients/_base.html" %}
 
 {% load i18n %}
 {% load core_tags %}
+{% load users_tags %}
 
 {% block title %}
-  {% trans "User management" %}
+  {% trans "Patients" %}
 {% endblock title %}
 {% block content %}
-  <div class="space-y-6">
+  <div class="space-y-6 p-6">
     {# ── Page header ── #}
     <div class="flex flex-wrap gap-4 items-center justify-between">
       <div>
-        <h1 class="font-bold text-2xl">{% trans "Users" %}</h1>
+        <h1 class="font-bold text-2xl">
+          {% withrole "PARENT" %}
+            {% trans "My children" %}
+          {% endwithrole %}
+        </h1>
         <p class="mt-0.5 text-sm text-base-content/60">
-          {% blocktrans with count=page_obj.paginator.count %}{{ count }} users total{% endblocktrans %}
+          {% blocktrans with count=page_obj.paginator.count %}{{ count }} patients total{% endblocktrans %}
         </p>
       </div>
-      <details class="dropdown dropdown-end">
-        <summary class="btn btn-sm btn-primary">
+      {% withrole "ADMIN" "SPECIALIST" %}
+        <a href="{% url 'patients:patient_create' %}"
+           class="btn btn-sm btn-primary">
           <span class="iconify lucide--plus size-4" aria-hidden="true"></span>
-          {% trans "Add user" %}
-          <span class="iconify lucide--chevron-down size-3.5" aria-hidden="true"></span>
-        </summary>
-        <ul class="dropdown-content menu w-44 mt-1 p-1 bg-base-100 rounded-box border border-base-200 shadow-sm">
-          <li>
-            <a href="{% url 'users:admin_create' %}">
-              <span class="iconify lucide--shield size-4" aria-hidden="true"></span>
-              {% trans "Admin" %}
-            </a>
-          </li>
-          <li>
-            <a href="{% url 'users:specialist_create' %}">
-              <span class="iconify lucide--stethoscope size-4" aria-hidden="true"></span>
-              {% trans "Specialist" %}
-            </a>
-          </li>
-          <li>
-            <a href="{% url 'users:parent_create' %}">
-              <span class="iconify lucide--user size-4" aria-hidden="true"></span>
-              {% trans "Parent" %}
-            </a>
-          </li>
-        </ul>
-      </details>
+          {% trans "Add patient" %}
+        </a>
+      {% endwithrole %}
     </div>
     {# ── Filter bar ── #}
-    <form id="user-filter-form"
-          hx-get="{% url 'users:user_list' %}"
-          hx-target="#user-table"
+    <form id="patient-filter-form"
+          hx-get="{% url 'patients:patient_list' %}"
+          hx-target="#patient-table"
           hx-push-url="true"
-          hx-trigger="input delay:400ms from:#id_search, change from:#id_role, change from:#id_is_active"
+          hx-trigger="input delay:400ms from:#id_search, change from:#id_biological_sex, change from:#id_is_active"
           hx-swap="outerHTML"
           class="flex flex-wrap gap-3 items-end">
       <label class="input input-sm input-bordered grow flex gap-2 items-center min-w-48 max-w-xs">
@@ -59,16 +44,16 @@
                type="search"
                name="search"
                value="{{ filter.form.search.value|default:'' }}"
-               placeholder="{% trans 'Search by name or email…' %}"
+               placeholder="{% trans 'Search by parent or specialist…' %}"
                autocomplete="off"
                class="grow" />
       </label>
-      <select id="id_role"
-              name="role"
+      <select id="id_biological_sex"
+              name="biological_sex"
               class="min-w-36 select select-sm select-bordered">
-        {% for value, label in filter.form.role.field.choices %}
+        {% for value, label in filter.form.biological_sex.field.choices %}
           <option value="{{ value }}"
-                  {% if filter.form.role.value == value %}selected{% endif %}>{{ label }}</option>
+                  {% if filter.form.biological_sex.value == value %}selected{% endif %}>{{ label }}</option>
         {% endfor %}
       </select>
       <select id="id_is_active"
@@ -80,7 +65,7 @@
         {% endfor %}
       </select>
       {% if request.GET %}
-        <a href="{% url 'users:user_list' %}"
+        <a href="{% url 'patients:patient_list' %}"
            class="btn btn-sm btn-ghost gap-1.5">
           <span class="iconify lucide--x size-3.5" aria-hidden="true"></span>
           {% trans "Clear" %}
@@ -88,59 +73,72 @@
       {% endif %}
     </form>
     {# ── Table ── #}
-    {% partialdef user-table inline %}
-      <div id="user-table"
+    {% partialdef patient-table inline %}
+      <div id="patient-table"
            class="overflow-x-auto rounded-box border border-base-200">
-        {% if users %}
+        {% if patients %}
           <table class="table table-sm w-full">
             <thead>
               <tr class="text-xs text-base-content/70 tracking-wider uppercase bg-base-200/60">
-                <th class="w-64">{% trans "Name" %}</th>
-                <th class="hidden sm:table-cell">{% trans "Email" %}</th>
-                <th class="w-28">{% trans "Role" %}</th>
+                <th>{% trans "Name" %}</th>
+                <th class="hidden sm:table-cell">{% trans "Age" %}</th>
+                {% withrole "ADMIN" "SPECIALIST" %}
+                  <th class="hidden md:table-cell">{% trans "Parent" %}</th>
+                {% endwithrole %}
+                {% withrole "ADMIN" %}
+                  <th class="hidden lg:table-cell">{% trans "Specialist" %}</th>
+                {% endwithrole %}
                 <th class="w-24">{% trans "Status" %}</th>
-                <th class="hidden w-28 md:table-cell">{% trans "Joined" %}</th>
+                <th class="w-10"></th>
               </tr>
             </thead>
             <tbody>
-              {% for user in users %}
-                <tr class="transition-colors cursor-pointer hover:bg-base-200/40"
-                    hx-get="{{ user.get_absolute_url }}"
-                    hx-target="#user-update-modal-content"
-                    hx-swap="innerHTML"
-                    hx-on::after-request="document.getElementById('user-update-modal').showModal()">
-                  {# Name + avatar #}
+              {% for patient in patients %}
+                <tr class="transition-colors hover:bg-base-200/40">
                   <td>
-                    <div class="flex gap-3 items-center">
-                      {% if user.profile and user.profile.avatar %}
-                        <div class="avatar shrink-0">
-                          <div class="size-8 rounded-full">
-                            <img src="{{ user.profile.get_avatar_url }}"
-                                 alt="{{ user.get_full_name }}" />
-                          </div>
+                    <a href="{{ patient.get_absolute_url }}"
+                       class="flex gap-2 items-center font-medium hover:text-primary">
+                      <div class="avatar avatar-placeholder shrink-0">
+                        <div class="size-8 text-base-content/60 bg-base-300 rounded-full">
+                          <span class="font-bold text-xs">{{ patient.first_name|slice:":1" }}{{ patient.last_name|slice:":1" }}</span>
                         </div>
+                      </div>
+                      {{ patient.get_full_name }}
+                    </a>
+                  </td>
+                  <td class="hidden text-base-content/70 sm:table-cell">{{ patient.age }}</td>
+                  {% withrole "ADMIN" "SPECIALIST" %}
+                    <td class="hidden text-base-content/70 md:table-cell">
+                      {% if patient.parent %}
+                        {{ patient.parent.get_full_name }}
                       {% else %}
-                        <div class="avatar avatar-placeholder shrink-0">
-                          <div class="size-8 text-base-content/60 bg-base-300 rounded-full">
-                            <span class="font-bold text-xs">{{ user.first_name|slice:":1" }}{{ user.last_name|slice:":1" }}</span>
-                          </div>
-                        </div>
+                        —
                       {% endif %}
-                      <span class="font-medium truncate">{{ user.get_full_name }}</span>
-                    </div>
-                  </td>
-                  {# Email #}
-                  <td class="hidden max-w-0 text-base-content/70 truncate sm:table-cell">{{ user.email }}</td>
-                  {# Role #}
+                    </td>
+                  {% endwithrole %}
+                  {% withrole "ADMIN" %}
+                    <td class="hidden text-base-content/70 lg:table-cell">
+                      {% if patient.specialist %}
+                        {{ patient.specialist.get_full_name }}
+                      {% else %}
+                        —
+                      {% endif %}
+                    </td>
+                  {% endwithrole %}
                   <td>
-                    <c-users.role-badge role="{{ user.role }}" display="{{ user.get_role_display }}" />
+                    {% if patient.is_active %}
+                      <span class="badge badge-sm badge-success badge-soft">{% trans "Active" %}</span>
+                    {% else %}
+                      <span class="badge badge-sm badge-ghost">{% trans "Inactive" %}</span>
+                    {% endif %}
                   </td>
-                  {# Status #}
                   <td>
-                    <c-users.status-badge :is_active="{{ user.is_active|yesno:'true,false' }}" />
+                    <a href="{{ patient.get_absolute_url }}"
+                       class="btn btn-xs btn-ghost"
+                       aria-label="{% trans 'View patient' %}">
+                      <span class="iconify lucide--chevron-right size-4" aria-hidden="true"></span>
+                    </a>
                   </td>
-                  {# Joined #}
-                  <td class="hidden text-xs text-base-content/60 md:table-cell">{{ user.date_joined|date:"M d, Y" }}</td>
                 </tr>
               {% endfor %}
             </tbody>
@@ -158,7 +156,7 @@
                   <a href="?{% querystring page=page_obj.previous_page_number %}"
                      class="btn btn-sm btn-ghost join-item"
                      hx-get="?{% querystring page=page_obj.previous_page_number %}"
-                     hx-target="#user-table"
+                     hx-target="#patient-table"
                      hx-swap="outerHTML"
                      hx-push-url="true"
                      aria-label="{% trans 'Previous page' %}">
@@ -176,7 +174,7 @@
                     <a href="?{% querystring page=num %}"
                        class="btn btn-sm btn-ghost join-item"
                        hx-get="?{% querystring page=num %}"
-                       hx-target="#user-table"
+                       hx-target="#patient-table"
                        hx-swap="outerHTML"
                        hx-push-url="true">{{ num }}</a>
                   {% endif %}
@@ -185,7 +183,7 @@
                   <a href="?{% querystring page=page_obj.next_page_number %}"
                      class="btn btn-sm btn-ghost join-item"
                      hx-get="?{% querystring page=page_obj.next_page_number %}"
-                     hx-target="#user-table"
+                     hx-target="#patient-table"
                      hx-swap="outerHTML"
                      hx-push-url="true"
                      aria-label="{% trans 'Next page' %}">
@@ -200,12 +198,11 @@
             </div>
           {% endif %}
         {% else %}
-          {# ── Empty state ── #}
           <div class="flex flex-col gap-3 items-center justify-center py-16 text-base-content/50">
-            <span class="iconify lucide--users size-10" aria-hidden="true"></span>
-            <p class="font-medium">{% trans "No users found" %}</p>
+            <span class="iconify lucide--baby size-10" aria-hidden="true"></span>
+            <p class="font-medium">{% trans "No patients found" %}</p>
             {% if request.GET %}
-              <a href="{% url 'users:user_list' %}" class="btn btn-sm btn-ghost">{% trans "Clear filters" %}</a>
+              <a href="{% url 'patients:patient_list' %}" class="btn btn-sm btn-ghost">{% trans "Clear filters" %}</a>
             {% endif %}
           </div>
         {% endif %}
@@ -213,15 +210,3 @@
     {% endpartialdef %}
   </div>
 {% endblock content %}
-{% block modals %}
-  <dialog id="user-update-modal"
-          class="modal"
-          aria-labelledby="user-update-modal-title">
-    <div class="modal-box max-w-lg">
-      <div id="user-update-modal-content">{# Populated by HTMX on row click #}</div>
-    </div>
-    <form method="dialog" class="modal-backdrop">
-      <button>{% trans "Close" %}</button>
-    </form>
-  </dialog>
-{% endblock modals %}

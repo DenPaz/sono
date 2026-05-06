@@ -1,0 +1,86 @@
+{% extends "users/_base.html" %}
+
+{% load i18n %}
+{% load users_tags %}
+
+{% block title %}
+  {% trans "My profile" %}
+{% endblock title %}
+{% block extra_css %}
+  {{ form.media.css }}
+{% endblock extra_css %}
+{% block content %}
+  <div class="space-y-6 max-w-2xl p-6">
+    {# ── Page header ── #}
+    <div>
+      <h1 class="font-bold text-2xl">{% trans "My profile" %}</h1>
+      <p class="mt-0.5 text-sm text-base-content/60">
+        {% trans "Manage your personal information and account settings." %}
+      </p>
+    </div>
+    <form method="post" enctype="multipart/form-data" class="space-y-6">
+      {% csrf_token %}
+      {# ── Avatar ── #}
+      <div class="card bg-base-100 border border-base-200 shadow-sm">
+        <div class="card-body p-5">
+          <h2 class="mb-4 font-semibold">{% trans "Avatar" %}</h2>
+          <div class="flex flex-wrap gap-4 items-center">
+            <div class="avatar shrink-0">
+              <div class="overflow-hidden size-16 bg-base-300 rounded-box">
+                <img src="{{ object.profile.get_avatar_url }}"
+                     alt="{{ object.get_full_name }}"
+                     class="size-full object-cover" />
+              </div>
+            </div>
+            <div class="grow">
+              {{ form.profile.avatar }}
+              {% for error in form.profile.avatar.errors %}<p class="mt-1 text-sm text-error">{{ error }}</p>{% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+      {# ── Personal info ── #}
+      <div class="card bg-base-100 border border-base-200 shadow-sm">
+        <div class="card-body space-y-4 p-5">
+          <h2 class="font-semibold">{% trans "Personal information" %}</h2>
+          <c-forms.input :field="form.user.first_name" icon="lucide--user" />
+          <c-forms.input :field="form.user.last_name" icon="lucide--user" />
+          <c-forms.input :field="form.user.email" icon="lucide--mail" />
+          {% withrole "PARENT" %}
+            <c-forms.input :field="form.profile.phone" icon="lucide--phone" />
+            <c-forms.input :field="form.profile.birth_date" icon="lucide--calendar" />
+          {% endwithrole %}
+        </div>
+      </div>
+      {# ── Preferences ── #}
+      <div class="card bg-base-100 border border-base-200 shadow-sm">
+        <div class="card-body space-y-4 p-5">
+          <h2 class="font-semibold">{% trans "Preferences" %}</h2>
+          <fieldset class="fieldset">
+            <legend class="fieldset-legend">{% trans "Language" %}</legend>
+            {{ form.profile.language }}
+            {% for error in form.profile.language.errors %}<p class="text-sm text-error">{{ error }}</p>{% endfor %}
+          </fieldset>
+        </div>
+      </div>
+      {# ── Parent-only: Address ── #}
+      {% withrole "PARENT" %}
+        <div class="card bg-base-100 border border-base-200 shadow-sm">
+          <div class="card-body p-5">
+            <h2 class="mb-4 font-semibold">{% trans "Address" %}</h2>
+            {{ form.profile.address }}
+            {% for error in form.profile.address.errors %}<p class="text-sm text-error">{{ error }}</p>{% endfor %}
+          </div>
+        </div>
+      {% endwithrole %}
+      {# ── Actions ── #}
+      <div class="flex gap-3">
+        <button type="submit" class="btn btn-primary">{% trans "Save changes" %}</button>
+        <a href="{% url 'dashboard:index' %}" class="btn btn-ghost">{% trans "Cancel" %}</a>
+      </div>
+    </form>
+  </div>
+{% endblock content %}
+{% block extra_js %}
+  {{ form.media.js }}
+{% endblock extra_js %}
