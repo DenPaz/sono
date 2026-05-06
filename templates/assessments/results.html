@@ -1,0 +1,145 @@
+{% extends "dashboard/_base.html" %}
+{% load i18n %}
+{% load static %}
+{% load django_vite %}
+
+{% block title %}{% trans "Resultado clínico" %}{% endblock title %}
+
+{% block content %}
+  <section class="space-y-6 p-4 md:p-6">
+    {% if result_not_found %}
+      <article class="alert alert-warning">
+        <span>{% trans "Não foi possível recuperar os dados desta avaliação. Gere um novo questionário." %}</span>
+      </article>
+    {% endif %}
+
+    <article class="card bg-base-100 border-base-300 border shadow-sm">
+      <div class="card-body gap-5 p-5">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 class="text-lg font-semibold">{% trans "Resultado da avaliação" %} {{ assessment.assessment_id }}</h2>
+            <p class="text-sm text-base-content/70">
+              {{ assessment.patient.name }} - {{ assessment.patient.birth_date }} - {{ assessment.patient.sex }} - {{ assessment.patient.municipality }} - {{ assessment.patient.professional }}
+            </p>
+            {% if assessment.patient.notes %}
+              <p class="mt-2 text-xs text-base-content/60 italic">
+                <strong>{% trans "Observações" %}:</strong> {{ assessment.patient.notes }}
+              </p>
+            {% endif %}
+          </div>
+          <span class="badge {{ assessment.risk.badge }} badge-lg">{{ assessment.risk.label }}</span>
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-3">
+          <div class="rounded-box border border-base-300 bg-base-200/50 p-4">
+            <p class="text-xs uppercase tracking-wide text-base-content/70">{% trans "Pontuação total" %}</p>
+            <p class="mt-1 text-3xl font-bold">{{ assessment.total_score }}</p>
+            <p class="text-xs text-base-content/70">{% trans "Máximo" %}: {{ assessment.max_score }}</p>
+          </div>
+          <div class="rounded-box border border-base-300 bg-base-200/50 p-4">
+            <p class="text-xs uppercase tracking-wide text-base-content/70">{% trans "Classificação de risco" %}</p>
+            <p class="mt-1 text-2xl font-semibold">{{ assessment.risk.label }}</p>
+            <p class="text-xs text-base-content/70">{{ assessment.risk.description }}</p>
+          </div>
+          <div class="rounded-box border border-base-300 bg-base-200/50 p-4">
+            <p class="text-xs uppercase tracking-wide text-base-content/70">{% trans "Média de subescalas" %}</p>
+            <p class="mt-1 text-3xl font-bold">{{ subscale_average|default:0 }}%</p>
+            <p class="text-xs text-base-content/70">{% trans "Consolidação das 6 dimensões" %}</p>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+          <a href="{% url 'assessments:results_export_pdf' assessment.assessment_id %}"
+             class="btn btn-outline btn-sm">
+            <span class="iconify lucide--file-down size-4"></span>
+            <span>{% trans "Exportar PDF" %}</span>
+          </a>
+          <a href="{% url 'assessments:questionnaire' %}" class="btn btn-primary btn-sm">
+            <span class="iconify lucide--file-plus-2 size-4"></span>
+            <span>{% trans "Nova avaliação" %}</span>
+          </a>
+          <a href="{% url 'dashboard:index' %}" class="btn btn-ghost btn-sm">
+            <span class="iconify lucide--house size-4"></span>
+            <span>{% trans "Voltar ao painel" %}</span>
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <article class="card bg-base-100 border-base-300 border shadow-sm">
+      <div class="card-body p-5">
+        <h3 class="font-semibold">{% trans "Detalhamento das subescalas" %}</h3>
+        <p class="text-sm text-base-content/70">
+          {% trans "Seis blocos com pontuação individual por dimensão." %}
+        </p>
+
+        <div id="assessment-subscales-chart" class="mt-4 min-h-72"></div>
+
+        <div class="mt-3 space-y-4">
+          {% for subscale in assessment.subscales %}
+            <div class="rounded-box border border-base-300 p-4">
+              <div class="flex flex-wrap items-center justify-between gap-2 text-sm">
+                <span class="font-medium">{{ subscale.label }}</span>
+                <span class="text-base-content/70">{{ subscale.score }} / {{ subscale.max_score }}</span>
+              </div>
+              <progress value="{{ subscale.percentage }}" max="100" class="progress progress-secondary w-full mt-2"></progress>
+              <p class="text-xs text-base-content/60 mt-1">{{ subscale.percentage }}%</p>
+            </div>
+          {% empty %}
+            <p class="text-sm text-base-content/60">{% trans "Nenhuma subescala disponível para exibição." %}</p>
+          {% endfor %}
+        </div>
+      </div>
+    </article>
+  </section>
+{% endblock content %}
+
+{% block extra_js %}
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      if (typeof ApexCharts === "undefined") {
+        return;
+      }
+
+      const container = document.getElementById("assessment-subscales-chart");
+      if (!container) {
+        return;
+      }
+
+      const categories = [{% for subscale in assessment.subscales %}"{{ subscale.label|escapejs }}"{% if not forloop.last %}, {% endif %}{% endfor %}];
+      const values = [{% for subscale in assessment.subscales %}{{ subscale.percentage }}{% if not forloop.last %}, {% endif %}{% endfor %}];
+
+      if (!categories.length) {
+        return;
+      }
+
+      const chart = new ApexCharts(container, {
+        chart: {
+          type: "bar",
+          height: 300,
+          toolbar: { show: false },
+        },
+        plotOptions: {
+          bar: {
+            horizontal: true,
+            borderRadius: 4,
+          },
+        },
+        series: [{ name: "Percentual", data: values }],
+        xaxis: {
+          categories,
+          max: 100,
+        },
+        colors: ["#6366f1"],
+        dataLabels: {
+          enabled: true,
+          formatter: (value) => `${value}%`,
+        },
+        grid: { borderColor: "#e5e7eb" },
+      });
+
+      chart.render();
+    });
+  </script>
+{% endblock extra_js %}

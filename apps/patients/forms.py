@@ -56,13 +56,13 @@ def frequency_field(label: str, **kwargs) -> forms.ChoiceField:
 
 class QuestionnaireStep1Form(forms.Form):
     q1 = forms.TypedChoiceField(
-        label=_("How many hours does the child sleep per night?"),
+        label=_("1. Quantas horas a criança dorme durante a noite?"),
         choices=SleepDuration.choices,
         coerce=int,
         widget=forms.RadioSelect,
     )
     q2 = forms.TypedChoiceField(
-        label=_("How long does the child take to fall asleep?"),
+        label=_("2. Quanto tempo a criança demora para adormecer?"),
         choices=SleepOnsetDelay.choices,
         coerce=int,
         widget=forms.RadioSelect,
@@ -71,89 +71,85 @@ class QuestionnaireStep1Form(forms.Form):
 
 class QuestionnaireStep2Form(forms.Form):
     q3 = frequency_field(
-        label=_("The child refuses to go to bed to sleep."),
+        label=_("3. A criança não quer ir para a cama para dormir."),
     )
     q4 = frequency_field(
-        label=_("The child has difficulty falling asleep."),
+        label=_("4. A criança tem dificuldade para adormecer."),
     )
     q5 = frequency_field(
-        label=_("The child feels anxious or afraid when falling asleep."),
+        label=_("5. Antes de adormecer a criança está agitada, nervosa ou sente medo."),
     )
     q6 = frequency_field(
-        label=_("The child has sudden jerks or body tremors at sleep onset."),
+        label=_("6. A criança apresenta \"movimentos bruscos\", repuxões ou tremores ao adormecer."),
     )
     q7 = frequency_field(
-        label=_("The child makes rhythmic movements with their head or body at night."),
+        label=_("7. Durante a noite a criança faz movimentos rítmicos com a cabeça e corpo."),
     )
     q8 = frequency_field(
-        label=_("The child says they see 'strange things' just before falling asleep."),
+        label=_("8. A criança diz que está vendo \"coisas estranhas\" um pouco antes de adormecer."),
     )
     q9 = frequency_field(
-        label=_("The child sweats a lot when falling asleep."),
+        label=_("9. A criança transpira muito ao adormecer."),
     )
 
 
 class QuestionnaireStep3Form(forms.Form):
     q10 = frequency_field(
-        label=_("The child wakes up more than twice during the night."),
+        label=_("10. A criança acorda mais de duas vezes durante a noite."),
     )
     q11 = frequency_field(
-        label=_("The child wakes up at night and has difficulty falling back asleep."),
+        label=_("11. A criança acorda durante a noite e tem dificuldade em adormecer novamente."),
     )
     q12 = frequency_field(
-        label=_("The child moves continuously during sleep."),
+        label=_("12. A criança mexe-se continuamente durante o sono."),
     )
     q13 = frequency_field(
-        label=_("The child does not breathe well during sleep."),
+        label=_("13. A criança não respira bem durante o sono."),
     )
     q14 = frequency_field(
-        label=_("The child pauses breathing for a few moments during sleep."),
+        label=_("14. A criança para de respirar por alguns instantes durante o sono."),
     )
     q15 = frequency_field(
-        label=_("The child snores."),
+        label=_("15. A criança ronca."),
     )
     q16 = frequency_field(
-        label=_("The child sweats a lot during the night."),
+        label=_("16. A criança transpira muito durante a noite."),
     )
 
 
 class QuestionnaireStep4Form(forms.Form):
     q17 = frequency_field(
-        label=_("The child gets up and sits or walks around in bed while asleep."),
+        label=_("17. A criança levanta-se e senta-se na cama ou anda enquanto dorme."),
     )
     q18 = frequency_field(
-        label=_("The child talks during sleep."),
+        label=_("18. A criança fala durante o sono."),
     )
     q19 = frequency_field(
-        label=_("The child grinds their teeth during sleep."),
+        label=_("19. A criança range os dentes durante o sono."),
     )
     q20 = frequency_field(
-        label=_(
-            "The child screams in distress during sleep without being able to wake up."
-        ),
+        label=_("20. Durante o sono a criança grita angustiada, sem conseguir acordar."),
     )
     q21 = frequency_field(
-        label=_("The child has nightmares they don't remember the next day."),
+        label=_("21. A criança tem pesadelos que não lembra no dia seguinte."),
     )
 
 
 class QuestionnaireStep5Form(forms.Form):
     q22 = frequency_field(
-        label=_("The child has difficulty waking up in the morning."),
+        label=_("22. A criança tem dificuldade em acordar pela manhã."),
     )
     q23 = frequency_field(
-        label=_("The child wakes up tired in the morning."),
+        label=_("23. Acorda cansada, pela manhã."),
     )
     q24 = frequency_field(
-        label=_(
-            "Upon waking, the child cannot move or feels paralysed for a few minutes."
-        ),
+        label=_("24. Ao acordar a criança não consegue movimentar-se ou fica como se estivesse paralisada por uns minutos."),
     )
     q25 = frequency_field(
-        label=_("The child feels sleepy during the day."),
+        label=_("25. A criança sente-se sonolenta durante o dia."),
     )
     q26 = frequency_field(
-        label=_("The child falls asleep in unexpected situations during the day."),
+        label=_("26. Durante o dia a criança adormece em situações inesperadas sem avisar."),
     )
 
 
@@ -166,9 +162,9 @@ QUESTIONNAIRE_FORMS = [
 ]
 
 STEP_TITLES = {
-    "step1": _("Sleep duration & onset"),
-    "step2": _("Bedtime behaviour"),
-    "step3": _("Night awakenings & breathing"),
-    "step4": _("Arousal & parasomnias"),
-    "step5": _("Daytime sleepiness"),
+    "step1": _("Duração e início do sono"),
+    "step2": _("Comportamento ao dormir"),
+    "step3": _("Despertares noturnos e respiração"),
+    "step4": _("Despertares e parassonias"),
+    "step5": _("Sonolência diurna"),
 }

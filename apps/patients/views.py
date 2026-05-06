@@ -79,6 +79,13 @@ class PatientCreateView(AllowedRolesMixin, SuccessMessageMixin, CreateView):
     def get_success_url(self):
         return reverse_lazy("patients:patient_detail", kwargs={"pk": self.object.pk})
 
+    def get_initial(self):
+        initial = super().get_initial()
+        parent_pk = self.request.GET.get("parent")
+        if parent_pk:
+            initial["parent"] = parent_pk
+        return initial
+
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         if self.request.user.role == UserRole.SPECIALIST:

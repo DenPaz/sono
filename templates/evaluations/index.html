@@ -1,0 +1,99 @@
+{% extends "dashboard/_base.html" %}
+{% load i18n %}
+{% load static %}
+{% load django_vite %}
+
+{% block title %}{% trans "Avaliações" %}{% endblock title %}
+
+{% block content %}
+  <section class="space-y-6 p-4 md:p-6">
+    <article class="card bg-base-100 border-base-300 border shadow-sm">
+      <div class="card-body gap-4 p-5">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 class="text-lg font-semibold">{% trans "Gestão de avaliações" %}</h2>
+            <p class="text-base-content/70 text-sm">
+              {% trans "Filtre por paciente, profissional, status ou risco para organizar a fila clínica." %}
+            </p>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <a href="{% url 'assessments:questionnaire' %}" class="btn btn-primary btn-sm">
+              <span class="iconify lucide--file-plus-2 size-4"></span>
+              <span>{% trans "Nova avaliação" %}</span>
+            </a>
+            <a href="{% url 'dashboard:evaluations_export_csv' %}?{{ request.GET.urlencode }}"
+               class="btn btn-outline btn-sm">
+              <span class="iconify lucide--download size-4"></span>
+              <span>{% trans "Exportar" %}</span>
+            </a>
+          </div>
+        </div>
+
+        <form method="get" class="grid gap-3 md:grid-cols-4">
+          <label class="form-control">
+            <span class="label-text text-xs uppercase tracking-wide text-base-content/60">{% trans "Paciente" %}</span>
+            <input type="text"
+                   name="patient"
+                   value="{{ applied_filters.patient }}"
+                   class="input input-bordered w-full"
+                   placeholder="{% trans 'Nome do paciente' %}" />
+          </label>
+          <label class="form-control">
+            <span class="label-text text-xs uppercase tracking-wide text-base-content/60">{% trans "Profissional" %}</span>
+            <input type="text"
+                   name="professional"
+                   value="{{ applied_filters.professional }}"
+                   class="input input-bordered w-full"
+                   placeholder="{% trans 'Nome do profissional' %}" />
+          </label>
+
+          <div class="md:col-span-4 flex flex-wrap gap-2">
+            <button type="submit" class="btn btn-primary btn-sm">{% trans "Aplicar filtros" %}</button>
+            <a href="{% url 'dashboard:evaluations' %}" class="btn btn-ghost btn-sm">{% trans "Limpar" %}</a>
+          </div>
+        </form>
+      </div>
+    </article>
+
+    <article class="card bg-base-100 border-base-300 border shadow-sm">
+      <div class="card-body p-0">
+        <div class="overflow-x-auto">
+          <table class="table table-zebra">
+            <thead>
+              <tr>
+                <th>{% trans "Código" %}</th>
+                <th>{% trans "Paciente" %}</th>
+                <th>{% trans "Profissional" %}</th>
+                <th>{% trans "Município" %}</th>
+                <th>{% trans "Pontuação" %}</th>
+                <th class="text-end">{% trans "Ações" %}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for evaluation in evaluations %}
+                <tr>
+                  <td class="font-semibold">{{ evaluation.id }}</td>
+                  <td>{{ evaluation.patient }}</td>
+                  <td>{{ evaluation.professional }}</td>
+                  <td>{{ evaluation.municipality }}</td>
+                  <td>{{ evaluation.score }}</td>
+                  <td class="text-end">
+                    <div class="inline-flex gap-2">
+                      <a href="{% url 'assessments:results' evaluation.assessment_id %}" class="btn btn-ghost btn-xs">
+                        {% trans "Ver resultado" %}
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="8" class="text-center text-base-content/60 py-8">{% trans "Nenhum registro encontrado para os filtros aplicados." %}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </article>
+  </section>
+{% endblock content %}

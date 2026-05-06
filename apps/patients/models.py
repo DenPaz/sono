@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
@@ -25,15 +26,15 @@ from .managers import PatientManager
 
 class Patient(BaseModel):
     first_name = EncryptedCharField(
-        verbose_name=_("First name"),
+        verbose_name=_("Nome"),
         max_length=100,
     )
     last_name = EncryptedCharField(
-        verbose_name=_("Last name"),
+        verbose_name=_("Sobrenome"),
         max_length=100,
     )
     birth_date = EncryptedDateField(
-        verbose_name=_("Birth date"),
+        verbose_name=_("Data de nascimento"),
     )
     biological_sex = models.CharField(
         verbose_name=_("Biological sex"),
@@ -94,7 +95,60 @@ class QuestionnaireResponse(BaseModel):
         to=Patient,
         verbose_name=_("Patient"),
         related_name="questionnaire_responses",
-        on_delete=models.PROTECT,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+    )
+    parent = models.ForeignKey(
+        to="users.Parent",
+        verbose_name=_("Responsável"),
+        related_name="parent_responses",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+    )
+    professional = models.ForeignKey(
+        to=settings.AUTH_USER_MODEL,
+        verbose_name=_("Professional"),
+        related_name="applied_responses",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+    )
+    first_name = models.CharField(
+        verbose_name=_("Nome"),
+        max_length=100,
+        blank=True,
+        default="",
+    )
+    last_name = models.CharField(
+        verbose_name=_("Sobrenome"),
+        max_length=100,
+        blank=True,
+        default="",
+    )
+    birth_date = models.DateField(
+        verbose_name=_("Birth date"),
+        null=True,
+        blank=True,
+    )
+    biological_sex = models.CharField(
+        verbose_name=_("Biological sex"),
+        max_length=2,
+        choices=BiologicalSex.choices,
+        null=True,
+        blank=True,
+    )
+    municipality = models.CharField(
+        verbose_name=_("Municipality"),
+        max_length=150,
+        blank=True,
+        default="",
+    )
+    notes = models.TextField(
+        verbose_name=_("Notes"),
+        blank=True,
+        default="",
     )
     q1 = models.PositiveSmallIntegerField(
         verbose_name=_("Q1"),
@@ -208,6 +262,14 @@ class QuestionnaireResponse(BaseModel):
 
     def __str__(self):
         return f"{self.id} ({self.created.strftime('%d/%m/%Y')})"
+
+    @property
+    def patient_display_name(self):
+        if self.patient:
+            return self.patient.get_full_name()
+        if self.first_name:
+            return f"{self.first_name} {self.last_name}".strip()
+        return _("Anonymous")
 
     @property
     def sleep_onset_maintenance_score(self) -> int:
