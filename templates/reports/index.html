@@ -1,0 +1,130 @@
+{% extends "dashboard/_base.html" %}
+{% load i18n %}
+{% load static %}
+{% load django_vite %}
+
+{% block title %}{% trans "Relatórios" %}{% endblock title %}
+
+{% block content %}
+  <section class="space-y-6 p-4 md:p-6">
+    <article class="card bg-base-100 border-base-300 border shadow-sm">
+      <div class="card-body gap-4 p-5">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 class="text-lg font-semibold">{% trans "Relatórios consolidados" %}</h2>
+            <p class="text-base-content/70 text-sm">
+              {% trans "Selecione o período para atualizar métricas e tendência de desempenho." %}
+            </p>
+          </div>
+          <form method="get" class="flex flex-wrap items-end gap-2">
+            <label class="form-control">
+              <span class="label-text text-xs uppercase tracking-wide text-base-content/60">{% trans "Período" %}</span>
+              <select name="period" class="select select-bordered min-w-44">
+                {% for option_value, option_label in period_options %}
+                  <option value="{{ option_value }}" {% if selected_period == option_value %}selected{% endif %}>{{ option_label }}</option>
+                {% endfor %}
+              </select>
+            </label>
+            <button type="submit" class="btn btn-primary btn-sm">{% trans "Atualizar" %}</button>
+          </form>
+        </div>
+      </div>
+    </article>
+
+    <article class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      {% for metric in metrics %}
+        <div class="card bg-base-100 border-base-300 border shadow-sm">
+          <div class="card-body p-5">
+            <p class="text-base-content/70 text-xs uppercase tracking-wide">{{ metric.label }}</p>
+            <p class="text-2xl font-bold">{{ metric.value }}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </article>
+
+    <article class="grid gap-4 lg:grid-cols-2">
+      <div class="card bg-base-100 border-base-300 border shadow-sm">
+        <div class="card-body p-5">
+          <h3 class="font-semibold">{% trans "Volume de avaliações" %}</h3>
+          <p class="text-base-content/70 text-sm">{% trans "Visualização em barras por período." %}</p>
+          <div id="reports-bar-chart" class="mt-3 min-h-72"></div>
+        </div>
+      </div>
+
+      <div class="card bg-base-100 border-base-300 border shadow-sm">
+        <div class="card-body p-5">
+          <h3 class="font-semibold">{% trans "Média de pontuação clínica" %}</h3>
+          <p class="text-base-content/70 text-sm">{% trans "Linha de tendência para comparação entre períodos." %}</p>
+          <div id="reports-line-chart" class="mt-3 min-h-72"></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="card bg-base-100 border-base-300 border shadow-sm">
+      <div class="card-body p-5">
+        <h3 class="font-semibold">{% trans "Área de exportação" %}</h3>
+        <p class="text-base-content/70 text-sm">
+          {% trans "Gere arquivos PDF ou CSV para auditoria operacional." %}
+        </p>
+        <div class="mt-3 flex flex-wrap gap-2">
+          <a href="{% url 'dashboard:reports_export_pdf' %}?period={{ selected_period }}"
+             class="btn btn-outline btn-sm">{% trans "Exportar PDF" %}</a>
+          <a href="{% url 'dashboard:reports_export_csv' %}?period={{ selected_period }}"
+             class="btn btn-outline btn-sm">{% trans "Exportar CSV" %}</a>
+        </div>
+      </div>
+    </article>
+  </section>
+{% endblock content %}
+
+{% block extra_js %}
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      if (typeof ApexCharts === "undefined") {
+        return;
+      }
+
+      const barContainer = document.getElementById("reports-bar-chart");
+      const lineContainer = document.getElementById("reports-line-chart");
+
+      const barCategories = [{% for point in bar_series %}"{{ point.label|escapejs }}"{% if not forloop.last %}, {% endif %}{% endfor %}];
+      const barValues = [{% for point in bar_series %}{{ point.value }}{% if not forloop.last %}, {% endif %}{% endfor %}];
+      const lineCategories = [{% for point in line_series %}"{{ point.label|escapejs }}"{% if not forloop.last %}, {% endif %}{% endfor %}];
+      const lineValues = [{% for point in line_series %}{{ point.value }}{% if not forloop.last %}, {% endif %}{% endfor %}];
+
+      if (barContainer) {
+        const barChart = new ApexCharts(barContainer, {
+          chart: {
+            type: "bar",
+            height: 280,
+            toolbar: { show: false },
+          },
+          series: [{ name: "Avaliações", data: barValues }],
+          xaxis: { categories: barCategories },
+          colors: ["#2563eb"],
+          dataLabels: { enabled: false },
+          grid: { borderColor: "#e5e7eb" },
+        });
+        barChart.render();
+      }
+
+      if (lineContainer) {
+        const lineChart = new ApexCharts(lineContainer, {
+          chart: {
+            type: "line",
+            height: 280,
+            toolbar: { show: false },
+          },
+          series: [{ name: "Pontuação média", data: lineValues }],
+          xaxis: { categories: lineCategories },
+          stroke: { curve: "smooth", width: 3 },
+          colors: ["#14b8a6"],
+          dataLabels: { enabled: false },
+          grid: { borderColor: "#e5e7eb" },
+        });
+        lineChart.render();
+      }
+    });
+  </script>
+{% endblock extra_js %}

@@ -1,25 +1,26 @@
 {% load i18n %}
 {% load static %}
+{% load users_tags %}
 
 {% get_current_language as current_language %}
 {% get_available_languages as available_languages %}
 {% get_language_info_list for available_languages as languages %}
 <header id="layout-topbar"
-        aria-label="{% trans 'Top bar' %}"
+        aria-label="{% trans 'Barra superior' %}"
         class="flex items-center justify-between px-4"
-        data-greeting-morning="{% trans 'Good morning' %}"
-        data-greeting-afternoon="{% trans 'Good afternoon' %}"
-        data-greeting-evening="{% trans 'Good evening' %}"
+        data-greeting-morning="{% trans 'Bom dia' %}"
+        data-greeting-afternoon="{% trans 'Boa tarde' %}"
+        data-greeting-evening="{% trans 'Boa noite' %}"
         x-data="topbarData()">
   <div class="inline-flex gap-3 items-center">
     <label for="layout-sidebar-toggle-trigger"
            class="btn btn-sm btn-ghost btn-square group-has-[[id=layout-sidebar-hover-trigger]:checked]/html:hidden"
-           aria-label="{% trans 'Toggle sidebar' %}">
+           aria-label="{% trans 'Alternar menu' %}">
       <span class="iconify lucide--menu size-5" aria-hidden="true"></span>
     </label>
     <label for="layout-sidebar-hover-trigger"
            class="btn btn-sm btn-ghost btn-square hidden group-has-[[id=layout-sidebar-hover-trigger]:checked]/html:flex"
-           aria-label="{% trans 'Toggle sidebar hover mode' %}">
+           aria-label="{% trans 'Alternar recolhimento' %}">
       <span class="iconify lucide--menu size-5" aria-hidden="true"></span>
     </label>
     <div class="hidden flex-col sm:flex">
@@ -30,52 +31,54 @@
   </div>
   <div class="inline-flex gap-3 items-center">
     <c-brand.theme_toggle class="btn-sm btn-ghost" />
-    <div class="dropdown dropdown-bottom dropdown-end">
-      <button type="button"
-              class="btn btn-sm btn-circle btn-ghost"
-              tabindex="0"
-              aria-label="{% trans 'Select language' %}">
-        <img src="{% static 'images/locale/'|add:current_language|add:'.svg' %}"
-             class="size-5.5 rounded-box object-cover"
-             alt="{{ current_language|upper }}" />
-      </button>
-      <div class="dropdown-content mt-2 bg-base-100 rounded-box shadow-sm"
-           tabindex="0">
-        <form id="language-form" method="post" action="{% url 'set_language' %}">
-          {% csrf_token %}
-          <input id="language-input"
-                 type="hidden"
-                 name="language"
-                 value="{{ current_language }}" />
-          <input type="hidden" name="next" value="{{ request.get_full_path }}" />
-          <ul class="menu w-full p-2"
-              aria-label="{% trans 'Available languages' %}">
-            {% for language in languages %}
-              <li aria-selected="{% if language.code == current_language %}true{% else %}false{% endif %}">
-                <button type="submit"
-                        class="flex gap-2 items-center w-full"
-                        onclick="document.getElementById('language-input').value='{{ language.code }}'">
-                  <img src="{% static 'images/locale/'|add:language.code|add:'.svg' %}"
-                       class="shrink-0 size-4.5 rounded-box object-cover"
-                       alt="{{ language.name_local }}" />
-                  <span class="flex-1 text-left">{{ language.name_local }}</span>
-                  {% if language.code == current_language %}
-                    <span class="iconify lucide--check shrink-0 size-4 text-success"
-                          aria-hidden="true"></span>
-                  {% endif %}
-                </button>
-              </li>
-            {% endfor %}
-          </ul>
-        </form>
+    {% if languages|length > 1 %}
+      <div class="dropdown dropdown-bottom dropdown-end">
+        <button type="button"
+                class="btn btn-sm btn-circle btn-ghost"
+                tabindex="0"
+                aria-label="{% trans 'Selecionar idioma' %}">
+          <img src="{% static 'images/locale/'|add:current_language|add:'.svg' %}"
+               class="size-5.5 rounded-box object-cover"
+               alt="{{ current_language|upper }}" />
+        </button>
+        <div class="dropdown-content mt-2 bg-base-100 rounded-box shadow-sm"
+             tabindex="0">
+          <form id="language-form" method="post" action="{% url 'set_language' %}">
+            {% csrf_token %}
+            <input id="language-input"
+                   type="hidden"
+                   name="language"
+                   value="{{ current_language }}" />
+            <input type="hidden" name="next" value="{{ request.get_full_path }}" />
+            <ul class="menu w-full p-2"
+                aria-label="{% trans 'Idiomas disponíveis' %}">
+              {% for language in languages %}
+                <li aria-selected="{% if language.code == current_language %}true{% else %}false{% endif %}">
+                  <button type="submit"
+                          class="flex gap-2 items-center w-full"
+                          onclick="document.getElementById('language-input').value='{{ language.code }}'">
+                    <img src="{% static 'images/locale/'|add:language.code|add:'.svg' %}"
+                         class="shrink-0 size-4.5 rounded-box object-cover"
+                         alt="{{ language.name_local }}" />
+                    <span class="flex-1 text-left">{{ language.name_local }}</span>
+                    {% if language.code == current_language %}
+                      <span class="iconify lucide--check shrink-0 size-4 text-success"
+                            aria-hidden="true"></span>
+                    {% endif %}
+                  </button>
+                </li>
+              {% endfor %}
+            </ul>
+          </form>
+        </div>
       </div>
-    </div>
+    {% endif %}
     <div class="h-7 border-base-300 border-e" aria-hidden="true"></div>
     <div class="dropdown dropdown-bottom dropdown-end">
       <button type="button"
               class="btn btn-sm btn-circle btn-ghost"
               tabindex="0"
-              aria-label="{% trans 'User menu' %}">
+              aria-label="{% trans 'Menu do usuário' %}">
         <div class="avatar overflow-hidden size-7 bg-base-200 rounded-box">
           <img src="{{ user.profile.get_avatar_url }}"
                alt="{{ user.get_full_name }}" />
@@ -95,9 +98,17 @@
           <li>
             <a href="{% url 'users:profile' %}">
               <span class="iconify lucide--settings size-4" aria-hidden="true"></span>
-              <span>{% trans "My profile" %}</span>
+              <span>{% trans "Meu perfil" %}</span>
             </a>
           </li>
+          {% withrole "ADMIN" %}
+            <li>
+              <a href="{% url 'users:settings' %}">
+                <span class="iconify lucide--sliders-horizontal size-4" aria-hidden="true"></span>
+                <span>{% trans "Configurações" %}</span>
+              </a>
+            </li>
+          {% endwithrole %}
         </ul>
         <hr class="border-base-300" />
         <ul class="menu w-full p-2">
@@ -106,7 +117,7 @@
                     class="text-error hover:bg-error/10"
                     onclick="document.getElementById('logout-modal').showModal()">
               <span class="iconify lucide--log-out size-4" aria-hidden="true"></span>
-              <span>{% trans "Sign out" %}</span>
+              <span>{% trans "Sair" %}</span>
             </button>
           </li>
         </ul>

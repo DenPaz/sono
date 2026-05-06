@@ -1,0 +1,51 @@
+{% extends "dashboard/_base.html" %}
+{% load i18n %}
+{% load static %}
+{% load django_vite %}
+
+{% block title %}{% trans "Convidar profissional" %}{% endblock title %}
+
+{% block content %}
+  <section class="space-y-6 p-4 md:p-6">
+    <article class="card bg-base-100 border-base-300 border shadow-sm max-w-3xl">
+      <div class="card-body gap-4 p-5">
+        <div>
+          <h2 class="text-lg font-semibold">{% trans "Convidar profissional" %}</h2>
+          <p class="text-base-content/70 text-sm">
+            {% trans "Crie o acesso do especialista e envie o e-mail para definição de senha." %}
+          </p>
+        </div>
+
+        <form method="post" class="grid gap-3 md:grid-cols-2">
+          {% csrf_token %}
+          {% if form.non_field_errors %}
+            <div class="alert alert-error md:col-span-2">
+              <span>{{ form.non_field_errors|join:", " }}</span>
+            </div>
+          {% endif %}
+
+          <label class="form-control md:col-span-2">
+            <span class="label-text">{{ form.name.label }}</span>
+            {{ form.name }}
+            {% for error in form.name.errors %}<span class="label-text-alt text-error">{{ error }}</span>{% endfor %}
+          </label>
+
+          <label class="form-control md:col-span-2">
+            <span class="label-text">{{ form.email.label }}</span>
+            {{ form.email }}
+            {% for error in form.email.errors %}<span class="label-text-alt text-error">{{ error }}</span>{% endfor %}
+          </label>
+
+          <div class="md:col-span-2 rounded-box border border-base-300 bg-base-200/50 p-4 text-sm text-base-content/70">
+            {% trans "O papel será criado automaticamente como especialista. O município passará a aparecer na listagem assim que o profissional tiver pacientes vinculados." %}
+          </div>
+
+          <div class="md:col-span-2 flex flex-wrap gap-2 pt-2">
+            <button type="submit" class="btn btn-primary btn-sm">{% trans "Enviar convite" %}</button>
+            <a href="{% url 'dashboard:professionals' %}" class="btn btn-ghost btn-sm">{% trans "Cancelar" %}</a>
+          </div>
+        </form>
+      </div>
+    </article>
+  </section>
+{% endblock content %}

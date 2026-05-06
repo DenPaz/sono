@@ -1,0 +1,79 @@
+{% extends "dashboard/_base.html" %}
+{% load i18n %}
+{% load static %}
+{% load django_vite %}
+
+{% block title %}{% trans "Municípios" %}{% endblock title %}
+
+{% block content %}
+  <section class="space-y-6 p-4 md:p-6">
+    <article class="grid gap-4 md:grid-cols-3">
+      {% for item in highlights %}
+        <div class="card bg-base-100 border-base-300 border shadow-sm">
+          <div class="card-body p-5">
+            <p class="text-base-content/70 text-xs uppercase tracking-wide">{{ item.label }}</p>
+            <p class="text-2xl font-bold">{{ item.value }}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </article>
+
+    <article class="card bg-base-100 border-base-300 border shadow-sm">
+      <div class="card-body gap-4 p-5">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 class="text-lg font-semibold">{% trans "Ranking municipal" %}</h2>
+            <p class="text-base-content/70 text-sm">
+              {% trans "Ranking de desempenho por município baseado em avaliações." %}
+            </p>
+          </div>
+          <form method="get" class="w-full sm:w-auto">
+            <label class="input input-bordered flex items-center gap-2">
+              <span class="iconify lucide--search size-4 text-base-content/60"></span>
+              <input type="text"
+                     name="query"
+                     value="{{ query }}"
+                     class="grow"
+                     placeholder="{% trans 'Buscar município' %}" />
+            </label>
+          </form>
+        </div>
+
+
+
+        <div class="overflow-x-auto">
+          <table class="table table-zebra">
+            <thead>
+              <tr>
+                <th>{% trans "Município" %}</th>
+                <th>{% trans "Concluídas" %}</th>
+                <th>{% trans "Risco alto" %}</th>
+                <th>{% trans "Tendência" %}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for municipality in municipalities %}
+                <tr>
+                  <td class="font-semibold">{{ municipality.name }}</td>
+
+                  <td>{{ municipality.completed }}</td>
+                  <td>{{ municipality.high_risk }}</td>
+                  <td>
+                    <span class="badge badge-info">{{ municipality.trend }}</span>
+                  </td>
+                </tr>
+              {% empty %}
+                <tr>
+                   <td colspan="4" class="text-center text-base-content/60 py-8">{% trans "Nenhum município encontrado." %}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </article>
+  </section>
+{% endblock content %}
+
+{% block extra_js %}
+{% endblock extra_js %}

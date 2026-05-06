@@ -3,41 +3,41 @@
 {% load i18n %}
 
 {% block title %}
-  {% trans "Dashboard" %}
+  {% trans "Painel" %}
 {% endblock title %}
 {% block content %}
   <div class="space-y-6 p-6">
     {# ── Page header ── #}
     <div class="flex flex-wrap gap-4 items-center justify-between">
       <div>
-        <h1 class="font-bold text-2xl">{% trans "Dashboard" %}</h1>
+        <h1 class="font-bold text-2xl">{% trans "Painel" %}</h1>
         <p class="mt-0.5 text-sm text-base-content/60">
-          {% blocktrans with name=request.user.first_name %}Welcome back, {{ name }}{% endblocktrans %}
+          {% blocktrans with name=request.user.first_name %}Bem-vindo de volta, {{ name }}{% endblocktrans %}
         </p>
       </div>
       <details class="dropdown dropdown-end">
         <summary class="btn btn-sm btn-primary">
           <span class="iconify lucide--plus size-4" aria-hidden="true"></span>
-          {% trans "Add user" %}
+          {% trans "Adicionar usuário" %}
           <span class="iconify lucide--chevron-down size-3.5" aria-hidden="true"></span>
         </summary>
         <ul class="dropdown-content menu w-44 mt-1 p-1 bg-base-100 rounded-box border border-base-200 shadow-sm">
           <li>
             <a href="{% url 'users:admin_create' %}">
               <span class="iconify lucide--shield size-4" aria-hidden="true"></span>
-              {% trans "Admin" %}
+              {% trans "Administrador" %}
             </a>
           </li>
           <li>
             <a href="{% url 'users:specialist_create' %}">
               <span class="iconify lucide--stethoscope size-4" aria-hidden="true"></span>
-              {% trans "Specialist" %}
+              {% trans "Especialista" %}
             </a>
           </li>
           <li>
             <a href="{% url 'users:parent_create' %}">
               <span class="iconify lucide--user size-4" aria-hidden="true"></span>
-              {% trans "Parent" %}
+              {% trans "Responsável" %}
             </a>
           </li>
         </ul>
@@ -48,43 +48,43 @@
       <div class="card bg-base-100 border border-base-200 shadow-sm">
         <div class="card-body p-4">
           <div class="flex items-center justify-between">
-            <p class="text-sm text-base-content/60">{% trans "Admins" %}</p>
+            <p class="text-sm text-base-content/60">{% trans "Administradores" %}</p>
             <span class="iconify lucide--shield size-5 text-orange-400"
                   aria-hidden="true"></span>
           </div>
           <p class="mt-1 font-bold text-3xl">{{ stats.admins }}</p>
           <a href="{% url 'users:user_list' %}?role=ADMIN"
-             class="mt-1 text-xs text-primary hover:underline">{% trans "View all" %} →</a>
+             class="mt-1 text-xs text-primary hover:underline">{% trans "Ver todos" %} →</a>
         </div>
       </div>
       <div class="card bg-base-100 border border-base-200 shadow-sm">
         <div class="card-body p-4">
           <div class="flex items-center justify-between">
-            <p class="text-sm text-base-content/60">{% trans "Specialists" %}</p>
+            <p class="text-sm text-base-content/60">{% trans "Especialistas" %}</p>
             <span class="iconify lucide--stethoscope size-5 text-purple-400"
                   aria-hidden="true"></span>
           </div>
           <p class="mt-1 font-bold text-3xl">{{ stats.specialists }}</p>
           <a href="{% url 'users:user_list' %}?role=SPECIALIST"
-             class="mt-1 text-xs text-primary hover:underline">{% trans "View all" %} →</a>
+             class="mt-1 text-xs text-primary hover:underline">{% trans "Ver todos" %} →</a>
         </div>
       </div>
       <div class="card bg-base-100 border border-base-200 shadow-sm">
         <div class="card-body p-4">
           <div class="flex items-center justify-between">
-            <p class="text-sm text-base-content/60">{% trans "Parents" %}</p>
+            <p class="text-sm text-base-content/60">{% trans "Responsáveis" %}</p>
             <span class="iconify lucide--user size-5 text-indigo-400"
                   aria-hidden="true"></span>
           </div>
           <p class="mt-1 font-bold text-3xl">{{ stats.parents }}</p>
-          <a href="{% url 'users:parent_list' %}"
-             class="mt-1 text-xs text-primary hover:underline">{% trans "View all" %} →</a>
+          <a href="{% url 'users:user_list' %}?role=PARENT"
+             class="mt-1 text-xs text-primary hover:underline">{% trans "Ver todos" %} →</a>
         </div>
       </div>
       <div class="card bg-base-100 border border-base-200 shadow-sm">
         <div class="card-body p-4">
           <div class="flex items-center justify-between">
-            <p class="text-sm text-base-content/60">{% trans "Active patients" %}</p>
+            <p class="text-sm text-base-content/60">{% trans "Pacientes ativos" %}</p>
             <span class="iconify lucide--baby size-5 text-teal-400" aria-hidden="true"></span>
           </div>
           <p class="mt-1 font-bold text-3xl">{{ stats.patients }}</p>
@@ -95,33 +95,25 @@
     <div class="card bg-base-100 border border-base-200 shadow-sm">
       <div class="card-body p-0">
         <div class="flex items-center justify-between px-5 py-4 border-base-200 border-b">
-          <h2 class="font-semibold">{% trans "Recent questionnaire responses" %}</h2>
+          <h2 class="font-semibold">{% trans "Respostas recentes aos questionários" %}</h2>
         </div>
         {% if recent_responses %}
           <div class="overflow-x-auto">
             <table class="table table-sm">
               <thead>
                 <tr class="text-xs text-base-content/70 tracking-wider uppercase bg-base-200/60">
-                  <th>{% trans "Patient" %}</th>
-                  <th class="hidden sm:table-cell">{% trans "Date" %}</th>
-                  <th class="w-20">{% trans "Score" %}</th>
-                  <th class="w-24">{% trans "Flags" %}</th>
+                  <th>{% trans "Paciente" %}</th>
+                  <th class="hidden sm:table-cell">{% trans "Data" %}</th>
+                  <th class="w-20">{% trans "Pontuação" %}</th>
                 </tr>
               </thead>
               <tbody>
                 {% for response in recent_responses %}
                   <tr class="hover:bg-base-200/40">
-                    <td class="font-medium">{{ response.patient.get_full_name }}</td>
-                    <td class="hidden text-xs text-base-content/60 sm:table-cell">{{ response.created|date:"M d, Y" }}</td>
+                    <td class="font-medium">{{ response.patient_display_name }}</td>
+                    <td class="hidden text-xs text-base-content/60 sm:table-cell">{{ response.created|date:"d/m/Y" }}</td>
                     <td>
                       <span class="font-mono font-semibold">{{ response.total_score }}</span>
-                    </td>
-                    <td>
-                      {% if response.has_flags %}
-                        <span class="badge badge-sm badge-warning badge-soft">{% trans "Flagged" %}</span>
-                      {% else %}
-                        <span class="badge badge-sm badge-success badge-soft">{% trans "Clear" %}</span>
-                      {% endif %}
                     </td>
                   </tr>
                 {% endfor %}
@@ -131,7 +123,7 @@
         {% else %}
           <div class="flex flex-col gap-3 items-center justify-center py-12 text-base-content/40">
             <span class="iconify lucide--clipboard-list size-10" aria-hidden="true"></span>
-            <p class="text-sm">{% trans "No questionnaire responses yet" %}</p>
+            <p class="text-sm">{% trans "Nenhuma resposta de questionário ainda" %}</p>
           </div>
         {% endif %}
       </div>

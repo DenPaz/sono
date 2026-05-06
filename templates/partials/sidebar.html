@@ -16,12 +16,12 @@
      aria-hidden="true"></div>
 <aside id="layout-sidebar"
        class="sidebar-menu py-3"
-       aria-label="{% trans 'Main navigation' %}">
+       aria-label="{% trans 'Navegação principal' %}">
   <div class="flex gap-3 items-center justify-between min-h-10 px-5">
     <a href="{% url 'dashboard:index' %}"
        class="font-black text-3xl text-transparent bg-clip-text bg-linear-to-r from-primary to-accent">Sono</a>
     <label for="layout-sidebar-hover-trigger"
-           title="{% trans 'Toggle sidebar hover' %}"
+           title="{% trans 'Alternar recolhimento lateral' %}"
            class="btn btn-sm btn-circle btn-ghost relative text-base-content/50 max-lg:hidden">
       <span class="iconify lucide--panel-left-close absolute size-4.5 opacity-100 transition-all duration-300 group-has-[[id=layout-sidebar-hover-trigger]:checked]/html:opacity-0"
             aria-hidden="true"></span>
@@ -30,42 +30,68 @@
     </label>
   </div>
   <nav class="custom-scrollbar overflow-auto grow"
-       aria-label="{% trans 'Sidebar navigation' %}">
+       aria-label="{% trans 'Navegação lateral' %}">
     <div class="space-y-1.5 mt-5 px-2.5">
       <a href="{% url 'dashboard:index' %}"
          class="menu-item {% active_class 'dashboard:index' %}">
         <span class="iconify lucide--monitor-dot size-4" aria-hidden="true"></span>
-        <span>{% trans "Dashboard" %}</span>
+        <span>{% trans "Painel" %}</span>
       </a>
       {% withrole "ADMIN" %}
+        <a href="{% url 'assessments:questionnaire' %}"
+           class="menu-item {% active_class 'assessments:questionnaire' 'assessments:results' %}">
+          <span class="iconify lucide--file-plus-2 size-4" aria-hidden="true"></span>
+          <span>{% trans "Nova avaliação" %}</span>
+        </a>
+        <a href="{% url 'dashboard:evaluations' %}"
+           class="menu-item {% active_class 'dashboard:evaluations' 'assessments:results' %}">
+          <span class="iconify lucide--clipboard-list size-4" aria-hidden="true"></span>
+          <span>{% trans "Avaliações" %}</span>
+        </a>
+        <a href="{% url 'dashboard:professionals' %}"
+           class="menu-item {% active_class 'dashboard:professionals' 'dashboard:invite_professional' 'dashboard:manage_professional' %}">
+          <span class="iconify lucide--stethoscope size-4" aria-hidden="true"></span>
+          <span>{% trans "Profissionais" %}</span>
+        </a>
+        <a href="{% url 'dashboard:municipalities' %}"
+           class="menu-item {% active_class 'dashboard:municipalities' %}">
+          <span class="iconify lucide--map-pinned size-4" aria-hidden="true"></span>
+          <span>{% trans "Municípios" %}</span>
+        </a>
+        <a href="{% url 'dashboard:reports' %}"
+           class="menu-item {% active_class 'dashboard:reports' %}">
+          <span class="iconify lucide--chart-column size-4" aria-hidden="true"></span>
+          <span>{% trans "Relatórios" %}</span>
+        </a>
         <a href="{% url 'users:user_list' %}"
            class="menu-item {% active_class 'users:user_list' 'users:admin_create' 'users:specialist_create' 'users:parent_create' %}">
           <span class="iconify lucide--users size-4" aria-hidden="true"></span>
-          <span>{% trans "Users" %}</span>
+          <span>{% trans "Usuários" %}</span>
         </a>
-        <a href="{% url 'patients:patient_list' %}"
-           class="menu-item {% active_class 'patients:patient_list' 'patients:patient_create' 'patients:patient_detail' 'patients:patient_update' %}">
-          <span class="iconify lucide--stethoscope size-4" aria-hidden="true"></span>
-          <span>{% trans "Patients" %}</span>
+        <a href="{% url 'users:settings' %}"
+           class="menu-item {% active_class 'users:settings' %}">
+          <span class="iconify lucide--settings size-4" aria-hidden="true"></span>
+          <span>{% trans "Configurações" %}</span>
         </a>
+
       {% endwithrole %}
       {% withrole "SPECIALIST" %}
         <a href="{% url 'patients:patient_list' %}"
            class="menu-item {% active_class 'patients:patient_list' 'patients:patient_create' 'patients:patient_detail' 'patients:patient_update' %}">
           <span class="iconify lucide--stethoscope size-4" aria-hidden="true"></span>
-          <span>{% trans "My patients" %}</span>
+          <span>{% trans "Meus pacientes" %}</span>
         </a>
         <a href="{% url 'users:parent_list' %}"
            class="menu-item {% active_class 'users:parent_list' %}">
           <span class="iconify lucide--heart-handshake size-4" aria-hidden="true"></span>
-          <span>{% trans "Parents" %}</span>
+          <span>{% trans "Responsáveis" %}</span>
         </a>
       {% endwithrole %}
       {% withrole "PARENT" %}
         <a href="{% url 'patients:patient_list' %}"
            class="menu-item {% active_class 'patients:patient_list' 'patients:patient_detail' %}">
           <span class="iconify lucide--baby size-4" aria-hidden="true"></span>
-          <span>{% trans "My children" %}</span>
+          <span>{% trans "Meus dependentes" %}</span>
         </a>
       {% endwithrole %}
     </div>
@@ -75,7 +101,7 @@
             class="menu-item w-full cursor-pointer hover:bg-base-200"
             onclick="document.getElementById('logout-modal').showModal()">
       <span class="iconify lucide--log-out size-4" aria-hidden="true"></span>
-      <span>{% trans "Sign out" %}</span>
+      <span>{% trans "Sair" %}</span>
     </button>
   </div>
 </aside>
@@ -83,13 +109,13 @@
 <dialog id="logout-modal" class="modal" aria-labelledby="logout-modal-title">
   <form method="post" action="{% url 'account_logout' %}" class="modal-box">
     {% csrf_token %}
-    <h2 id="logout-modal-title" class="font-bold text-lg">{% trans "Confirm sign out" %}</h2>
-    <p class="py-4">{% trans "Are you sure you want to sign out?" %}</p>
+    <h2 id="logout-modal-title" class="font-bold text-lg">{% trans "Confirmar saída" %}</h2>
+    <p class="py-4">{% trans "Tem certeza que deseja sair?" %}</p>
     <div class="modal-action">
-      <button type="submit" class="btn btn-error">{% trans "Confirm" %}</button>
+      <button type="submit" class="btn btn-error">{% trans "Confirmar" %}</button>
       <button type="button"
               class="btn"
-              onclick="document.getElementById('logout-modal').close()">{% trans "Cancel" %}</button>
+              onclick="document.getElementById('logout-modal').close()">{% trans "Cancelar" %}</button>
     </div>
   </form>
 </dialog>

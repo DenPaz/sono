@@ -9,14 +9,14 @@
   <div class="space-y-6 p-6">
     {# ── Page header ── #}
     <div>
-      <h1 class="font-bold text-2xl">{% trans "Dashboard" %}</h1>
+      <h1 class="font-bold text-2xl">{% trans "Painel" %}</h1>
       <p class="mt-0.5 text-sm text-base-content/60">
-        {% blocktrans with name=request.user.first_name %}Welcome back, {{ name }}{% endblocktrans %}
+        {% blocktrans with name=request.user.first_name %}Bem-vindo de volta, {{ name }}{% endblocktrans %}
       </p>
     </div>
     {# ── Children ── #}
     <div>
-      <h2 class="mb-3 font-semibold">{% trans "My children" %}</h2>
+      <h2 class="mb-3 font-semibold">{% trans "Meus dependentes" %}</h2>
       {% if patients %}
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {% for patient in patients %}
@@ -26,7 +26,7 @@
                   <div>
                     <h3 class="font-semibold">{{ patient.get_full_name }}</h3>
                     <p class="text-sm text-base-content/60">
-                      {% blocktrans with age=patient.age %}{{ age }} years old{% endblocktrans %}
+                      {% blocktrans with age=patient.age %}{{ age }} anos de idade{% endblocktrans %}
                     </p>
                   </div>
                   <div class="avatar avatar-placeholder shrink-0">
@@ -38,13 +38,13 @@
                 <div class="flex items-center justify-between mt-3 pt-3 border-base-200 border-t">
                   <p class="text-xs text-base-content/50">
                     {% with count=patient.questionnaire_responses.count %}
-                      {% blocktrans count count=count %}{{ count }} response{% plural %}{{ count }} responses{% endblocktrans %}
+                      {% blocktrans count count=count %}{{ count }} resposta{% plural %}{{ count }} respostas{% endblocktrans %}
                     {% endwith %}
                   </p>
                   <a href="{% url 'patients:questionnaire' patient_pk=patient.pk %}"
                      class="btn btn-xs btn-primary">
                     <span class="iconify lucide--clipboard-pen size-3.5" aria-hidden="true"></span>
-                    {% trans "Fill questionnaire" %}
+                    {% trans "Preencher questionário" %}
                   </a>
                 </div>
               </div>
@@ -55,8 +55,8 @@
         <div class="card bg-base-100 border border-base-200">
           <div class="card-body flex flex-col gap-3 items-center justify-center py-12 text-base-content/40">
             <span class="iconify lucide--baby size-10" aria-hidden="true"></span>
-            <p class="text-sm">{% trans "No children registered yet" %}</p>
-            <p class="text-xs">{% trans "Ask your specialist to register your child." %}</p>
+            <p class="text-sm">{% trans "Nenhum dependente cadastrado ainda" %}</p>
+            <p class="text-xs">{% trans "Peça ao seu especialista para cadastrar seu dependente." %}</p>
           </div>
         </div>
       {% endif %}
@@ -66,15 +66,15 @@
       <div class="card bg-base-100 border border-base-200 shadow-sm">
         <div class="card-body p-0">
           <div class="px-5 py-4 border-base-200 border-b">
-            <h2 class="font-semibold">{% trans "Recent questionnaire responses" %}</h2>
+            <h2 class="font-semibold">{% trans "Respostas recentes aos questionários" %}</h2>
           </div>
           <div class="overflow-x-auto">
             <table class="table table-sm">
               <thead>
                 <tr class="text-xs text-base-content/70 tracking-wider uppercase bg-base-200/60">
-                  <th>{% trans "Child" %}</th>
-                  <th class="hidden sm:table-cell">{% trans "Date" %}</th>
-                  <th class="w-20">{% trans "Score" %}</th>
+                  <th>{% trans "Dependente" %}</th>
+                  <th class="hidden sm:table-cell">{% trans "Data" %}</th>
+                  <th class="w-20">{% trans "Pontuação" %}</th>
                 </tr>
               </thead>
               <tbody>
