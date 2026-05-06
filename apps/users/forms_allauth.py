@@ -5,16 +5,16 @@ from django.utils.translation import gettext_lazy as _
 
 class UserSignupForm(SignupForm):
     first_name = forms.CharField(
-        label=_("First name"),
+        label=_("Nome"),
         max_length=100,
         required=True,
-        widget=forms.TextInput(attrs={"placeholder": _("First name")}),
+        widget=forms.TextInput(attrs={"placeholder": _("Nome")}),
     )
     last_name = forms.CharField(
-        label=_("Last name"),
+        label=_("Sobrenome"),
         max_length=100,
         required=True,
-        widget=forms.TextInput(attrs={"placeholder": _("Last name")}),
+        widget=forms.TextInput(attrs={"placeholder": _("Sobrenome")}),
     )
 
     def save(self, request):

@@ -6,6 +6,7 @@ from .views import ParentCreateView
 from .views import ParentListView
 from .views import ParentUpdateView
 from .views import ProfileView
+from .views import SettingsView
 from .views import SpecialistCreateView
 from .views import SpecialistUpdateView
 from .views import UserListView
@@ -22,6 +23,11 @@ urlpatterns = [
         route="profile/",
         view=ProfileView.as_view(),
         name="profile",
+    ),
+    path(
+        route="settings/",
+        view=SettingsView.as_view(),
+        name="settings",
     ),
     path(
         route="admins/create/",

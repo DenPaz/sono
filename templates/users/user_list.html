@@ -4,41 +4,41 @@
 {% load core_tags %}
 
 {% block title %}
-  {% trans "User management" %}
+  {% trans "Gestão de usuários" %}
 {% endblock title %}
 {% block content %}
   <div class="space-y-6">
     {# ── Page header ── #}
     <div class="flex flex-wrap gap-4 items-center justify-between">
       <div>
-        <h1 class="font-bold text-2xl">{% trans "Users" %}</h1>
+        <h1 class="font-bold text-2xl">{% trans "Usuários" %}</h1>
         <p class="mt-0.5 text-sm text-base-content/60">
-          {% blocktrans with count=page_obj.paginator.count %}{{ count }} users total{% endblocktrans %}
+          {% blocktrans with count=page_obj.paginator.count %}{{ count }} usuários no total{% endblocktrans %}
         </p>
       </div>
       <details class="dropdown dropdown-end">
         <summary class="btn btn-sm btn-primary">
           <span class="iconify lucide--plus size-4" aria-hidden="true"></span>
-          {% trans "Add user" %}
+          {% trans "Adicionar usuário" %}
           <span class="iconify lucide--chevron-down size-3.5" aria-hidden="true"></span>
         </summary>
         <ul class="dropdown-content menu w-44 mt-1 p-1 bg-base-100 rounded-box border border-base-200 shadow-sm">
           <li>
             <a href="{% url 'users:admin_create' %}">
               <span class="iconify lucide--shield size-4" aria-hidden="true"></span>
-              {% trans "Admin" %}
+              {% trans "Administrador" %}
             </a>
           </li>
           <li>
             <a href="{% url 'users:specialist_create' %}">
               <span class="iconify lucide--stethoscope size-4" aria-hidden="true"></span>
-              {% trans "Specialist" %}
+              {% trans "Especialista" %}
             </a>
           </li>
           <li>
             <a href="{% url 'users:parent_create' %}">
               <span class="iconify lucide--user size-4" aria-hidden="true"></span>
-              {% trans "Parent" %}
+              {% trans "Responsável" %}
             </a>
           </li>
         </ul>
@@ -59,7 +59,7 @@
                type="search"
                name="search"
                value="{{ filter.form.search.value|default:'' }}"
-               placeholder="{% trans 'Search by name or email…' %}"
+               placeholder="{% trans 'Buscar por nome ou e-mail…' %}"
                autocomplete="off"
                class="grow" />
       </label>
@@ -83,7 +83,7 @@
         <a href="{% url 'users:user_list' %}"
            class="btn btn-sm btn-ghost gap-1.5">
           <span class="iconify lucide--x size-3.5" aria-hidden="true"></span>
-          {% trans "Clear" %}
+          {% trans "Limpar" %}
         </a>
       {% endif %}
     </form>
@@ -95,11 +95,11 @@
           <table class="table table-sm w-full">
             <thead>
               <tr class="text-xs text-base-content/70 tracking-wider uppercase bg-base-200/60">
-                <th class="w-64">{% trans "Name" %}</th>
-                <th class="hidden sm:table-cell">{% trans "Email" %}</th>
-                <th class="w-28">{% trans "Role" %}</th>
+                <th class="w-64">{% trans "Nome" %}</th>
+                <th class="hidden sm:table-cell">{% trans "E-mail" %}</th>
+                <th class="w-28">{% trans "Função" %}</th>
                 <th class="w-24">{% trans "Status" %}</th>
-                <th class="hidden w-28 md:table-cell">{% trans "Joined" %}</th>
+                <th class="hidden w-28 md:table-cell">{% trans "Criado em" %}</th>
               </tr>
             </thead>
             <tbody>
@@ -140,7 +140,7 @@
                     <c-users.status-badge :is_active="{{ user.is_active|yesno:'true,false' }}" />
                   </td>
                   {# Joined #}
-                  <td class="hidden text-xs text-base-content/60 md:table-cell">{{ user.date_joined|date:"M d, Y" }}</td>
+                  <td class="hidden text-xs text-base-content/60 md:table-cell">{{ user.date_joined|date:"d/m/Y" }}</td>
                 </tr>
               {% endfor %}
             </tbody>
@@ -150,7 +150,7 @@
             <div class="flex items-center justify-between px-4 py-3 bg-base-100 border-base-200 border-t">
               <p class="text-sm text-base-content/60">
                 {% blocktrans with start=page_obj.start_index end=page_obj.end_index count=page_obj.paginator.count %}
-                  Showing {{ start }}–{{ end }} of {{ count }}
+                  Exibindo {{ start }}–{{ end }} de {{ count }}
                 {% endblocktrans %}
               </p>
               <div class="join">
@@ -161,7 +161,7 @@
                      hx-target="#user-table"
                      hx-swap="outerHTML"
                      hx-push-url="true"
-                     aria-label="{% trans 'Previous page' %}">
+                     aria-label="{% trans 'Página anterior' %}">
                     <span class="iconify lucide--chevron-left size-4" aria-hidden="true"></span>
                   </a>
                 {% else %}
@@ -188,7 +188,7 @@
                      hx-target="#user-table"
                      hx-swap="outerHTML"
                      hx-push-url="true"
-                     aria-label="{% trans 'Next page' %}">
+                     aria-label="{% trans 'Próxima página' %}">
                     <span class="iconify lucide--chevron-right size-4" aria-hidden="true"></span>
                   </a>
                 {% else %}
@@ -203,9 +203,9 @@
           {# ── Empty state ── #}
           <div class="flex flex-col gap-3 items-center justify-center py-16 text-base-content/50">
             <span class="iconify lucide--users size-10" aria-hidden="true"></span>
-            <p class="font-medium">{% trans "No users found" %}</p>
+            <p class="font-medium">{% trans "Nenhum usuário encontrado" %}</p>
             {% if request.GET %}
-              <a href="{% url 'users:user_list' %}" class="btn btn-sm btn-ghost">{% trans "Clear filters" %}</a>
+              <a href="{% url 'users:user_list' %}" class="btn btn-sm btn-ghost">{% trans "Limpar filtros" %}</a>
             {% endif %}
           </div>
         {% endif %}
@@ -221,7 +221,7 @@
       <div id="user-update-modal-content">{# Populated by HTMX on row click #}</div>
     </div>
     <form method="dialog" class="modal-backdrop">
-      <button>{% trans "Close" %}</button>
+      <button>{% trans "Fechar" %}</button>
     </form>
   </dialog>
 {% endblock modals %}

@@ -1,0 +1,40 @@
+{% extends "account/_base.html" %}
+
+{% load i18n %}
+{% load widget_tweaks %}
+
+{% block title %}{% trans "Confirm code" %}{% endblock title %}
+
+{% block content %}
+  <article class="card bg-base-100 border-base-300 border shadow-sm">
+    <div class="card-body gap-4 p-6 sm:p-8">
+      <h1 class="text-xl font-semibold">{% block head_title %}{% trans "Confirm code" %}{% endblock head_title %}</h1>
+      <p class="text-base-content/70 text-sm">{% block head_body %}{% trans "Enter the code sent to your account." %}{% endblock head_body %}</p>
+
+      {% if form.non_field_errors %}
+        <div class="alert alert-error">
+          <span>{{ form.non_field_errors|join:", " }}</span>
+        </div>
+      {% endif %}
+
+      <form method="post" class="space-y-4">
+        {% csrf_token %}
+        {% for hidden_field in form.hidden_fields %}
+          {{ hidden_field }}
+        {% endfor %}
+        {% for field in form.visible_fields %}
+          <div class="space-y-1">
+            <label class="label" for="{{ field.id_for_label }}">
+              <span class="label-text">{{ field.label }}</span>
+            </label>
+            {{ field|add_class:"input input-bordered w-full"|add_error_class:"input-error" }}
+            {% if field.errors %}
+              <p class="text-error text-xs">{{ field.errors|join:", " }}</p>
+            {% endif %}
+          </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary w-full">{% trans "Confirm" %}</button>
+      </form>
+    </div>
+  </article>
+{% endblock content %}

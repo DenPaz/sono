@@ -12,6 +12,7 @@ urlpatterns = [
     path("i18n/", include("django.conf.urls.i18n")),
     path("i18n/set-language/", SetLanguageView.as_view(), name="set_language"),
     path("accounts/", include("allauth.urls")),
+    path("assessments/", include("apps.assessments.urls", namespace="assessments")),
     path("", include("apps.dashboard.urls", namespace="dashboard")),
     path("users/", include("apps.users.urls", namespace="users")),
     path("patients/", include("apps.patients.urls", namespace="patients")),

@@ -1,35 +1,45 @@
 {% extends "base.html" %}
 
 {% load i18n %}
+{% load widget_tweaks %}
 
 {% block title %}
-  {% trans "Add parent" %}
+  {% trans "Adicionar responsável" %}
 {% endblock title %}
 {% block content %}
   <div class="max-w-lg p-6">
-    <div class="flex gap-3 items-center mb-6">
-      <a href="{% url 'users:parent_list' %}"
+    <div class="flex gap-3 items-center mb-4">
+      <a href="{% url 'users:user_list' %}"
          class="btn btn-sm btn-circle btn-ghost"
-         aria-label="{% trans "Back" %}">
+         aria-label="{% trans "Voltar" %}">
         <span class="iconify lucide--arrow-left size-4" aria-hidden="true"></span>
       </a>
-      <h1 class="font-bold text-2xl">{% trans "Add parent" %}</h1>
+      <h1 class="font-bold text-2xl">{% trans "Adicionar responsável" %}</h1>
     </div>
     <form method="post" enctype="multipart/form-data" class="space-y-4">
       {% csrf_token %}
       <c-forms.input :field="form.user.first_name" icon="lucide--user" />
       <c-forms.input :field="form.user.last_name" icon="lucide--user" />
       <c-forms.input :field="form.user.email" icon="lucide--mail" />
+      
       <c-forms.input :field="form.profile.phone" icon="lucide--phone" />
-      <c-forms.input :field="form.profile.birth_date" icon="lucide--calendar" />
-      <fieldset class="fieldset">
-        <legend class="fieldset-legend">{% trans "Avatar" %}</legend>
-        {{ form.profile.avatar }}
-        {% for error in form.profile.avatar.errors %}<p class="text-sm text-error">{{ error }}</p>{% endfor %}
-      </fieldset>
-      <div class="flex gap-3 pt-2">
-        <button type="submit" class="btn btn-primary">{% trans "Create parent" %}</button>
-        <a href="{% url 'users:parent_list' %}" class="btn btn-ghost">{% trans "Cancel" %}</a>
+      <c-forms.input :field="form.profile.birth_date" />
+
+      <div class="form-control w-full">
+        <label class="label">
+          <span class="label-text">{% trans "Avatar" %}</span>
+        </label>
+        {% render_field form.profile.avatar class="file-input file-input-bordered w-full" %}
+        {% for error in form.profile.avatar.errors %}
+          <label class="label">
+            <span class="label-text-alt text-error">{{ error }}</span>
+          </label>
+        {% endfor %}
+      </div>
+
+      <div class="flex gap-3 pt-6 border-t border-base-200">
+        <button type="submit" class="btn btn-primary">{% trans "Criar responsável" %}</button>
+        <a href="{% url 'users:user_list' %}" class="btn btn-ghost">{% trans "Cancelar" %}</a>
       </div>
     </form>
   </div>

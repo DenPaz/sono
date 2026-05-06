@@ -1,0 +1,14 @@
+{% extends "account/_base.html" %}
+
+{% load i18n %}
+
+{% block title %}{% trans "Email required" %}{% endblock title %}
+
+{% block content %}
+  <article class="card bg-base-100 border-base-300 border shadow-sm">
+    <div class="card-body gap-4 p-6 sm:p-8">
+      <h1 class="text-xl font-semibold">{% trans "Verify your email" %}</h1>
+      <p class="text-base-content/70 text-sm">{% trans "You need to verify your email before continuing." %}</p>
+    </div>
+  </article>
+{% endblock content %}

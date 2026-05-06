@@ -1,9 +1,13 @@
+from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic import CreateView
+from django.views.generic import FormView
 from django.views.generic import UpdateView
 from django.views.i18n import set_language
 from django_filters.views import FilterView
@@ -23,6 +27,7 @@ from .forms import ParentMultiModelUpdateForm
 from .forms import SpecialistMultiModelCreateForm
 from .forms import SpecialistMultiModelSelfUpdateForm
 from .forms import SpecialistMultiModelUpdateForm
+from .forms import UserSettingsForm
 from .models import Admin
 from .models import Parent
 from .models import Specialist
@@ -73,7 +78,7 @@ class AdminCreateView(
     allowed_roles = [UserRole.ADMIN]
     template_name = "users/admin_create.html"
     success_url = reverse_lazy("users:user_list")
-    success_message = _("Admin created successfully.")
+    success_message = _("Administrador criado com sucesso.")
 
 
 class AdminUpdateView(
@@ -89,7 +94,7 @@ class AdminUpdateView(
     template_name = "users/admin_update.html"
     htmx_template_name = "#update-form"
     success_url = reverse_lazy("users:user_list")
-    success_message = _("Admin updated successfully.")
+    success_message = _("Administrador atualizado com sucesso.")
 
     def get_queryset(self):
         return super().get_queryset().with_profile()
@@ -109,7 +114,7 @@ class SpecialistCreateView(
     allowed_roles = [UserRole.ADMIN]
     template_name = "users/specialist_create.html"
     success_url = reverse_lazy("users:user_list")
-    success_message = _("Specialist created successfully.")
+    success_message = _("Especialista criado com sucesso.")
 
 
 class SpecialistUpdateView(
@@ -125,7 +130,7 @@ class SpecialistUpdateView(
     template_name = "users/specialist_update.html"
     htmx_template_name = "#update-form"
     success_url = reverse_lazy("users:user_list")
-    success_message = _("Specialist updated successfully.")
+    success_message = _("Especialista atualizado com sucesso.")
 
     def get_queryset(self):
         return super().get_queryset().with_profile()
@@ -140,7 +145,7 @@ class SpecialistUpdateView(
 class ProfileView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     template_name = "users/profile.html"
     success_url = reverse_lazy("users:profile")
-    success_message = _("Profile updated successfully.")
+    success_message = _("Perfil atualizado com sucesso.")
 
     _proxy_models = {
         UserRole.ADMIN: Admin,
@@ -162,14 +167,70 @@ class ProfileView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
 
 # ---------------------------------------------------------------------------
+# Settings view (admin only)
+# ---------------------------------------------------------------------------
+class SettingsView(AllowedRolesMixin, FormView):
+    template_name = "users/settings/index.html"
+    form_class = UserSettingsForm
+    allowed_roles = [UserRole.ADMIN]
+    success_url = reverse_lazy("users:settings")
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["user"] = self.request.user
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        last_password_change = (
+            timezone.localtime(self.request.user.password_changed_at).strftime(
+                "%d/%m/%Y %H:%M"
+            )
+            if self.request.user.password_changed_at
+            else "-"
+        )
+        context.update(
+            {
+                "page_title": _("Configurações"),
+                "security": {
+                    "two_factor_enabled": False,
+                    "last_password_change": last_password_change,
+                },
+            }
+        )
+        return context
+
+    def form_valid(self, form):
+        user = form.save()
+        if form.cleaned_data.get("new_password"):
+            update_session_auth_hash(self.request, user)
+        messages.success(
+            self.request,
+            _("Configurações atualizadas com sucesso."),
+        )
+        return super().form_valid(form)
+
+
+# ---------------------------------------------------------------------------
 # Parent views
 # ---------------------------------------------------------------------------
 class ParentListView(UserListView):
     model = Parent
-    allowed_roles = [UserRole.ADMIN, UserRole.PARENT]
+    allowed_roles = [UserRole.ADMIN, UserRole.SPECIALIST]
     template_name = "users/parent_list.html"
     htmx_template_name = "#parent-table"
     context_object_name = "parents"
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.request.user.role == UserRole.SPECIALIST:
+            return queryset.filter(patients__specialist=self.request.user).distinct()
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = _("Responsáveis")
+        return context
 
 
 class ParentCreateView(
@@ -183,7 +244,7 @@ class ParentCreateView(
     allowed_roles = [UserRole.ADMIN]
     template_name = "users/parent_create.html"
     success_url = reverse_lazy("users:parent_list")
-    success_message = _("Parent created successfully.")
+    success_message = _("Responsável criado com sucesso.")
 
 
 class ParentUpdateView(
@@ -199,7 +260,7 @@ class ParentUpdateView(
     template_name = "users/parent_update.html"
     htmx_template_name = "#update-form"
     success_url = reverse_lazy("users:parent_list")
-    success_message = _("Parent updated successfully.")
+    success_message = _("Responsável atualizado com sucesso.")
 
     def get_queryset(self):
         return super().get_queryset().with_profile()

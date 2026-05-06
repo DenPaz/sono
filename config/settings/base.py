@@ -28,8 +28,7 @@ DEBUG = env.bool("DJANGO_DEBUG", False)
 TIME_ZONE = "America/Sao_Paulo"
 LANGUAGE_CODE = "pt-br"
 LANGUAGES = [
-    ("en", _("English")),
-    ("pt-br", _("Portuguese")),
+    ("pt-br", _("Português")),
 ]
 SITE_ID = 1
 SITE_NAME = "Sono"
@@ -94,6 +93,7 @@ LOCAL_APPS = [
     "apps.users.config.UsersConfig",
     "apps.dashboard.config.DashboardConfig",
     "apps.patients.config.PatientsConfig",
+    "apps.assessments.config.AssessmentsConfig",
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 

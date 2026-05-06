@@ -22,14 +22,20 @@ from .managers import UserManager
 from .utils import get_default_avatar_url
 from .utils import get_user_upload_path
 
+DEFAULT_USER_PREFERENCES = {
+    "email_alerts": True,
+    "weekly_report": True,
+    "lgpd_data_export": True,
+}
+
 
 class User(BaseModel, AbstractUser):
     first_name = models.CharField(
-        verbose_name=_("First name"),
+        verbose_name=_("Nome"),
         max_length=100,
     )
     last_name = models.CharField(
-        verbose_name=_("Last name"),
+        verbose_name=_("Sobrenome"),
         max_length=100,
     )
     email = models.EmailField(
@@ -40,6 +46,16 @@ class User(BaseModel, AbstractUser):
         verbose_name=_("Role"),
         max_length=20,
         choices=UserRole.choices,
+    )
+    preferences = models.JSONField(
+        verbose_name=_("Preferences"),
+        default=dict,
+        blank=True,
+    )
+    password_changed_at = models.DateTimeField(
+        verbose_name=_("Password changed at"),
+        null=True,
+        blank=True,
     )
     username = None
 
@@ -54,7 +70,7 @@ class User(BaseModel, AbstractUser):
         ordering = ["first_name", "last_name"]
 
     def __str__(self):
-        return f"{self.get_full_name()} <{self.email}>"
+        return self.get_full_name()
 
     def get_absolute_url(self):
         url_names = {
@@ -72,6 +88,13 @@ class User(BaseModel, AbstractUser):
         if not self.role:
             return None
         return getattr(self, f"{self.role.lower()}_profile", None)
+
+    @property
+    def resolved_preferences(self) -> dict:
+        return {
+            **DEFAULT_USER_PREFERENCES,
+            **(self.preferences or {}),
+        }
 
 
 class Admin(User):
@@ -143,7 +166,7 @@ class UserProfile(BaseModel):
         help_text=_("Maximum size: 5MB. Allowed formats: .jpg, .jpeg, .png"),
     )
     language = models.CharField(
-        verbose_name=_("Language"),
+        verbose_name=_("Idioma"),
         max_length=10,
         choices=settings.LANGUAGES,
         default=settings.LANGUAGE_CODE,
@@ -206,11 +229,11 @@ class ParentProfile(UserProfile):
         on_delete=models.CASCADE,
     )
     phone = PhoneNumberField(
-        verbose_name=_("Phone number"),
+        verbose_name=_("Número de telefone"),
         blank=True,
     )
     birth_date = models.DateField(
-        verbose_name=_("Birth date"),
+        verbose_name=_("Data de nascimento"),
         blank=True,
         null=True,
     )

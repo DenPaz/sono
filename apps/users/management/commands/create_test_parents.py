@@ -17,7 +17,7 @@ class Command(BaseCommand):
     help = "Create test parent users."
 
     def add_arguments(self, parser):
-        parser.add_argument("--count", type=int, default=1000)
+        parser.add_argument("--count", type=int, default=100)
         parser.add_argument(
             "--reset",
             action="store_true",
@@ -35,6 +35,7 @@ class Command(BaseCommand):
 
         parents = ParentFactory.build_batch(
             count,
+            password=SHARED_PASSWORD,
             role=UserRole.PARENT,
             is_staff=False,
             is_superuser=False,

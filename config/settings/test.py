@@ -29,3 +29,8 @@ TEMPLATES[0]["OPTIONS"]["debug"] = True
 # MEDIA
 # -----------------------------------------------------------------------------
 MEDIA_URL = "http://media.testserver/"
+
+# -----------------------------------------------------------------------------
+# django-fernet-encrypted-fields
+# -----------------------------------------------------------------------------
+SALT_KEY = env("FIELD_ENCRYPTION_KEY", default="1ns3cure-s3cr3t-k3y-f0r-t3st1ng")

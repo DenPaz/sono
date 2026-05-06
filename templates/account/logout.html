@@ -1,0 +1,19 @@
+{% extends "account/_base.html" %}
+
+{% load i18n %}
+
+{% block title %}{% trans "Sign out" %}{% endblock title %}
+
+{% block content %}
+  <article class="card bg-base-100 border-base-300 border shadow-sm">
+    <div class="card-body gap-4 p-6 sm:p-8">
+      <h1 class="text-xl font-semibold">{% trans "Sign out" %}</h1>
+      <p class="text-base-content/70 text-sm">{% trans "Are you sure you want to sign out?" %}</p>
+
+      <form method="post" action="{% url 'account_logout' %}" class="mt-4">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-error w-full">{% trans "Confirm" %}</button>
+      </form>
+    </div>
+  </article>
+{% endblock content %}

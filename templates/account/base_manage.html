@@ -1,0 +1,10 @@
+{% extends "account/_base.html" %}
+
+{% block content %}
+  <article class="card bg-base-100 border-base-300 border shadow-sm">
+    <div class="card-body gap-4 p-6 sm:p-8">
+      {% block content_body %}
+      {% endblock content_body %}
+    </div>
+  </article>
+{% endblock content %}

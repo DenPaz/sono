@@ -1,22 +1,20 @@
 {% extends "base.html" %}
 
 {% load i18n %}
+{% load widget_tweaks %}
 
 {% block title %}
-  {% trans "Edit parent" %}
+  {% trans "Editar responsável" %}
 {% endblock title %}
-{% block extra_css %}
-  {{ form.media.css }}
-{% endblock extra_css %}
 {% block content %}
   <div class="max-w-lg p-6">
     <div class="flex gap-3 items-center mb-4">
-      <a href="{% url 'users:parent_list' %}"
+      <a href="{% url 'users:user_list' %}"
          class="btn btn-sm btn-circle btn-ghost"
-         aria-label="{% trans "Back" %}">
+         aria-label="{% trans "Voltar" %}">
         <span class="iconify lucide--arrow-left size-4" aria-hidden="true"></span>
       </a>
-      <h1 class="font-bold text-2xl">{% trans "Edit parent" %}</h1>
+      <h1 class="font-bold text-2xl">{% trans "Editar responsável" %}</h1>
     </div>
     {% partialdef update-form inline %}
       <div id="update-form-container">
@@ -35,14 +33,16 @@
           <c-forms.input :field="form.user.first_name" icon="lucide--user" />
           <c-forms.input :field="form.user.last_name" icon="lucide--user" />
           <c-forms.input :field="form.user.email" icon="lucide--mail" />
+          
+          <c-forms.checkbox :field="form.user.is_active" />
+
           <c-forms.input :field="form.profile.phone" icon="lucide--phone" />
-          <c-forms.input :field="form.profile.birth_date" icon="lucide--calendar" />
-          <fieldset class="fieldset">
-            <legend class="fieldset-legend">{% trans "Status" %}</legend>
-            <c-forms.checkbox :field="form.user.is_active" />
-          </fieldset>
-          <fieldset class="fieldset">
-            <legend class="fieldset-legend">{% trans "Avatar" %}</legend>
+          <c-forms.input :field="form.profile.birth_date" />
+          
+          <div class="form-control w-full">
+            <label class="label">
+              <span class="label-text">{% trans "Avatar" %}</span>
+            </label>
             {% if object.parent_profile.avatar %}
               <div class="mb-2">
                 <img src="{{ object.parent_profile.get_avatar_url }}"
@@ -50,29 +50,51 @@
                      class="size-16 rounded-box object-cover" />
               </div>
             {% endif %}
-            {{ form.profile.avatar }}
-            {% for error in form.profile.avatar.errors %}<p class="text-sm text-error">{{ error }}</p>{% endfor %}
-          </fieldset>
-          <fieldset class="fieldset">
-            <legend class="fieldset-legend">{% trans "Language" %}</legend>
-            {{ form.profile.language }}
-            {% for error in form.profile.language.errors %}<p class="text-sm text-error">{{ error }}</p>{% endfor %}
-          </fieldset>
-          <fieldset class="fieldset">
-            <legend class="fieldset-legend">{% trans "Address" %}</legend>
-            {{ form.profile.address }}
-            {% for error in form.profile.address.errors %}<p class="text-sm text-error">{{ error }}</p>{% endfor %}
-          </fieldset>
-          <div class="flex gap-3 pt-2">
-            <button type="submit" class="btn btn-primary">{% trans "Save changes" %}</button>
-            <a href="{% url 'users:parent_list' %}" class="btn btn-ghost">{% trans "Cancel" %}</a>
+            {% render_field form.profile.avatar class="file-input file-input-bordered w-full" %}
+            {% for error in form.profile.avatar.errors %}
+              <label class="label">
+                <span class="label-text-alt text-error">{{ error }}</span>
+              </label>
+            {% endfor %}
+          </div>
+
+          <c-forms.input :field="form.profile.address" />
+
+          {# ── Associated children ── #}
+          <div class="mt-6 p-4 bg-base-200/50 rounded-box border border-base-200">
+            <h3 class="font-semibold mb-3 text-sm uppercase tracking-wide text-base-content/60">{% trans "Dependentes" %}</h3>
+            
+            <fieldset class="fieldset mb-4">
+              <legend class="fieldset-legend">{% trans "Vincular dependentes existentes" %}</legend>
+              {{ form.user.patients }}
+              {% for error in form.user.patients.errors %}<p class="text-sm text-error">{{ error }}</p>{% endfor %}
+            </fieldset>
+
+            <div class="space-y-2 border-t border-base-200 pt-4">
+              {% for patient in object.patients.all %}
+                <div class="flex items-center justify-between p-3 bg-base-100 rounded-box border border-base-200">
+                  <div class="flex items-center gap-2">
+                    <span class="iconify lucide--baby size-4 text-teal-400"></span>
+                    <span class="font-medium text-sm">{{ patient.get_full_name }}</span>
+                  </div>
+                  <a href="{{ patient.get_absolute_url }}" class="btn btn-xs btn-ghost">{% trans "Ver" %}</a>
+                </div>
+              {% empty %}
+                <p class="text-xs text-base-content/50 italic">{% trans "Nenhum dependente associado ainda." %}</p>
+              {% endfor %}
+              <a href="{% url 'patients:patient_create' %}?parent={{ object.pk }}" class="btn btn-sm btn-outline btn-block mt-4">
+                <span class="iconify lucide--plus size-3.5"></span>
+                {% trans "Adicionar novo dependente" %}
+              </a>
+            </div>
+          </div>
+
+          <div class="flex gap-3 pt-6 border-t border-base-200">
+            <button type="submit" class="btn btn-primary">{% trans "Salvar alterações" %}</button>
+            <a href="{% url 'users:user_list' %}" class="btn btn-ghost">{% trans "Cancelar" %}</a>
           </div>
         </form>
-        {% if request.htmx %}{{ form.media.js }}{% endif %}
       </div>
     {% endpartialdef %}
   </div>
 {% endblock content %}
-{% block extra_js %}
-  {% if not request.htmx %}{{ form.media.js }}{% endif %}
-{% endblock extra_js %}

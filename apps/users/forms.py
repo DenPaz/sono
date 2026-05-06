@@ -1,13 +1,19 @@
 from betterforms.multiform import MultiModelForm
 from django import forms
+from django.contrib.auth import password_validation
 from django.contrib.auth.hashers import make_password
+from django.core.exceptions import ValidationError
+from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
+from .models import DEFAULT_USER_PREFERENCES
 from .models import Admin
 from .models import AdminProfile
 from .models import Parent
 from .models import ParentProfile
 from .models import Specialist
 from .models import SpecialistProfile
+from .models import User
 
 
 # ---------------------------------------------------------------------------
@@ -170,13 +176,54 @@ class SpecialistMultiModelUpdateForm(UserMultiModelUpdateForm):
 # Parent forms
 # ---------------------------------------------------------------------------
 class ParentCreateForm(UserCreateForm):
+    patients = forms.ModelMultipleChoiceField(
+        queryset=None,
+        required=False,
+        label=_("Associar dependentes existentes"),
+        help_text=_("Selecione pacientes que já existem mas precisam ser vinculados a este responsável."),
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        from apps.patients.models import Patient
+        self.fields["patients"].queryset = Patient.objects.all()
+
     class Meta(UserCreateForm.Meta):
         model = Parent
 
+    def save(self, commit=True):
+        user = super().save(commit=commit)
+        if commit:
+            for patient in self.cleaned_data.get("patients", []):
+                patient.parent = user
+                patient.save()
+        return user
+
 
 class ParentUpdateForm(UserUpdateForm):
+    patients = forms.ModelMultipleChoiceField(
+        queryset=None,
+        required=False,
+        label=_("Associar dependentes existentes"),
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        from apps.patients.models import Patient
+        self.fields["patients"].queryset = Patient.objects.all()
+        if self.instance.pk:
+            self.fields["patients"].initial = self.instance.patients.all()
+
     class Meta(UserUpdateForm.Meta):
         model = Parent
+
+    def save(self, commit=True):
+        user = super().save(commit=commit)
+        if commit:
+            for patient in self.cleaned_data.get("patients", []):
+                patient.parent = user
+                patient.save()
+        return user
 
 
 class ParentProfileCreateForm(UserProfileCreateForm):
@@ -256,3 +303,72 @@ class ParentMultiModelSelfUpdateForm(UserMultiModelUpdateForm):
         "user": ParentSelfUpdateForm,
         "profile": ParentProfileUpdateForm,
     }
+
+
+class UserSettingsForm(forms.Form):
+    first_name = forms.CharField(max_length=100)
+    last_name = forms.CharField(max_length=100)
+    email = forms.EmailField()
+    new_password = forms.CharField(
+        required=False,
+        strip=False,
+        widget=forms.PasswordInput(render_value=False),
+    )
+    confirm_password = forms.CharField(
+        required=False,
+        strip=False,
+        widget=forms.PasswordInput(render_value=False),
+    )
+    email_alerts = forms.BooleanField(required=False)
+    weekly_report = forms.BooleanField(required=False)
+    lgpd_data_export = forms.BooleanField(required=False)
+
+    def __init__(self, *args, user: User, **kwargs):
+        self.user = user
+        super().__init__(*args, **kwargs)
+        preferences = user.resolved_preferences
+        self.initial.setdefault("first_name", user.first_name)
+        self.initial.setdefault("last_name", user.last_name)
+        self.initial.setdefault("email", user.email)
+        for key, value in DEFAULT_USER_PREFERENCES.items():
+            self.initial.setdefault(key, preferences.get(key, value))
+
+    def clean_email(self):
+        email = self.cleaned_data["email"].strip().lower()
+        if User.objects.exclude(pk=self.user.pk).filter(email__iexact=email).exists():
+            raise ValidationError(_("Um usuário com este e-mail já existe."))
+        return email
+
+    def clean(self):
+        cleaned_data = super().clean()
+        new_password = cleaned_data.get("new_password")
+        confirm_password = cleaned_data.get("confirm_password")
+
+        if new_password or confirm_password:
+            if new_password != confirm_password:
+                self.add_error(
+                    "confirm_password",
+                    _("A confirmação da senha não confere."),
+                )
+            elif new_password:
+                password_validation.validate_password(new_password, self.user)
+
+        return cleaned_data
+
+    def save(self) -> User:
+        self.user.first_name = self.cleaned_data["first_name"]
+        self.user.last_name = self.cleaned_data["last_name"]
+        self.user.email = self.cleaned_data["email"]
+        self.user.preferences = {
+            "email_alerts": self.cleaned_data["email_alerts"],
+            "weekly_report": self.cleaned_data["weekly_report"],
+            "lgpd_data_export": self.cleaned_data["lgpd_data_export"],
+        }
+
+        new_password = self.cleaned_data.get("new_password")
+        if new_password:
+            self.user.set_password(new_password)
+            self.user.password_changed_at = timezone.now()
+
+        self.user.save()
+        return self.user
