@@ -327,11 +327,21 @@ class UserSettingsForm(forms.Form):
         self.user = user
         super().__init__(*args, **kwargs)
         preferences = user.resolved_preferences
-        self.initial.setdefault("first_name", user.first_name)
-        self.initial.setdefault("last_name", user.last_name)
+        
+        from apps.users.enums import UserRole
+        if user.role != UserRole.ADMIN:
+            self.fields.pop("first_name", None)
+            self.fields.pop("last_name", None)
+            self.fields.pop("email_alerts", None)
+            self.fields.pop("weekly_report", None)
+            self.fields.pop("lgpd_data_export", None)
+        else:
+            self.initial.setdefault("first_name", user.first_name)
+            self.initial.setdefault("last_name", user.last_name)
+            for key, value in DEFAULT_USER_PREFERENCES.items():
+                self.initial.setdefault(key, preferences.get(key, value))
+        
         self.initial.setdefault("email", user.email)
-        for key, value in DEFAULT_USER_PREFERENCES.items():
-            self.initial.setdefault(key, preferences.get(key, value))
 
     def clean_email(self):
         email = self.cleaned_data["email"].strip().lower()
@@ -356,14 +366,19 @@ class UserSettingsForm(forms.Form):
         return cleaned_data
 
     def save(self) -> User:
-        self.user.first_name = self.cleaned_data["first_name"]
-        self.user.last_name = self.cleaned_data["last_name"]
+        if "first_name" in self.cleaned_data:
+            self.user.first_name = self.cleaned_data["first_name"]
+        if "last_name" in self.cleaned_data:
+            self.user.last_name = self.cleaned_data["last_name"]
+            
         self.user.email = self.cleaned_data["email"]
-        self.user.preferences = {
-            "email_alerts": self.cleaned_data["email_alerts"],
-            "weekly_report": self.cleaned_data["weekly_report"],
-            "lgpd_data_export": self.cleaned_data["lgpd_data_export"],
-        }
+        
+        if "email_alerts" in self.cleaned_data:
+            self.user.preferences = {
+                "email_alerts": self.cleaned_data["email_alerts"],
+                "weekly_report": self.cleaned_data["weekly_report"],
+                "lgpd_data_export": self.cleaned_data["lgpd_data_export"],
+            }
 
         new_password = self.cleaned_data.get("new_password")
         if new_password:

@@ -68,6 +68,7 @@ class AssessmentPatientForm(forms.Form):
             attrs={
                 "class": "input input-bordered w-full",
                 "placeholder": _("Cidade / Município"),
+                "list": "municipalities_list",
             }
         ),
     )

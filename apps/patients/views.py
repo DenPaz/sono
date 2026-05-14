@@ -135,13 +135,16 @@ class PatientUpdateView(
 class QuestionnaireWizardView(AllowedRolesMixin, SessionWizardView):
     template_name = "patients/questionnaire_wizard.html"
     form_list = QUESTIONNAIRE_FORMS
-    allowed_roles = [UserRole.PARENT]
+    allowed_roles = [UserRole.PARENT, UserRole.SPECIALIST]
 
     def dispatch(self, request, *args, **kwargs):
+        from django.db.models import Q
+        user = request.user
+        condition = Q(parent=user) if user.role == UserRole.PARENT else Q(specialist=user)
+        
         self.patient = get_object_or_404(
             Patient,
-            pk=self.kwargs["patient_pk"],
-            parent=request.user,
+            Q(pk=self.kwargs["patient_pk"]) & condition,
             is_active=True,
         )
         return super().dispatch(request, *args, **kwargs)
@@ -160,8 +163,14 @@ class QuestionnaireWizardView(AllowedRolesMixin, SessionWizardView):
         return context
 
     def done(self, form_list, **kwargs):
+        user = self.request.user
+        parent = user if user.role == UserRole.PARENT else None
+        professional = user if user.role == UserRole.SPECIALIST else None
+        
         QuestionnaireResponse.objects.create(
             patient=self.patient,
+            parent=parent,
+            professional=professional,
             **self.get_all_cleaned_data(),
         )
         messages.success(self.request, _("Questionnaire submitted successfully."))

@@ -15,6 +15,8 @@ from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic import FormView
 from django.views.generic import TemplateView
+from django.template.loader import render_to_string
+from weasyprint import HTML
 
 from apps.assessments.utils import build_risk_summary
 from apps.core.utils import generate_simple_pdf
@@ -73,15 +75,17 @@ class IndexView(TemplateView):
 
     def _specialist_context(self):
         user = self.request.user
+        patients = Patient.objects.filter(specialist=user, is_active=True).prefetch_related(
+            "questionnaire_responses"
+        )
         recent_responses = (
             QuestionnaireResponse.objects.filter(patient__specialist=user)
             .select_related("patient")
             .order_by("-created")[:8]
         )
         return {
-            "patient_count": Patient.objects.filter(
-                specialist=user, is_active=True
-            ).count(),
+            "patients": patients,
+            "patient_count": patients.count(),
             "recent_responses": recent_responses,
         }
 
@@ -168,68 +172,64 @@ def _filter_evaluations(
     ]
 
 
-def _resolve_period(selected_period: str) -> str:
-    return selected_period if selected_period in {"7d", "30d", "90d"} else "30d"
+from datetime import datetime
 
-
-def _build_period_buckets(selected_period: str, today) -> list[dict]:
-    if selected_period == "7d":
-        start_date = today - timedelta(days=6)
-        return [
-            {
-                "label": (start_date + timedelta(days=offset)).strftime("%d/%m"),
-                "start": start_date + timedelta(days=offset),
-                "end": start_date + timedelta(days=offset),
-            }
-            for offset in range(7)
-        ]
-
-    if selected_period == "90d":
-        start_date = today - timedelta(days=89)
-        buckets = []
-        for index in range(3):
-            bucket_start = start_date + timedelta(days=index * 30)
-            bucket_end = min(bucket_start + timedelta(days=29), today)
-            buckets.append(
-                {
-                    "label": bucket_start.strftime("%b"),
-                    "start": bucket_start,
-                    "end": bucket_end,
-                }
-            )
-        return buckets
-
-    start_date = today - timedelta(days=29)
-    bucket_count = (30 + 6) // 7
+def _build_period_buckets(start_date, end_date) -> list[dict]:
+    delta_days = (end_date - start_date).days
+    
     buckets = []
-    for index in range(bucket_count):
-        bucket_start = start_date + timedelta(days=index * 7)
-        bucket_end = min(bucket_start + timedelta(days=6), today)
-        buckets.append(
-            {
-                "label": f"Sem {index + 1}",
-                "start": bucket_start,
-                "end": bucket_end,
-            }
-        )
+    if delta_days <= 14:
+        for offset in range(delta_days + 1):
+            day = start_date + timedelta(days=offset)
+            buckets.append({"label": day.strftime("%d/%m"), "start": day, "end": day})
+    elif delta_days <= 90:
+        bucket_count = (delta_days + 6) // 7
+        for index in range(bucket_count):
+            bucket_start = start_date + timedelta(days=index * 7)
+            bucket_end = min(bucket_start + timedelta(days=6), end_date)
+            buckets.append({"label": f"Sem {index + 1}", "start": bucket_start, "end": bucket_end})
+    else:
+        bucket_count = (delta_days + 30) // 30
+        for index in range(bucket_count):
+            bucket_start = start_date + timedelta(days=index * 30)
+            bucket_end = min(bucket_start + timedelta(days=29), end_date)
+            buckets.append({"label": bucket_start.strftime("%b %y"), "start": bucket_start, "end": bucket_end})
     return buckets
 
 
-def _build_report_payload(selected_period: str) -> dict:
+def _build_report_payload(start_date_str: str, end_date_str: str, municipality: str) -> dict:
     today = timezone.localdate()
-    period = _resolve_period(selected_period)
-    days_map = {"7d": 6, "30d": 29, "90d": 89}
-    start_date = today - timedelta(days=days_map[period])
+    
+    try:
+        start_date = datetime.strptime(start_date_str, "%Y-%m-%d").date()
+    except (ValueError, TypeError):
+        start_date = today - timedelta(days=29)
+        
+    try:
+        end_date = datetime.strptime(end_date_str, "%Y-%m-%d").date()
+    except (ValueError, TypeError):
+        end_date = today
+
+    if start_date > end_date:
+        start_date, end_date = end_date, start_date
 
     queryset = QuestionnaireResponse.objects.filter(
-        created__date__range=(start_date, today)
+        created__date__range=(start_date, end_date)
     ).select_related(
         "patient",
         "patient__parent",
         "patient__parent__parent_profile",
     )
-    responses = list(queryset)
-    buckets = _build_period_buckets(period, today)
+    all_responses = list(queryset)
+    
+    responses = []
+    for r in all_responses:
+        if municipality and municipality != "-":
+            if _get_municipality(r) != municipality:
+                continue
+        responses.append(r)
+
+    buckets = _build_period_buckets(start_date, end_date)
 
     bucket_stats = [
         {"count": 0, "score_sum": 0} for _ in range(len(buckets))
@@ -252,14 +252,14 @@ def _build_report_payload(selected_period: str) -> dict:
         bar_series.append({"label": bucket["label"], "value": count})
         line_series.append({"label": bucket["label"], "value": average})
 
+    total_disorders = sum(sum(1 for v in r.flags.values() if v) for r in responses)
+
     total_patients = Patient.objects.active().count()
-    unique_patients = len({response.patient_id for response in responses})
-    high_risk_count = sum(
-        1
-        for response in responses
-        if sum(1 for value in response.flags.values() if value)
-        >= HIGH_RISK_FLAG_THRESHOLD
-    )
+    if municipality and municipality != "-":
+        total_patients = len({r.patient_id or r.patient_display_name for r in responses}) or 1
+        
+    unique_patients = len({response.patient_id or response.patient_display_name for response in responses})
+    high_risk_count = sum(1 for response in responses if response.has_flags)
     high_risk_pct = (
         round((high_risk_count / len(responses)) * 100)
         if responses
@@ -270,24 +270,19 @@ def _build_report_payload(selected_period: str) -> dict:
         if responses
         else 0
     )
-    coverage_pct = (
-        round((unique_patients / total_patients) * 100)
-        if total_patients
-        else 0
-    )
 
     metrics = [
-        {"label": _("Avaliações no período"), "value": str(len(responses))},
+        {"label": _("Avaliações"), "value": str(len(responses))},
+        {"label": _("Distúrbios"), "value": str(total_disorders)},
         {"label": _("Risco alto"), "value": f"{high_risk_pct}%"},
         {"label": _("Pacientes avaliados"), "value": str(unique_patients)},
-        {"label": _("Cobertura"), "value": f"{coverage_pct}%"},
         {"label": _("Pontuação média"), "value": str(average_score)},
     ]
 
     return {
-        "period": period,
-        "start_date": start_date,
-        "end_date": today,
+        "start_date": start_date.strftime("%Y-%m-%d"),
+        "end_date": end_date.strftime("%Y-%m-%d"),
+        "municipality": municipality,
         "responses": responses,
         "metrics": metrics,
         "bar_series": bar_series,
@@ -572,10 +567,17 @@ class ProfessionalManageView(AllowedRolesMixin, TemplateView):
         return context
 
     def post(self, request, *args, **kwargs):
-        email = request.POST.get("email", "").strip()
-        specialist = self._find_specialist(email) if email else None
+        original_email = request.POST.get("original_email", "").strip()
+        specialist = self._find_specialist(original_email) if original_email else None
 
         if specialist:
+            new_email = request.POST.get("email", "").strip()
+            if new_email and new_email != specialist.email:
+                if User.objects.filter(email__iexact=new_email).exclude(pk=specialist.pk).exists():
+                    messages.error(request, _("O e-mail informado já está em uso."))
+                    return redirect(f"{self.request.path}?email={original_email}")
+                specialist.email = new_email
+
             name = request.POST.get("name", "").strip()
             if name:
                 parts = name.split()
@@ -594,12 +596,13 @@ class ProfessionalManageView(AllowedRolesMixin, TemplateView):
                 prefs.pop("municipality", None)
             specialist.preferences = prefs
 
-            specialist.save(update_fields=["first_name", "last_name", "is_active", "preferences"])
+            specialist.save(update_fields=["first_name", "last_name", "is_active", "preferences", "email"])
             messages.success(
                 request,
                 _("Atualização registrada para %(name)s.")
                 % {"name": specialist.get_full_name()},
             )
+            email = specialist.email
         else:
             messages.warning(
                 request,
@@ -641,9 +644,23 @@ class MunicipalitiesView(AllowedRolesMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         query = self.request.GET.get("query", "")
         today = timezone.localdate()
-        recent_start = today - timedelta(days=29)
-        previous_start = recent_start - timedelta(days=30)
-        previous_end = recent_start - timedelta(days=1)
+
+        try:
+            start_date = datetime.strptime(self.request.GET.get("start_date", ""), "%Y-%m-%d").date()
+        except (ValueError, TypeError):
+            start_date = today - timedelta(days=29)
+
+        try:
+            end_date = datetime.strptime(self.request.GET.get("end_date", ""), "%Y-%m-%d").date()
+        except (ValueError, TypeError):
+            end_date = today
+
+        if start_date > end_date:
+            start_date, end_date = end_date, start_date
+
+        delta_days = (end_date - start_date).days
+        previous_start = start_date - timedelta(days=delta_days + 1)
+        previous_end = start_date - timedelta(days=1)
 
         responses = QuestionnaireResponse.objects.select_related(
             "patient",
@@ -667,14 +684,13 @@ class MunicipalitiesView(AllowedRolesMixin, TemplateView):
                 continue
             stats = city_stats[city]
             stats["completed"] += 1
-            stats["unique_patients"].add(response.patient_id or response.patient_name)
+            stats["unique_patients"].add(response.patient_id or response.patient_display_name)
 
-            flagged_count = sum(1 for value in response.flags.values() if value)
-            if flagged_count >= HIGH_RISK_FLAG_THRESHOLD:
+            if response.has_flags:
                 stats["high_risk"] += 1
 
             response_date = response.created.date()
-            if response_date >= recent_start:
+            if start_date <= response_date <= end_date:
                 stats["recent"] += 1
             elif previous_start <= response_date <= previous_end:
                 stats["previous"] += 1
@@ -709,6 +725,8 @@ class MunicipalitiesView(AllowedRolesMixin, TemplateView):
                 "page_title": _("Desempenho por Município"),
                 "municipalities": ranking,
                 "query": query,
+                "start_date": start_date.strftime("%Y-%m-%d"),
+                "end_date": end_date.strftime("%Y-%m-%d"),
                 "highlights": [
                     {
                         "label": _("Total de Municípios"),
@@ -736,22 +754,28 @@ class ReportsView(AllowedRolesMixin, TemplateView):
     template_name = "reports/index.html"
     allowed_roles = [UserRole.ADMIN]
 
-    PERIOD_OPTIONS = [
-        ("7d", _("Ultimos 7 dias")),
-        ("30d", _("Ultimos 30 dias")),
-        ("90d", _("Ultimos 90 dias")),
-    ]
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        selected_period = _resolve_period(self.request.GET.get("period", "30d"))
-        payload = _build_report_payload(selected_period)
+        start_date = self.request.GET.get("start_date", "")
+        end_date = self.request.GET.get("end_date", "")
+        municipality = self.request.GET.get("municipality", "")
+        
+        payload = _build_report_payload(start_date, end_date, municipality)
+
+        # Get all municipalities
+        all_cities = set()
+        for resp in QuestionnaireResponse.objects.select_related("patient__parent__parent_profile"):
+            city = _get_municipality(resp)
+            if city and city != "-":
+                all_cities.add(city)
 
         context.update(
             {
                 "page_title": _("Relatorios Consolidados"),
-                "selected_period": payload["period"],
-                "period_options": self.PERIOD_OPTIONS,
+                "start_date": payload["start_date"],
+                "end_date": payload["end_date"],
+                "selected_municipality": payload["municipality"],
+                "all_municipalities": sorted(all_cities),
                 "metrics": payload["metrics"],
                 "bar_series": payload["bar_series"],
                 "line_series": payload["line_series"],
@@ -763,45 +787,33 @@ class ReportsView(AllowedRolesMixin, TemplateView):
                     (item["value"] for item in payload["line_series"]),
                     default=0,
                 ),
+                "responses": payload["responses"],
             }
         )
         return context
-
 
 class ReportsPdfExportView(AllowedRolesMixin, View):
     allowed_roles = [UserRole.ADMIN]
 
     def get(self, request, *args, **kwargs):
-        selected_period = _resolve_period(request.GET.get("period", "30d"))
-        payload = _build_report_payload(selected_period)
+        start_date = request.GET.get("start_date", "")
+        end_date = request.GET.get("end_date", "")
+        municipality = request.GET.get("municipality", "")
+        payload = _build_report_payload(start_date, end_date, municipality)
 
-        lines = [
-            f"Período: {selected_period}",
-            "",
-            "Métricas:",
-        ]
-        lines.extend(
-            [f"- {metric['label']}: {metric['value']}" for metric in payload["metrics"]]
-        )
+        context = {
+            "payload": payload,
+            "title": "Relatório de Distúrbios do Sono",
+            "date": timezone.localtime().strftime("%d/%m/%Y %H:%M")
+        }
+        
+        html_string = render_to_string("reports/pdf_template.html", context)
+        pdf_file = HTML(string=html_string).write_pdf()
 
-        lines.extend(["", "Volume de avaliações:"])
-        lines.extend(
-            [f"- {point['label']}: {point['value']}" for point in payload["bar_series"]]
-        )
-
-        lines.extend(["", "Média de pontuação clínica:"])
-        lines.extend(
-            [
-                f"- {point['label']}: {point['value']}"
-                for point in payload["line_series"]
-            ]
-        )
-
-        response = HttpResponse(content_type="application/pdf")
+        response = HttpResponse(pdf_file, content_type="application/pdf")
         response["Content-Disposition"] = (
-            f'attachment; filename="relatorios-{selected_period}.pdf"'
+            f'attachment; filename="relatorios-{payload["start_date"]}-{payload["end_date"]}.pdf"'
         )
-        response.write(generate_simple_pdf("Relatorios consolidados", lines))
         return response
 
 
@@ -809,25 +821,40 @@ class ReportsCsvExportView(AllowedRolesMixin, View):
     allowed_roles = [UserRole.ADMIN]
 
     def get(self, request, *args, **kwargs):
-        selected_period = _resolve_period(request.GET.get("period", "30d"))
-        payload = _build_report_payload(selected_period)
+        start_date = request.GET.get("start_date", "")
+        end_date = request.GET.get("end_date", "")
+        municipality = request.GET.get("municipality", "")
+        payload = _build_report_payload(start_date, end_date, municipality)
 
         response = HttpResponse(content_type="text/csv; charset=utf-8")
         response["Content-Disposition"] = (
-            f'attachment; filename="relatorios-{selected_period}.csv"'
+            f'attachment; filename="relatorios-{payload["start_date"]}-{payload["end_date"]}.csv"'
         )
 
         writer = csv.writer(response)
-        writer.writerow(["periodo", selected_period])
+        writer.writerow(["Período", f"{payload['start_date']} até {payload['end_date']}"])
+        writer.writerow(["Município", payload["municipality"] or "Todos"])
         writer.writerow([])
-        writer.writerow(["metrica", "valor"])
+        writer.writerow(["Métrica", "Valor"])
         for metric in payload["metrics"]:
             writer.writerow([metric["label"], metric["value"]])
 
         writer.writerow([])
-        writer.writerow(["serie", "periodo", "valor"])
-        for point in payload["bar_series"]:
-            writer.writerow(["volume_avaliacoes", point["label"], point["value"]])
-        for point in payload["line_series"]:
-            writer.writerow(["media_score_clinico", point["label"], point["value"]])
+        writer.writerow(["Avaliações"])
+        writer.writerow([
+            "Código", "Paciente", "Profissional", "Município", 
+            "Pontuação", "Status", "Data"
+        ])
+        for r in payload["responses"]:
+            status = _("Em revisão") if r.has_flags else _("Concluída")
+            writer.writerow([
+                r.pk,
+                r.patient_display_name,
+                _get_professional_name(r),
+                _get_municipality(r),
+                r.total_score,
+                status,
+                r.created.strftime("%Y-%m-%d")
+            ])
+            
         return response

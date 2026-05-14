@@ -172,7 +172,7 @@ class ProfileView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 class SettingsView(AllowedRolesMixin, FormView):
     template_name = "users/settings/index.html"
     form_class = UserSettingsForm
-    allowed_roles = [UserRole.ADMIN]
+    allowed_roles = [UserRole.ADMIN, UserRole.SPECIALIST, UserRole.PARENT]
     success_url = reverse_lazy("users:settings")
 
     def get_form_kwargs(self):

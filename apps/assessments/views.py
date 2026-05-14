@@ -30,7 +30,7 @@ def _get_patient_city(patient) -> str:
 class QuestionnaireWizardView(AllowedRolesMixin, SessionWizardView):
     template_name = "assessments/questionnaire.html"
     form_list = QUESTIONNAIRE_FORMS
-    allowed_roles = [UserRole.ADMIN]
+    allowed_roles = [UserRole.ADMIN, UserRole.SPECIALIST]
 
     def get_context_data(self, form, **kwargs):
         context = super().get_context_data(form=form, **kwargs)
@@ -53,6 +53,9 @@ class QuestionnaireWizardView(AllowedRolesMixin, SessionWizardView):
             )
 
         progress_percent = round((current_step_index / len(form_keys)) * 100)
+        
+        all_cities = list(QuestionnaireResponse.objects.exclude(municipality="").values_list("municipality", flat=True).distinct())
+
         context.update(
             {
                 "page_title": _("Aplicação do questionário"),
@@ -60,6 +63,7 @@ class QuestionnaireWizardView(AllowedRolesMixin, SessionWizardView):
                 "current_step_index": current_step_index,
                 "total_steps": len(form_keys),
                 "progress_percent": progress_percent,
+                "all_municipalities": all_cities,
             }
         )
         return context
@@ -101,7 +105,7 @@ class QuestionnaireWizardView(AllowedRolesMixin, SessionWizardView):
 
 class AssessmentResultView(AllowedRolesMixin, TemplateView):
     template_name = "assessments/results.html"
-    allowed_roles = [UserRole.ADMIN]
+    allowed_roles = [UserRole.ADMIN, UserRole.SPECIALIST]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -162,6 +166,34 @@ class AssessmentResultView(AllowedRolesMixin, TemplateView):
             else 0
         )
 
+        from apps.patients.forms import QUESTIONNAIRE_FORMS as PATIENT_FORMS
+        from apps.patients.forms import STEP_TITLES
+        detailed_answers = []
+        for step_name, form_class in PATIENT_FORMS:
+            form = form_class()
+            step_answers = []
+            for field_name, field in form.fields.items():
+                value = getattr(response, field_name)
+                display_value = dict(field.choices).get(value, value)
+                step_answers.append({
+                    "question": field.label,
+                    "answer": display_value,
+                })
+            detailed_answers.append({
+                "title": STEP_TITLES.get(step_name, step_name),
+                "answers": step_answers,
+            })
+
+        DISORDER_LABELS = {
+            "sleep_onset_maintenance": _("Início e Manutenção do Sono"),
+            "respiratory": _("Distúrbios Respiratórios do Sono"),
+            "arousal": _("Despertares"),
+            "sleep_wake_transition": _("Transição Sono-Vigília"),
+            "excessive_daytime_sleepiness": _("Sonolência Diurna Excessiva"),
+            "hyperhidrosis": _("Hiperidrose do Sono"),
+        }
+        active_disorders = [DISORDER_LABELS.get(k, k) for k, v in response.flags.items() if v]
+
         context.update(
             {
                 "page_title": _("Resultado clínico"),
@@ -180,6 +212,8 @@ class AssessmentResultView(AllowedRolesMixin, TemplateView):
                     "max_score": TOTAL_MAX_SCORE,
                     "risk": risk,
                     "subscales": subscales,
+                    "detailed_answers": detailed_answers,
+                    "active_disorders": active_disorders,
                 },
                 "subscale_average": average_percentage,
             }
