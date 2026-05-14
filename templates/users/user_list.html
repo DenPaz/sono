@@ -137,7 +137,7 @@
                   </td>
                   {# Status #}
                   <td>
-                    <c-users.status-badge :is_active="{{ user.is_active|yesno:'true,false' }}" />
+                    <c-users.status-badge :is_active="user.is_active" />
                   </td>
                   {# Joined #}
                   <td class="hidden text-xs text-base-content/60 md:table-cell">{{ user.date_joined|date:"d/m/Y" }}</td>

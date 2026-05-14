@@ -455,12 +455,17 @@ class ProfessionalsListView(AllowedRolesMixin, TemplateView):
         professionals = []
         for specialist in specialists:
             assigned_patients = patients_by_specialist.get(specialist.pk, [])
-            city_counts = Counter(
-                _get_patient_city(patient)
-                for patient in assigned_patients
-                if _get_patient_city(patient) != "-"
-            )
-            municipality = city_counts.most_common(1)[0][0] if city_counts else "-"
+            pref_municipality = (specialist.preferences or {}).get("municipality")
+            if pref_municipality:
+                municipality = pref_municipality
+            else:
+                city_counts = Counter(
+                    _get_patient_city(patient)
+                    for patient in assigned_patients
+                    if _get_patient_city(patient) != "-"
+                )
+                municipality = city_counts.most_common(1)[0][0] if city_counts else "-"
+
             role_label = _("Especialista")
             status_label = _("Ativo") if specialist.is_active else _("Inativo")
 
@@ -516,6 +521,16 @@ class ProfessionalManageView(AllowedRolesMixin, TemplateView):
             self._find_specialist(selected_email) if selected_email else None
         )
 
+        all_cities = set()
+        for resp in QuestionnaireResponse.objects.select_related("patient__parent__parent_profile"):
+            city = _get_municipality(resp)
+            if city and city != "-":
+                all_cities.add(city)
+        for pat in Patient.objects.filter(is_active=True).select_related("parent", "parent__parent_profile"):
+            city = _get_patient_city(pat)
+            if city and city != "-":
+                all_cities.add(city)
+
         professional = None
         if specialist:
             assigned_patients = list(
@@ -523,10 +538,14 @@ class ProfessionalManageView(AllowedRolesMixin, TemplateView):
                 .select_related("parent", "parent__parent_profile")
                 .order_by("first_name", "last_name")
             )
+            pref_municipality = (specialist.preferences or {}).get("municipality")
             city_counts = Counter(
                 _get_patient_city(patient)
                 for patient in assigned_patients
                 if _get_patient_city(patient) != "-"
+            )
+            resolved_municipality = pref_municipality or (
+                city_counts.most_common(1)[0][0] if city_counts else "-"
             )
             role_label = _("Especialista")
             status_label = _("Ativo") if specialist.is_active else _("Inativo")
@@ -537,9 +556,8 @@ class ProfessionalManageView(AllowedRolesMixin, TemplateView):
                 "status_label": status_label,
                 "status_value": "active" if specialist.is_active else "inactive",
                 "active_cases": len(assigned_patients),
-                "municipality": (
-                    city_counts.most_common(1)[0][0] if city_counts else "-"
-                ),
+                "municipality": resolved_municipality if resolved_municipality != "-" else "",
+                "is_custom_not_in_list": resolved_municipality != "-" and resolved_municipality not in all_cities,
             }
 
         context.update(
@@ -547,6 +565,7 @@ class ProfessionalManageView(AllowedRolesMixin, TemplateView):
                 "page_title": _("Gerenciar profissional"),
                 "selected_email": selected_email,
                 "professional": professional,
+                "all_municipalities": sorted(all_cities),
                 "professional_not_found": selected_email and specialist is None,
             }
         )
@@ -566,7 +585,16 @@ class ProfessionalManageView(AllowedRolesMixin, TemplateView):
                 else:
                     specialist.last_name = ""
             specialist.is_active = request.POST.get("status") == "active"
-            specialist.save(update_fields=["first_name", "last_name", "is_active"])
+
+            new_municipality = request.POST.get("municipality", "").strip()
+            prefs = specialist.preferences or {}
+            if new_municipality and new_municipality != "-":
+                prefs["municipality"] = new_municipality
+            else:
+                prefs.pop("municipality", None)
+            specialist.preferences = prefs
+
+            specialist.save(update_fields=["first_name", "last_name", "is_active", "preferences"])
             messages.success(
                 request,
                 _("Atualização registrada para %(name)s.")

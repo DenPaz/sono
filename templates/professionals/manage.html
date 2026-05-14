@@ -50,16 +50,44 @@
               <span class="label-text">{% trans "Cargo" %}</span>
               <input type="text"
                      value="{{ professional.role }}"
-                     class="input input-bordered w-full" />
+                     class="input input-bordered w-full"
                      readonly />
             </label>
 
-            <label class="form-control">
+            <label class="form-control"
+                   x-data="{ 
+                     mode: '{{ professional.is_custom_not_in_list|yesno:'custom,select' }}',
+                     customVal: '{{ professional.municipality|escapejs }}'
+                   }">
               <span class="label-text">{% trans "Município" %}</span>
-              <input type="text"
-                     value="{{ professional.municipality }}"
-                     class="input input-bordered w-full"
-                     readonly />
+              
+              <!-- Modo Select -->
+              <select x-show="mode === 'select'"
+                      :name="mode === 'select' ? 'municipality' : ''"
+                      @change="if ($event.target.value === '__custom__') { mode = 'custom'; $nextTick(() => $refs.customInput.focus()); }"
+                      class="select select-bordered w-full">
+                <option value="">{% trans "Automático (Padrão)" %}</option>
+                {% for city in all_municipalities %}
+                  <option value="{{ city }}" {% if professional.municipality == city %}selected{% endif %}>{{ city }}</option>
+                {% endfor %}
+                <option value="__custom__" class="font-semibold text-primary">{% trans "+ Digitar outro município…" %}</option>
+              </select>
+
+              <!-- Modo Input Customizado -->
+              <div x-show="mode === 'custom'" class="relative flex items-center">
+                <input x-ref="customInput"
+                       type="text"
+                       :name="mode === 'custom' ? 'municipality' : ''"
+                       x-model="customVal"
+                       placeholder="{% trans 'Nome do novo município…' %}"
+                       class="input input-bordered w-full pr-8" />
+                <button type="button"
+                        @click="mode = 'select'; customVal = '';"
+                        class="btn btn-ghost btn-xs btn-circle absolute right-2"
+                        title="{% trans 'Voltar para lista' %}">
+                  <span class="iconify lucide--x size-3.5" aria-hidden="true"></span>
+                </button>
+              </div>
             </label>
 
             <label class="form-control">
