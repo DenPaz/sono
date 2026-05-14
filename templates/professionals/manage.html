@@ -28,7 +28,7 @@
         {% else %}
           <form method="post" class="grid gap-3 md:grid-cols-2">
             {% csrf_token %}
-            <input type="hidden" name="email" value="{{ professional.email }}" />
+            <input type="hidden" name="original_email" value="{{ professional.email }}" />
 
             <label class="form-control md:col-span-2">
               <span class="label-text">{% trans "Nome" %}</span>
@@ -41,9 +41,9 @@
             <label class="form-control md:col-span-2">
               <span class="label-text">{% trans "E-mail" %}</span>
               <input type="email"
+                     name="email"
                      value="{{ professional.email }}"
-                     class="input input-bordered w-full"
-                     disabled />
+                     class="input input-bordered w-full" />
             </label>
 
             <label class="form-control">

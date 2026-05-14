@@ -76,6 +76,11 @@
 
       {% endwithrole %}
       {% withrole "SPECIALIST" %}
+        <a href="{% url 'assessments:questionnaire' %}"
+           class="menu-item {% active_class 'assessments:questionnaire' 'assessments:results' %}">
+          <span class="iconify lucide--file-plus-2 size-4" aria-hidden="true"></span>
+          <span>{% trans "Nova avaliação" %}</span>
+        </a>
         <a href="{% url 'patients:patient_list' %}"
            class="menu-item {% active_class 'patients:patient_list' 'patients:patient_create' 'patients:patient_detail' 'patients:patient_update' %}">
           <span class="iconify lucide--stethoscope size-4" aria-hidden="true"></span>
@@ -86,12 +91,22 @@
           <span class="iconify lucide--heart-handshake size-4" aria-hidden="true"></span>
           <span>{% trans "Responsáveis" %}</span>
         </a>
+        <a href="{% url 'users:settings' %}"
+           class="menu-item {% active_class 'users:settings' %}">
+          <span class="iconify lucide--settings size-4" aria-hidden="true"></span>
+          <span>{% trans "Configurações" %}</span>
+        </a>
       {% endwithrole %}
       {% withrole "PARENT" %}
         <a href="{% url 'patients:patient_list' %}"
            class="menu-item {% active_class 'patients:patient_list' 'patients:patient_detail' %}">
           <span class="iconify lucide--baby size-4" aria-hidden="true"></span>
           <span>{% trans "Meus dependentes" %}</span>
+        </a>
+        <a href="{% url 'users:settings' %}"
+           class="menu-item {% active_class 'users:settings' %}">
+          <span class="iconify lucide--settings size-4" aria-hidden="true"></span>
+          <span>{% trans "Configurações" %}</span>
         </a>
       {% endwithrole %}
     </div>

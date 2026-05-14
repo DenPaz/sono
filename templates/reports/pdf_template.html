@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ title }}</title>
+  <style>
+    body {
+      font-family: Helvetica, Arial, sans-serif;
+      color: #333;
+      margin: 20px;
+    }
+    h1 {
+      font-size: 24px;
+      color: #2563eb;
+      border-bottom: 2px solid #2563eb;
+      padding-bottom: 10px;
+    }
+    h2 {
+      font-size: 18px;
+      color: #4b5563;
+      margin-top: 30px;
+    }
+    .header {
+      margin-bottom: 30px;
+    }
+    .info {
+      font-size: 14px;
+      color: #6b7280;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    th, td {
+      border: 1px solid #e5e7eb;
+      padding: 8px 12px;
+      text-align: left;
+      font-size: 14px;
+    }
+    th {
+      background-color: #f3f4f6;
+      color: #374151;
+      font-weight: bold;
+    }
+    .metrics {
+      display: table;
+      width: 100%;
+      margin-top: 20px;
+    }
+    .metric-card {
+      display: table-cell;
+      border: 1px solid #e5e7eb;
+      background-color: #f9fafb;
+      padding: 15px;
+      text-align: center;
+      width: 20%;
+    }
+    .metric-value {
+      font-size: 20px;
+      font-weight: bold;
+      color: #111827;
+    }
+    .metric-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      color: #6b7280;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>{{ title }}</h1>
+    <div class="info">
+      <p><strong>Data de Emissão:</strong> {{ date }}</p>
+      <p><strong>Período:</strong> {{ payload.start_date }} até {{ payload.end_date }}</p>
+      <p><strong>Município:</strong> {{ payload.municipality|default:"Todos" }}</p>
+    </div>
+  </div>
+
+  <h2>Métricas Principais</h2>
+  <div class="metrics">
+    {% for metric in payload.metrics %}
+      <div class="metric-card">
+        <div class="metric-value">{{ metric.value }}</div>
+        <div class="metric-label">{{ metric.label }}</div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <h2>Avaliações</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Paciente</th>
+        <th>Município</th>
+        <th>Data</th>
+        <th>Score</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for response in payload.responses %}
+        <tr>
+          <td>{{ response.pk|stringformat:"s"|slice:":8" }}</td>
+          <td>{{ response.patient_display_name }}</td>
+          <td>{{ response.municipality|default:"-" }}</td>
+          <td>{{ response.created|date:"d/m/Y" }}</td>
+          <td>{{ response.total_score }}</td>
+          <td>{% if response.has_flags %}Alto Risco{% else %}Baixo Risco{% endif %}</td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="6" style="text-align: center;">Nenhuma avaliação encontrada.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+</body>
+</html>

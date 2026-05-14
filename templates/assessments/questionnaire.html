@@ -87,6 +87,16 @@
               </div>
             {% endif %}
           {% endfor %}
+          
+          {% if all_municipalities %}
+            <datalist id="municipalities_list">
+              {% for city in all_municipalities %}
+                <option value="{{ city }}"></option>
+              {% endfor %}
+            </datalist>
+          {% endif %}
+          
+
 
           <div class="flex flex-wrap items-center justify-between gap-2 pt-2">
             {% if wizard.steps.prev %}

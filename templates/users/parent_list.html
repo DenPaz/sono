@@ -1,40 +1,29 @@
-{% extends "patients/_base.html" %}
+{% extends "users/_base.html" %}
 
 {% load i18n %}
 {% load core_tags %}
-{% load users_tags %}
 
 {% block title %}
-  {% trans "Pacientes" %}
+  {% trans "Gestão de responsáveis" %}
 {% endblock title %}
 {% block content %}
-  <div class="space-y-6 p-6">
+  <div class="space-y-6">
     {# ── Page header ── #}
     <div class="flex flex-wrap gap-4 items-center justify-between">
       <div>
-        <h1 class="font-bold text-2xl">
-          {% withrole "PARENT" %}
-            {% trans "Meus dependentes" %}
-          {% endwithrole %}
-        </h1>
+        <h1 class="font-bold text-2xl">{% trans "Responsáveis" %}</h1>
         <p class="mt-0.5 text-sm text-base-content/60">
-          {% blocktrans with count=page_obj.paginator.count %}{{ count }} pacientes no total{% endblocktrans %}
+          {% blocktrans with count=page_obj.paginator.count %}{{ count }} responsáveis no total{% endblocktrans %}
         </p>
       </div>
-      {% withrole "ADMIN" "SPECIALIST" %}
-        <a href="{% url 'patients:patient_create' %}"
-           class="btn btn-sm btn-primary">
-          <span class="iconify lucide--plus size-4" aria-hidden="true"></span>
-          {% trans "Adicionar paciente" %}
-        </a>
-      {% endwithrole %}
+      
     </div>
     {# ── Filter bar ── #}
-    <form id="patient-filter-form"
-          hx-get="{% url 'patients:patient_list' %}"
-          hx-target="#patient-table"
+    <form id="user-filter-form"
+          hx-get="{% url 'users:user_list' %}"
+          hx-target="#parent-table"
           hx-push-url="true"
-          hx-trigger="input delay:400ms from:#id_search, change from:#id_biological_sex, change from:#id_is_active"
+          hx-trigger="input delay:400ms from:#id_search, change from:#id_role, change from:#id_is_active"
           hx-swap="outerHTML"
           class="flex flex-wrap gap-3 items-end">
       <label class="input input-sm input-bordered grow flex gap-2 items-center min-w-48 max-w-xs">
@@ -44,16 +33,16 @@
                type="search"
                name="search"
                value="{{ filter.form.search.value|default:'' }}"
-               placeholder="{% trans 'Buscar por responsável ou especialista…' %}"
+               placeholder="{% trans 'Buscar por nome ou e-mail…' %}"
                autocomplete="off"
                class="grow" />
       </label>
-      <select id="id_biological_sex"
-              name="biological_sex"
+      <select id="id_role"
+              name="role"
               class="min-w-36 select select-sm select-bordered">
-        {% for value, label in filter.form.biological_sex.field.choices %}
+        {% for value, label in filter.form.role.field.choices %}
           <option value="{{ value }}"
-                  {% if filter.form.biological_sex.value == value %}selected{% endif %}>{{ label }}</option>
+                  {% if filter.form.role.value == value %}selected{% endif %}>{{ label }}</option>
         {% endfor %}
       </select>
       <select id="id_is_active"
@@ -65,7 +54,7 @@
         {% endfor %}
       </select>
       {% if request.GET %}
-        <a href="{% url 'patients:patient_list' %}"
+        <a href="{% url 'users:user_list' %}"
            class="btn btn-sm btn-ghost gap-1.5">
           <span class="iconify lucide--x size-3.5" aria-hidden="true"></span>
           {% trans "Limpar" %}
@@ -73,72 +62,59 @@
       {% endif %}
     </form>
     {# ── Table ── #}
-    {% partialdef patient-table inline %}
-      <div id="patient-table"
+    {% partialdef parent-table inline %}
+      <div id="parent-table"
            class="overflow-x-auto rounded-box border border-base-200">
-        {% if patients %}
+        {% if parents %}
           <table class="table table-sm w-full">
             <thead>
               <tr class="text-xs text-base-content/70 tracking-wider uppercase bg-base-200/60">
-                <th>{% trans "Nome" %}</th>
-                <th class="hidden sm:table-cell">{% trans "Idade" %}</th>
-                {% withrole "ADMIN" "SPECIALIST" %}
-                  <th class="hidden md:table-cell">{% trans "Responsável" %}</th>
-                {% endwithrole %}
-                {% withrole "ADMIN" %}
-                  <th class="hidden lg:table-cell">{% trans "Especialista" %}</th>
-                {% endwithrole %}
+                <th class="w-64">{% trans "Nome" %}</th>
+                <th class="hidden sm:table-cell">{% trans "E-mail" %}</th>
+                <th class="w-28">{% trans "Função" %}</th>
                 <th class="w-24">{% trans "Status" %}</th>
-                <th class="w-10"></th>
+                <th class="hidden w-28 md:table-cell">{% trans "Criado em" %}</th>
               </tr>
             </thead>
             <tbody>
-              {% for patient in patients %}
-                <tr class="transition-colors hover:bg-base-200/40">
+              {% for user in parents %}
+                <tr class="transition-colors cursor-pointer hover:bg-base-200/40"
+                    hx-get="{{ user.get_absolute_url }}"
+                    hx-target="#parent-update-modal-content"
+                    hx-swap="innerHTML"
+                    hx-on::after-request="document.getElementById('parent-update-modal').showModal()">
+                  {# Name + avatar #}
                   <td>
-                    <a href="{{ patient.get_absolute_url }}"
-                       class="flex gap-2 items-center font-medium hover:text-primary">
-                      <div class="avatar avatar-placeholder shrink-0">
-                        <div class="size-8 text-base-content/60 bg-base-300 rounded-full">
-                          <span class="font-bold text-xs">{{ patient.first_name|slice:":1" }}{{ patient.last_name|slice:":1" }}</span>
+                    <div class="flex gap-3 items-center">
+                      {% if user.profile and user.profile.avatar %}
+                        <div class="avatar shrink-0">
+                          <div class="size-8 rounded-full">
+                            <img src="{{ user.profile.get_avatar_url }}"
+                                 alt="{{ user.get_full_name }}" />
+                          </div>
                         </div>
-                      </div>
-                      {{ patient.get_full_name }}
-                    </a>
-                  </td>
-                  <td class="hidden text-base-content/70 sm:table-cell">{{ patient.age }}</td>
-                  {% withrole "ADMIN" "SPECIALIST" %}
-                    <td class="hidden text-base-content/70 md:table-cell">
-                      {% if patient.parent %}
-                        {{ patient.parent.get_full_name }}
                       {% else %}
-                        —
+                        <div class="avatar avatar-placeholder shrink-0">
+                          <div class="size-8 text-base-content/60 bg-base-300 rounded-full">
+                            <span class="font-bold text-xs">{{ user.first_name|slice:":1" }}{{ user.last_name|slice:":1" }}</span>
+                          </div>
+                        </div>
                       {% endif %}
-                    </td>
-                  {% endwithrole %}
-                  {% withrole "ADMIN" %}
-                    <td class="hidden text-base-content/70 lg:table-cell">
-                      {% if patient.specialist %}
-                        {{ patient.specialist.get_full_name }}
-                      {% else %}
-                        —
-                      {% endif %}
-                    </td>
-                  {% endwithrole %}
-                  <td>
-                    {% if patient.is_active %}
-                      <span class="badge badge-sm badge-success badge-soft">{% trans "Ativo" %}</span>
-                    {% else %}
-                      <span class="badge badge-sm badge-ghost">{% trans "Inativo" %}</span>
-                    {% endif %}
+                      <span class="font-medium truncate">{{ user.get_full_name }}</span>
+                    </div>
                   </td>
+                  {# Email #}
+                  <td class="hidden max-w-0 text-base-content/70 truncate sm:table-cell">{{ user.email }}</td>
+                  {# Role #}
                   <td>
-                    <a href="{{ patient.get_absolute_url }}"
-                       class="btn btn-xs btn-ghost"
-                       aria-label="{% trans 'Ver paciente' %}">
-                      <span class="iconify lucide--chevron-right size-4" aria-hidden="true"></span>
-                    </a>
+                    <c-users.role-badge role="{{ user.role }}" display="{{ user.get_role_display }}" />
                   </td>
+                  {# Status #}
+                  <td>
+                    <c-users.status-badge :is_active="user.is_active" />
+                  </td>
+                  {# Joined #}
+                  <td class="hidden text-xs text-base-content/60 md:table-cell">{{ user.date_joined|date:"d/m/Y" }}</td>
                 </tr>
               {% endfor %}
             </tbody>
@@ -156,7 +132,7 @@
                   <a href="?{% querystring page=page_obj.previous_page_number %}"
                      class="btn btn-sm btn-ghost join-item"
                      hx-get="?{% querystring page=page_obj.previous_page_number %}"
-                     hx-target="#patient-table"
+                     hx-target="#parent-table"
                      hx-swap="outerHTML"
                      hx-push-url="true"
                      aria-label="{% trans 'Página anterior' %}">
@@ -174,7 +150,7 @@
                     <a href="?{% querystring page=num %}"
                        class="btn btn-sm btn-ghost join-item"
                        hx-get="?{% querystring page=num %}"
-                       hx-target="#patient-table"
+                       hx-target="#parent-table"
                        hx-swap="outerHTML"
                        hx-push-url="true">{{ num }}</a>
                   {% endif %}
@@ -183,7 +159,7 @@
                   <a href="?{% querystring page=page_obj.next_page_number %}"
                      class="btn btn-sm btn-ghost join-item"
                      hx-get="?{% querystring page=page_obj.next_page_number %}"
-                     hx-target="#patient-table"
+                     hx-target="#parent-table"
                      hx-swap="outerHTML"
                      hx-push-url="true"
                      aria-label="{% trans 'Próxima página' %}">
@@ -198,11 +174,12 @@
             </div>
           {% endif %}
         {% else %}
+          {# ── Empty state ── #}
           <div class="flex flex-col gap-3 items-center justify-center py-16 text-base-content/50">
-            <span class="iconify lucide--baby size-10" aria-hidden="true"></span>
-            <p class="font-medium">{% trans "Nenhum paciente encontrado" %}</p>
+            <span class="iconify lucide--users size-10" aria-hidden="true"></span>
+            <p class="font-medium">{% trans "Nenhum usuário encontrado" %}</p>
             {% if request.GET %}
-              <a href="{% url 'patients:patient_list' %}" class="btn btn-sm btn-ghost">{% trans "Limpar filtros" %}</a>
+              <a href="{% url 'users:user_list' %}" class="btn btn-sm btn-ghost">{% trans "Limpar filtros" %}</a>
             {% endif %}
           </div>
         {% endif %}
@@ -210,3 +187,15 @@
     {% endpartialdef %}
   </div>
 {% endblock content %}
+{% block modals %}
+  <dialog id="parent-update-modal"
+          class="modal"
+          aria-labelledby="parent-update-modal-title">
+    <div class="modal-box max-w-lg">
+      <div id="parent-update-modal-content">{# Populated by HTMX on row click #}</div>
+    </div>
+    <form method="dialog" class="modal-backdrop">
+      <button>{% trans "Fechar" %}</button>
+    </form>
+  </dialog>
+{% endblock modals %}

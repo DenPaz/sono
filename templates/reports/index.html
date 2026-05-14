@@ -18,10 +18,19 @@
           </div>
           <form method="get" class="flex flex-wrap items-end gap-2">
             <label class="form-control">
-              <span class="label-text text-xs uppercase tracking-wide text-base-content/60">{% trans "Período" %}</span>
-              <select name="period" class="select select-bordered min-w-44">
-                {% for option_value, option_label in period_options %}
-                  <option value="{{ option_value }}" {% if selected_period == option_value %}selected{% endif %}>{{ option_label }}</option>
+              <span class="label-text text-xs uppercase tracking-wide text-base-content/60">{% trans "Data Inicial" %}</span>
+              <input type="date" name="start_date" value="{{ start_date }}" class="input input-bordered input-sm" />
+            </label>
+            <label class="form-control">
+              <span class="label-text text-xs uppercase tracking-wide text-base-content/60">{% trans "Data Final" %}</span>
+              <input type="date" name="end_date" value="{{ end_date }}" class="input input-bordered input-sm" />
+            </label>
+            <label class="form-control">
+              <span class="label-text text-xs uppercase tracking-wide text-base-content/60">{% trans "Município" %}</span>
+              <select name="municipality" class="select select-bordered select-sm min-w-44">
+                <option value="">{% trans "Todos" %}</option>
+                {% for city in all_municipalities %}
+                  <option value="{{ city }}" {% if selected_municipality == city %}selected{% endif %}>{{ city }}</option>
                 {% endfor %}
               </select>
             </label>
@@ -67,10 +76,54 @@
           {% trans "Gere arquivos PDF ou CSV para auditoria operacional." %}
         </p>
         <div class="mt-3 flex flex-wrap gap-2">
-          <a href="{% url 'dashboard:reports_export_pdf' %}?period={{ selected_period }}"
+          <a href="{% url 'dashboard:reports_export_pdf' %}?start_date={{ start_date }}&end_date={{ end_date }}&municipality={{ selected_municipality }}"
              class="btn btn-outline btn-sm">{% trans "Exportar PDF" %}</a>
-          <a href="{% url 'dashboard:reports_export_csv' %}?period={{ selected_period }}"
+          <a href="{% url 'dashboard:reports_export_csv' %}?start_date={{ start_date }}&end_date={{ end_date }}&municipality={{ selected_municipality }}"
              class="btn btn-outline btn-sm">{% trans "Exportar CSV" %}</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="card bg-base-100 border-base-300 border shadow-sm">
+      <div class="card-body p-0">
+        <div class="px-5 py-4 border-base-200 border-b">
+          <h3 class="font-semibold">{% trans "Avaliações no Período" %}</h3>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="table table-sm">
+            <thead>
+              <tr class="text-xs text-base-content/70 tracking-wider uppercase bg-base-200/60">
+                <th>{% trans "Paciente" %}</th>
+                <th>{% trans "Município" %}</th>
+                <th>{% trans "Data" %}</th>
+                <th>{% trans "Risco" %}</th>
+                <th>{% trans "Score" %}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for response in responses %}
+                <tr class="hover:bg-base-200/40">
+                  <td class="font-medium">{{ response.patient_display_name }}</td>
+                  <td>{{ response.municipality|default:"-" }}</td>
+                  <td class="text-xs text-base-content/60">{{ response.created|date:"d/m/Y" }}</td>
+                  <td>
+                    {% if response.has_flags %}
+                      <span class="badge badge-error badge-sm">{% trans "Alto Risco" %}</span>
+                    {% else %}
+                      <span class="badge badge-success badge-sm">{% trans "Baixo" %}</span>
+                    {% endif %}
+                  </td>
+                  <td>
+                    <span class="font-mono font-semibold">{{ response.total_score }}</span>
+                  </td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="5" class="text-center py-8 text-base-content/50">{% trans "Nenhuma avaliação encontrada." %}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
       </div>
     </article>
